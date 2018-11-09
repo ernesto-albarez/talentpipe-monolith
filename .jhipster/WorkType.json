@@ -1,0 +1,50 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "normalizedName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "minQuantityHours",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required",
+                "min"
+            ],
+            "fieldValidateRulesMin": "0"
+        },
+        {
+            "fieldName": "maxQuantityHours",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required",
+                "max"
+            ],
+            "fieldValidateRulesMax": "24"
+        }
+    ],
+    "changelogDate": "20181109114123",
+    "dto": "no",
+    "searchEngine": "elasticsearch",
+    "service": "serviceImpl",
+    "entityTableName": "work_type",
+    "jpaMetamodelFiltering": false,
+    "pagination": "no"
+}

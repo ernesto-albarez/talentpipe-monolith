@@ -1,0 +1,46 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "normalizedName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "minEmployeesQuantity",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required",
+                "min"
+            ],
+            "fieldValidateRulesMin": 0
+        },
+        {
+            "fieldName": "maxEmployeesQuantity",
+            "fieldType": "Integer",
+            "fieldValidateRules": []
+        }
+    ],
+    "changelogDate": "20181109114812",
+    "dto": "no",
+    "searchEngine": "elasticsearch",
+    "service": "serviceImpl",
+    "entityTableName": "company_type",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}

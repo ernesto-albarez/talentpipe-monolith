@@ -1,0 +1,50 @@
+{
+    "generator-jhipster-kotlin": {
+        "promptValues": {
+            "packageName": "io.kimos.talentpipe"
+        },
+        "jhipsterVersion": "5.1.0",
+        "applicationType": "monolith",
+        "baseName": "talentpipe",
+        "packageName": "io.kimos.talentpipe",
+        "packageFolder": "io/kimos/talentpipe",
+        "serverPort": "8080",
+        "authenticationType": "jwt",
+        "cacheProvider": "hazelcast",
+        "enableHibernateCache": true,
+        "websocket": "spring-websocket",
+        "databaseType": "sql",
+        "devDatabaseType": "h2Disk",
+        "prodDatabaseType": "mysql",
+        "searchEngine": "elasticsearch",
+        "messageBroker": false,
+        "serviceDiscoveryType": "eureka",
+        "buildTool": "gradle",
+        "enableSwaggerCodegen": false,
+        "jwtSecretKey": "da9986f0cdd603b43ea563e5373431a9c841a3d0",
+        "enableTranslation": true
+    },
+    "generator-jhipster": {
+        "promptValues": {
+            "nativeLanguage": "es"
+        },
+        "jhipsterVersion": "5.3.4",
+        "applicationType": "monolith",
+        "baseName": "talentpipe",
+        "testFrameworks": [
+            "cucumber"
+        ],
+        "jhiPrefix": "jhi",
+        "enableTranslation": true,
+        "clientPackageManager": "npm",
+        "nativeLanguage": "es",
+        "languages": [
+            "es",
+            "en",
+            "fr",
+            "pt-br"
+        ],
+        "blueprint": "generator-jhipster-kotlin",
+        "skipClient": true
+    }
+}

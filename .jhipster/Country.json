@@ -1,0 +1,43 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "normalizedName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "code",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "phoneCode",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "currency",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20181109113004",
+    "dto": "no",
+    "searchEngine": "elasticsearch",
+    "service": "serviceImpl",
+    "entityTableName": "country",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}

@@ -1,0 +1,32 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "normalizedName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20181109114812",
+    "dto": "no",
+    "searchEngine": "elasticsearch",
+    "service": "serviceImpl",
+    "entityTableName": "soft_skill",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}
