@@ -1,7 +1,7 @@
 {
-  "name": "talentpipe",
+  "name": "monolith",
   "version": "0.0.0",
-  "description": "Description for talentpipe",
+  "description": "Description for monolith",
   "private": true,
   "license": "UNLICENSED",
   "cacheDirectories": [

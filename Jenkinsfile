@@ -5,36 +5,34 @@ node {
         checkout scm
     }
 
-    docker.image('jhipster/jhipster:v5.3.4').inside('-u root -e GRADLE_USER_HOME=.gradle') {
-        stage('check java') {
-            sh "java -version"
+    stage('check java') {
+        sh "java -version"
+    }
+
+    stage('clean') {
+        sh "chmod +x gradlew"
+        sh "./gradlew clean --no-daemon"
+    }
+
+
+    stage('backend tests') {
+        try {
+            sh "./gradlew test -PnodeInstall --no-daemon"
+        } catch(err) {
+            throw err
+        } finally {
+            junit '**/build/**/TEST-*.xml'
         }
+    }
 
-        stage('clean') {
-            sh "chmod +x gradlew"
-            sh "./gradlew clean --no-daemon"
-        }
+    stage('packaging') {
+        sh "./gradlew bootWar -x test -Pprod -PnodeInstall --no-daemon"
+        archiveArtifacts artifacts: '**/build/libs/*.war', fingerprint: true
+    }
 
-
-        stage('backend tests') {
-            try {
-                sh "./gradlew test -PnodeInstall --no-daemon"
-            } catch(err) {
-                throw err
-            } finally {
-                junit '**/build/**/TEST-*.xml'
-            }
-        }
-
-        stage('packaging') {
-            sh "./gradlew bootWar -x test -Pprod -PnodeInstall --no-daemon"
-            archiveArtifacts artifacts: '**/build/libs/*.war', fingerprint: true
-        }
-
-        stage('quality analysis') {
-            withSonarQubeEnv('sonar-qube') {
-                sh "./gradlew sonarqube --no-daemon"
-            }
+    stage('quality analysis') {
+        withSonarQubeEnv('sonar-qube') {
+            sh "./gradlew sonarqube --no-daemon"
         }
     }
 
@@ -42,7 +40,7 @@ node {
     stage('build docker') {
         sh "cp -R src/main/docker build/"
         sh "cp build/libs/*.war build/docker/"
-        dockerImage = docker.build('kimosproject/talentpipe-monolith', 'build/docker')
+        dockerImage = docker.build('kimosproject/monolith', 'build/docker')
     }
 
     stage('publish docker') {

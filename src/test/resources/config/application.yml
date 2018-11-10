@@ -17,20 +17,22 @@ eureka:
     client:
         enabled: false
     instance:
-        appname: talentpipe
-        instanceId: talentpipe:${spring.application.instance-id:${random.value}}
+        appname: monolith
+        instanceId: monolith:${spring.application.instance-id:${random.value}}
 
 spring:
     application:
-        name: talentpipe
+        name: monolith
     cache:
         type: simple
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:h2:mem:talentpipe;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        url: jdbc:h2:mem:monolith;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
         name:
         username:
         password:
+        hikari:
+            auto-commit: false
     jpa:
         database-platform: io.github.jhipster.domain.util.FixedH2Dialect
         database: H2
@@ -43,10 +45,16 @@ spring:
                 implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
         properties:
             hibernate.id.new_generator_mappings: true
+            hibernate.connection.provider_disables_autocommit: true
             hibernate.cache.use_second_level_cache: false
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
             hibernate.hbm2ddl.auto: validate
+    data:
+        elasticsearch:
+            properties:
+                path:
+                    home: build/elasticsearch
     liquibase:
         contexts: test
     mail:
@@ -92,7 +100,8 @@ jhipster:
     security:
         authentication:
             jwt:
-                secret: da9986f0cdd603b43ea563e5373431a9c841a3d0
+                # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
+                base64-secret: ZGQzZjc2Y2UzMTIwZDQzNjE5OWEyNGZkNjBiNTM5YzU0NGIwMWM2OTIyM2RiNmFmNjUxNmM5ZmQ5MGI3MWQ0ODM0ZWMzNzYwMmQ1NTcxOGQ4MWI0Njg4OWIyZWNkZjYxOTE5YjhiMjdmMmJiYmJlYjBhYmU1Y2QxNjlmZTU2ZWU=
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
