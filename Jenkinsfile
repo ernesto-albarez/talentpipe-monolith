@@ -6,6 +6,7 @@ node {
     }
 
     stage('check java') {
+        sh "echo $PATH"
         sh "java -version"
     }
 
