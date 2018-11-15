@@ -12,13 +12,13 @@ node {
 
     stage('clean') {
         //sh "chmod +x gradlew"
-        sh "gradle clean --no-daemon"
+        sh "gradle clean --no-daemon --stacktrace"
     }
 
 
     stage('backend tests') {
         try {
-            sh "gradle test -PnodeInstall --no-daemon"
+            sh "gradle test -PnodeInstall --no-daemon --stacktrace"
         } catch(err) {
             throw err
         } finally {
@@ -27,7 +27,7 @@ node {
     }
 
     stage('packaging') {
-        sh "gradle bootWar -x test -Pprod -PnodeInstall --no-daemon"
+        sh "gradle bootWar -x test -Pprod -PnodeInstall --no-daemon --stacktrace"
         archiveArtifacts artifacts: '**/build/libs/*.war', fingerprint: true
     }
 
