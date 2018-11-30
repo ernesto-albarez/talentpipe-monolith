@@ -248,6 +248,7 @@ dependencies {
     compile "io.jsonwebtoken:jjwt-api"
     runtime "io.jsonwebtoken:jjwt-impl"
     runtime "io.jsonwebtoken:jjwt-jackson"
+    runtime "com.h2database:h2:1.4.190"
     compile ("io.springfox:springfox-swagger2") {
         exclude module: 'mapstruct'
     }
