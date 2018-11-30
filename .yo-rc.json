@@ -1,42 +1,42 @@
 {
-    "generator-jhipster": {
-        "promptValues": {
-            "packageName": "io.kimos.talentppe",
-            "nativeLanguage": "es"
-        },
-        "jhipsterVersion": "5.3.4",
-        "applicationType": "monolith",
-        "baseName": "monolith",
-        "packageName": "io.kimos.talentppe",
-        "packageFolder": "io/kimos/talentppe",
-        "serverPort": "8080",
-        "authenticationType": "jwt",
-        "cacheProvider": "hazelcast",
-        "enableHibernateCache": true,
-        "websocket": "spring-websocket",
-        "databaseType": "sql",
-        "devDatabaseType": "h2Disk",
-        "prodDatabaseType": "mysql",
-        "searchEngine": "elasticsearch",
-        "messageBroker": false,
-        "serviceDiscoveryType": "eureka",
-        "buildTool": "gradle",
-        "enableSwaggerCodegen": false,
-        "jwtSecretKey": "ZGQzZjc2Y2UzMTIwZDQzNjE5OWEyNGZkNjBiNTM5YzU0NGIwMWM2OTIyM2RiNmFmNjUxNmM5ZmQ5MGI3MWQ0ODM0ZWMzNzYwMmQ1NTcxOGQ4MWI0Njg4OWIyZWNkZjYxOTE5YjhiMjdmMmJiYmJlYjBhYmU1Y2QxNjlmZTU2ZWU=",
-        "enableTranslation": true,
-        "languages": [
-            "es",
-            "en",
-            "fr",
-            "pt-br"
-        ],
-        "testFrameworks": [
-            "gatling",
-            "cucumber"
-        ],
-        "jhiPrefix": "jhi",
-        "clientPackageManager": "npm",
-        "nativeLanguage": "es",
-        "skipClient": true
-    }
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "io.kimos.talentppe",
+      "nativeLanguage": "es"
+    },
+    "jhipsterVersion": "5.3.4",
+    "applicationType": "monolith",
+    "baseName": "monolith",
+    "packageName": "io.kimos.talentppe",
+    "packageFolder": "io/kimos/talentppe",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "hazelcast",
+    "enableHibernateCache": true,
+    "websocket": "spring-websocket",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": "elasticsearch",
+    "messageBroker": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "gradle",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "ZGQzZjc2Y2UzMTIwZDQzNjE5OWEyNGZkNjBiNTM5YzU0NGIwMWM2OTIyM2RiNmFmNjUxNmM5ZmQ5MGI3MWQ0ODM0ZWMzNzYwMmQ1NTcxOGQ4MWI0Njg4OWIyZWNkZjYxOTE5YjhiMjdmMmJiYmJlYjBhYmU1Y2QxNjlmZTU2ZWU=",
+    "enableTranslation": true,
+    "languages": [
+      "es",
+      "en",
+      "fr",
+      "pt-br"
+    ],
+    "testFrameworks": [
+      "gatling",
+      "cucumber"
+    ],
+    "jhiPrefix": "jhi",
+    "clientPackageManager": "npm",
+    "nativeLanguage": "es",
+    "skipClient": true
+  }
 }

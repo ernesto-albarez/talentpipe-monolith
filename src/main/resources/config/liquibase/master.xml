@@ -21,6 +21,12 @@
              relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20181109114812_added_entity_TechnicalSkill.xml"
              relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181117200151_added_entity_City.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181117200607_added_entity_Company.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181118000209_added_entity_Recruiter.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20181117200151_added_entity_constraints_City.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181117200607_added_entity_constraints_Company.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181118000209_added_entity_constraints_Recruiter.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>
