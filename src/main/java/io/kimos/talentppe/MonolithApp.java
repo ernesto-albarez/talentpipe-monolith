@@ -20,7 +20,6 @@ import java.util.Collection;
 
 @SpringBootApplication
 @EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
-//@EnableDiscoveryClient
 public class MonolithApp {
 
     private static final Logger log = LoggerFactory.getLogger(MonolithApp.class);
