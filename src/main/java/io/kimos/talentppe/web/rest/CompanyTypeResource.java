@@ -4,11 +4,15 @@ import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.kimos.talentppe.domain.CompanyType;
 import io.kimos.talentppe.service.CompanyTypeService;
+import io.kimos.talentppe.web.rest.dto.CreateCompanyTypeDTO;
+import io.kimos.talentppe.web.rest.dto.UpdateCompanyTypeDTO;
 import io.kimos.talentppe.web.rest.errors.BadRequestAlertException;
 import io.kimos.talentppe.web.rest.util.HeaderUtil;
 import io.kimos.talentppe.web.rest.util.PaginationUtil;
+import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +37,9 @@ public class CompanyTypeResource {
     private final Logger log = LoggerFactory.getLogger(CompanyTypeResource.class);
     private final CompanyTypeService companyTypeService;
 
+    @Autowired
+    private MapperFacade orikaMapper;
+
     public CompanyTypeResource(CompanyTypeService companyTypeService) {
         this.companyTypeService = companyTypeService;
     }
@@ -46,12 +53,9 @@ public class CompanyTypeResource {
      */
     @PostMapping("/company-types")
     @Timed
-    public ResponseEntity<CompanyType> createCompanyType(@Valid @RequestBody CompanyType companyType) throws URISyntaxException {
+    public ResponseEntity<CompanyType> createCompanyType(@Valid @RequestBody CreateCompanyTypeDTO companyType) throws URISyntaxException {
         log.debug("REST request to save CompanyType : {}", companyType);
-        if (companyType.getId() != null) {
-            throw new BadRequestAlertException("A new companyType cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        CompanyType result = companyTypeService.save(companyType);
+        CompanyType result = companyTypeService.save(orikaMapper.map(companyType, CompanyType.class));
         return ResponseEntity.created(new URI("/api/company-types/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -68,12 +72,12 @@ public class CompanyTypeResource {
      */
     @PutMapping("/company-types")
     @Timed
-    public ResponseEntity<CompanyType> updateCompanyType(@Valid @RequestBody CompanyType companyType) throws URISyntaxException {
+    public ResponseEntity<CompanyType> updateCompanyType(@Valid @RequestBody UpdateCompanyTypeDTO companyType) throws URISyntaxException {
         log.debug("REST request to update CompanyType : {}", companyType);
         if (companyType.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        CompanyType result = companyTypeService.save(companyType);
+        CompanyType result = companyTypeService.save(orikaMapper.map(companyType, CompanyType.class));
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, companyType.getId().toString()))
             .body(result);

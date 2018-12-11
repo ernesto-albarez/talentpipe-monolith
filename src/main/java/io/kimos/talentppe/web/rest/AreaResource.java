@@ -4,11 +4,15 @@ import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.kimos.talentppe.domain.Area;
 import io.kimos.talentppe.service.AreaService;
+import io.kimos.talentppe.web.rest.dto.CreateAreaDTO;
+import io.kimos.talentppe.web.rest.dto.UpdateAreaDTO;
 import io.kimos.talentppe.web.rest.errors.BadRequestAlertException;
 import io.kimos.talentppe.web.rest.util.HeaderUtil;
 import io.kimos.talentppe.web.rest.util.PaginationUtil;
+import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +37,9 @@ public class AreaResource {
     private final Logger log = LoggerFactory.getLogger(AreaResource.class);
     private final AreaService areaService;
 
+    @Autowired
+    private MapperFacade orikaMapper;
+
     public AreaResource(AreaService areaService) {
         this.areaService = areaService;
     }
@@ -46,12 +53,9 @@ public class AreaResource {
      */
     @PostMapping("/areas")
     @Timed
-    public ResponseEntity<Area> createArea(@Valid @RequestBody Area area) throws URISyntaxException {
+    public ResponseEntity<Area> createArea(@Valid @RequestBody CreateAreaDTO area) throws URISyntaxException {
         log.debug("REST request to save Area : {}", area);
-        if (area.getId() != null) {
-            throw new BadRequestAlertException("A new area cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        Area result = areaService.save(area);
+        Area result = areaService.save(orikaMapper.map(area, Area.class));
         return ResponseEntity.created(new URI("/api/areas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -68,12 +72,12 @@ public class AreaResource {
      */
     @PutMapping("/areas")
     @Timed
-    public ResponseEntity<Area> updateArea(@Valid @RequestBody Area area) throws URISyntaxException {
+    public ResponseEntity<Area> updateArea(@Valid @RequestBody UpdateAreaDTO area) throws URISyntaxException {
         log.debug("REST request to update Area : {}", area);
         if (area.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Area result = areaService.save(area);
+        Area result = areaService.save(orikaMapper.map(area, Area.class));
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, area.getId().toString()))
             .body(result);

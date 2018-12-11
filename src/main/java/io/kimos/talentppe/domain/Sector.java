@@ -50,24 +50,16 @@ public class Sector implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+        this.normalizedName = name.trim().toLowerCase();
     }
 
     public Sector name(String name) {
-        this.name = name;
+        this.setName(name);
         return this;
     }
 
     public String getNormalizedName() {
         return normalizedName;
-    }
-
-    public void setNormalizedName(String normalizedName) {
-        this.normalizedName = normalizedName;
-    }
-
-    public Sector normalizedName(String normalizedName) {
-        this.normalizedName = normalizedName;
-        return this;
     }
 
     public String getDescription() {

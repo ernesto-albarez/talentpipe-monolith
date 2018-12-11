@@ -4,11 +4,15 @@ import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.kimos.talentppe.domain.TechnicalSkill;
 import io.kimos.talentppe.service.TechnicalSkillService;
+import io.kimos.talentppe.web.rest.dto.CreateTechnicalSkillDTO;
+import io.kimos.talentppe.web.rest.dto.UpdateTechnicalSkillDTO;
 import io.kimos.talentppe.web.rest.errors.BadRequestAlertException;
 import io.kimos.talentppe.web.rest.util.HeaderUtil;
 import io.kimos.talentppe.web.rest.util.PaginationUtil;
+import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +37,9 @@ public class TechnicalSkillResource {
     private final Logger log = LoggerFactory.getLogger(TechnicalSkillResource.class);
     private final TechnicalSkillService technicalSkillService;
 
+    @Autowired
+    private MapperFacade orikaMapper;
+
     public TechnicalSkillResource(TechnicalSkillService technicalSkillService) {
         this.technicalSkillService = technicalSkillService;
     }
@@ -46,12 +53,9 @@ public class TechnicalSkillResource {
      */
     @PostMapping("/technical-skills")
     @Timed
-    public ResponseEntity<TechnicalSkill> createTechnicalSkill(@Valid @RequestBody TechnicalSkill technicalSkill) throws URISyntaxException {
+    public ResponseEntity<TechnicalSkill> createTechnicalSkill(@Valid @RequestBody CreateTechnicalSkillDTO technicalSkill) throws URISyntaxException {
         log.debug("REST request to save TechnicalSkill : {}", technicalSkill);
-        if (technicalSkill.getId() != null) {
-            throw new BadRequestAlertException("A new technicalSkill cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        TechnicalSkill result = technicalSkillService.save(technicalSkill);
+        TechnicalSkill result = technicalSkillService.save(orikaMapper.map(technicalSkill, TechnicalSkill.class));
         return ResponseEntity.created(new URI("/api/technical-skills/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -68,12 +72,12 @@ public class TechnicalSkillResource {
      */
     @PutMapping("/technical-skills")
     @Timed
-    public ResponseEntity<TechnicalSkill> updateTechnicalSkill(@Valid @RequestBody TechnicalSkill technicalSkill) throws URISyntaxException {
+    public ResponseEntity<TechnicalSkill> updateTechnicalSkill(@Valid @RequestBody UpdateTechnicalSkillDTO technicalSkill) throws URISyntaxException {
         log.debug("REST request to update TechnicalSkill : {}", technicalSkill);
         if (technicalSkill.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        TechnicalSkill result = technicalSkillService.save(technicalSkill);
+        TechnicalSkill result = technicalSkillService.save(orikaMapper.map(technicalSkill, TechnicalSkill.class));
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, technicalSkill.getId().toString()))
             .body(result);

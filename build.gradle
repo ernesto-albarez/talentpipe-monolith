@@ -245,6 +245,7 @@ dependencies {
     compile "org.springframework.security:spring-security-data"
     compile "org.springframework.security:spring-security-web"
     compile "org.springframework.security:spring-security-messaging"
+    compile 'net.rakugakibox.spring.boot:orika-spring-boot-starter:1.8.0'
     compile "io.jsonwebtoken:jjwt-api"
     runtime "io.jsonwebtoken:jjwt-impl"
     runtime "io.jsonwebtoken:jjwt-jackson"

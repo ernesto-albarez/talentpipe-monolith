@@ -1,13 +1,18 @@
 package io.kimos.talentppe.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.netflix.discovery.converters.Auto;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.kimos.talentppe.domain.WorkType;
 import io.kimos.talentppe.service.WorkTypeService;
+import io.kimos.talentppe.web.rest.dto.CreateWorkTypeDTO;
+import io.kimos.talentppe.web.rest.dto.UpdateWorkTypeDTO;
 import io.kimos.talentppe.web.rest.errors.BadRequestAlertException;
 import io.kimos.talentppe.web.rest.util.HeaderUtil;
+import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +33,9 @@ public class WorkTypeResource {
     private final Logger log = LoggerFactory.getLogger(WorkTypeResource.class);
     private final WorkTypeService workTypeService;
 
+    @Autowired
+    private MapperFacade orikaMapper;
+
     public WorkTypeResource(WorkTypeService workTypeService) {
         this.workTypeService = workTypeService;
     }
@@ -41,12 +49,9 @@ public class WorkTypeResource {
      */
     @PostMapping("/work-types")
     @Timed
-    public ResponseEntity<WorkType> createWorkType(@Valid @RequestBody WorkType workType) throws URISyntaxException {
+    public ResponseEntity<WorkType> createWorkType(@Valid @RequestBody CreateWorkTypeDTO workType) throws URISyntaxException {
         log.debug("REST request to save WorkType : {}", workType);
-        if (workType.getId() != null) {
-            throw new BadRequestAlertException("A new workType cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        WorkType result = workTypeService.save(workType);
+        WorkType result = workTypeService.save(orikaMapper.map(workType, WorkType.class));
         return ResponseEntity.created(new URI("/api/work-types/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -63,12 +68,12 @@ public class WorkTypeResource {
      */
     @PutMapping("/work-types")
     @Timed
-    public ResponseEntity<WorkType> updateWorkType(@Valid @RequestBody WorkType workType) throws URISyntaxException {
+    public ResponseEntity<WorkType> updateWorkType(@Valid @RequestBody UpdateWorkTypeDTO workType) throws URISyntaxException {
         log.debug("REST request to update WorkType : {}", workType);
         if (workType.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        WorkType result = workTypeService.save(workType);
+        WorkType result = workTypeService.save(orikaMapper.map(workType, WorkType.class));
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, workType.getId().toString()))
             .body(result);

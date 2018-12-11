@@ -1,14 +1,19 @@
 package io.kimos.talentppe.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.netflix.discovery.converters.Auto;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.kimos.talentppe.domain.Country;
 import io.kimos.talentppe.service.CountryService;
+import io.kimos.talentppe.web.rest.dto.CreateCountryDTO;
+import io.kimos.talentppe.web.rest.dto.UpdateCountryDTO;
 import io.kimos.talentppe.web.rest.errors.BadRequestAlertException;
 import io.kimos.talentppe.web.rest.util.HeaderUtil;
 import io.kimos.talentppe.web.rest.util.PaginationUtil;
+import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +38,9 @@ public class CountryResource {
     private final Logger log = LoggerFactory.getLogger(CountryResource.class);
     private final CountryService countryService;
 
+    @Autowired
+    private MapperFacade orikaMapper;
+
     public CountryResource(CountryService countryService) {
         this.countryService = countryService;
     }
@@ -46,12 +54,9 @@ public class CountryResource {
      */
     @PostMapping("/countries")
     @Timed
-    public ResponseEntity<Country> createCountry(@Valid @RequestBody Country country) throws URISyntaxException {
+    public ResponseEntity<Country> createCountry(@Valid @RequestBody CreateCountryDTO country) throws URISyntaxException {
         log.debug("REST request to save Country : {}", country);
-        if (country.getId() != null) {
-            throw new BadRequestAlertException("A new country cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        Country result = countryService.save(country);
+        Country result = countryService.save(orikaMapper.map(country, Country.class));
         return ResponseEntity.created(new URI("/api/countries/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -68,12 +73,12 @@ public class CountryResource {
      */
     @PutMapping("/countries")
     @Timed
-    public ResponseEntity<Country> updateCountry(@Valid @RequestBody Country country) throws URISyntaxException {
+    public ResponseEntity<Country> updateCountry(@Valid @RequestBody UpdateCountryDTO country) throws URISyntaxException {
         log.debug("REST request to update Country : {}", country);
         if (country.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Country result = countryService.save(country);
+        Country result = countryService.save(orikaMapper.map(country, Country.class));
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, country.getId().toString()))
             .body(result);

@@ -3,12 +3,16 @@ package io.kimos.talentppe.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import io.kimos.talentppe.domain.City;
 import io.kimos.talentppe.service.CityService;
+import io.kimos.talentppe.web.rest.dto.CreateCityDTO;
+import io.kimos.talentppe.web.rest.dto.UpdateCityDTO;
 import io.kimos.talentppe.web.rest.errors.BadRequestAlertException;
 import io.kimos.talentppe.web.rest.util.HeaderUtil;
 import io.kimos.talentppe.web.rest.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -39,6 +43,9 @@ public class CityResource {
 
     private final CityService cityService;
 
+    @Autowired
+    private MapperFacade orikaMapper;
+
     public CityResource(CityService cityService) {
         this.cityService = cityService;
     }
@@ -52,12 +59,9 @@ public class CityResource {
      */
     @PostMapping("/cities")
     @Timed
-    public ResponseEntity<City> createCity(@Valid @RequestBody City city) throws URISyntaxException {
+    public ResponseEntity<City> createCity(@Valid @RequestBody CreateCityDTO city) throws URISyntaxException {
         log.debug("REST request to save City : {}", city);
-        if (city.getId() != null) {
-            throw new BadRequestAlertException("A new city cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        City result = cityService.save(city);
+        City result = cityService.save(orikaMapper.map(city, City.class));
         return ResponseEntity.created(new URI("/api/cities/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -74,12 +78,12 @@ public class CityResource {
      */
     @PutMapping("/cities")
     @Timed
-    public ResponseEntity<City> updateCity(@Valid @RequestBody City city) throws URISyntaxException {
+    public ResponseEntity<City> updateCity(@Valid @RequestBody UpdateCityDTO city) throws URISyntaxException {
         log.debug("REST request to update City : {}", city);
         if (city.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        City result = cityService.save(city);
+        City result = cityService.save(orikaMapper.map(city, City.class));
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, city.getId().toString()))
             .body(result);

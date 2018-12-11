@@ -4,11 +4,15 @@ import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.kimos.talentppe.domain.Benefit;
 import io.kimos.talentppe.service.BenefitService;
+import io.kimos.talentppe.web.rest.dto.CreateBenefitDTO;
+import io.kimos.talentppe.web.rest.dto.UpdateBenefitDTO;
 import io.kimos.talentppe.web.rest.errors.BadRequestAlertException;
 import io.kimos.talentppe.web.rest.util.HeaderUtil;
 import io.kimos.talentppe.web.rest.util.PaginationUtil;
+import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +37,9 @@ public class BenefitResource {
     private final Logger log = LoggerFactory.getLogger(BenefitResource.class);
     private final BenefitService benefitService;
 
+    @Autowired
+    private MapperFacade orikaMapper;
+
     public BenefitResource(BenefitService benefitService) {
         this.benefitService = benefitService;
     }
@@ -46,12 +53,9 @@ public class BenefitResource {
      */
     @PostMapping("/benefits")
     @Timed
-    public ResponseEntity<Benefit> createBenefit(@Valid @RequestBody Benefit benefit) throws URISyntaxException {
+    public ResponseEntity<Benefit> createBenefit(@Valid @RequestBody CreateBenefitDTO benefit) throws URISyntaxException {
         log.debug("REST request to save Benefit : {}", benefit);
-        if (benefit.getId() != null) {
-            throw new BadRequestAlertException("A new benefit cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        Benefit result = benefitService.save(benefit);
+        Benefit result = benefitService.save(orikaMapper.map(benefit, Benefit.class));
         return ResponseEntity.created(new URI("/api/benefits/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -68,12 +72,12 @@ public class BenefitResource {
      */
     @PutMapping("/benefits")
     @Timed
-    public ResponseEntity<Benefit> updateBenefit(@Valid @RequestBody Benefit benefit) throws URISyntaxException {
+    public ResponseEntity<Benefit> updateBenefit(@Valid @RequestBody UpdateBenefitDTO benefit) throws URISyntaxException {
         log.debug("REST request to update Benefit : {}", benefit);
         if (benefit.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Benefit result = benefitService.save(benefit);
+        Benefit result = benefitService.save(orikaMapper.map(benefit, Benefit.class));
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, benefit.getId().toString()))
             .body(result);

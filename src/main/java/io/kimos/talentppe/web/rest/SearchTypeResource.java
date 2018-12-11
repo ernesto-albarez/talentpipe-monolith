@@ -4,11 +4,15 @@ import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.kimos.talentppe.domain.SearchType;
 import io.kimos.talentppe.service.SearchTypeService;
+import io.kimos.talentppe.web.rest.dto.CreateSearchTypeDTO;
+import io.kimos.talentppe.web.rest.dto.UpdateSearchTypeDTO;
 import io.kimos.talentppe.web.rest.errors.BadRequestAlertException;
 import io.kimos.talentppe.web.rest.util.HeaderUtil;
 import io.kimos.talentppe.web.rest.util.PaginationUtil;
+import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +37,9 @@ public class SearchTypeResource {
     private final Logger log = LoggerFactory.getLogger(SearchTypeResource.class);
     private final SearchTypeService searchTypeService;
 
+    @Autowired
+    private MapperFacade orikaMapper;
+
     public SearchTypeResource(SearchTypeService searchTypeService) {
         this.searchTypeService = searchTypeService;
     }
@@ -46,12 +53,9 @@ public class SearchTypeResource {
      */
     @PostMapping("/search-types")
     @Timed
-    public ResponseEntity<SearchType> createSearchType(@Valid @RequestBody SearchType searchType) throws URISyntaxException {
+    public ResponseEntity<SearchType> createSearchType(@Valid @RequestBody CreateSearchTypeDTO searchType) throws URISyntaxException {
         log.debug("REST request to save SearchType : {}", searchType);
-        if (searchType.getId() != null) {
-            throw new BadRequestAlertException("A new searchType cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        SearchType result = searchTypeService.save(searchType);
+        SearchType result = searchTypeService.save(orikaMapper.map(searchType, SearchType.class));
         return ResponseEntity.created(new URI("/api/search-types/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -68,12 +72,12 @@ public class SearchTypeResource {
      */
     @PutMapping("/search-types")
     @Timed
-    public ResponseEntity<SearchType> updateSearchType(@Valid @RequestBody SearchType searchType) throws URISyntaxException {
+    public ResponseEntity<SearchType> updateSearchType(@Valid @RequestBody UpdateSearchTypeDTO searchType) throws URISyntaxException {
         log.debug("REST request to update SearchType : {}", searchType);
         if (searchType.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        SearchType result = searchTypeService.save(searchType);
+        SearchType result = searchTypeService.save(orikaMapper.map(searchType, SearchType.class));
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, searchType.getId().toString()))
             .body(result);

@@ -50,23 +50,11 @@ public class Area implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+        this.normalizedName = name.trim().toLowerCase();
     }
 
     public Area name(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public String getNormalizedName() {
-        return normalizedName;
-    }
-
-    public void setNormalizedName(String normalizedName) {
-        this.normalizedName = normalizedName;
-    }
-
-    public Area normalizedName(String normalizedName) {
-        this.normalizedName = normalizedName;
+        this.setName(name);
         return this;
     }
 
@@ -109,7 +97,6 @@ public class Area implements Serializable {
         return "Area{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
-            ", normalizedName='" + getNormalizedName() + "'" +
             ", description='" + getDescription() + "'" +
             "}";
     }

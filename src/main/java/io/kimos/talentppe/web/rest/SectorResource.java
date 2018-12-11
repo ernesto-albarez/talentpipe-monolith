@@ -1,14 +1,19 @@
 package io.kimos.talentppe.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.netflix.discovery.converters.Auto;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.kimos.talentppe.domain.Sector;
 import io.kimos.talentppe.service.SectorService;
+import io.kimos.talentppe.web.rest.dto.CreateSectorDTO;
+import io.kimos.talentppe.web.rest.dto.UpdateSectorDTO;
 import io.kimos.talentppe.web.rest.errors.BadRequestAlertException;
 import io.kimos.talentppe.web.rest.util.HeaderUtil;
 import io.kimos.talentppe.web.rest.util.PaginationUtil;
+import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +38,9 @@ public class SectorResource {
     private final Logger log = LoggerFactory.getLogger(SectorResource.class);
     private final SectorService sectorService;
 
+    @Autowired
+    private MapperFacade orikaMapper;
+
     public SectorResource(SectorService sectorService) {
         this.sectorService = sectorService;
     }
@@ -46,12 +54,9 @@ public class SectorResource {
      */
     @PostMapping("/sectors")
     @Timed
-    public ResponseEntity<Sector> createSector(@Valid @RequestBody Sector sector) throws URISyntaxException {
+    public ResponseEntity<Sector> createSector(@Valid @RequestBody CreateSectorDTO sector) throws URISyntaxException {
         log.debug("REST request to save Sector : {}", sector);
-        if (sector.getId() != null) {
-            throw new BadRequestAlertException("A new sector cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        Sector result = sectorService.save(sector);
+        Sector result = sectorService.save(orikaMapper.map(sector, Sector.class));
         return ResponseEntity.created(new URI("/api/sectors/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -68,12 +73,12 @@ public class SectorResource {
      */
     @PutMapping("/sectors")
     @Timed
-    public ResponseEntity<Sector> updateSector(@Valid @RequestBody Sector sector) throws URISyntaxException {
+    public ResponseEntity<Sector> updateSector(@Valid @RequestBody UpdateSectorDTO sector) throws URISyntaxException {
         log.debug("REST request to update Sector : {}", sector);
         if (sector.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Sector result = sectorService.save(sector);
+        Sector result = sectorService.save(orikaMapper.map(sector, Sector.class));
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, sector.getId().toString()))
             .body(result);

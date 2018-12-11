@@ -34,9 +34,6 @@ public class City implements Serializable {
     @Column(name = "postal_code", nullable = false)
     private String postalCode;
 
-    @Column(name = "sarasa")
-    private String sarasa;
-
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("")
@@ -75,19 +72,6 @@ public class City implements Serializable {
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
-    }
-
-    public String getSarasa() {
-        return sarasa;
-    }
-
-    public City sarasa(String sarasa) {
-        this.sarasa = sarasa;
-        return this;
-    }
-
-    public void setSarasa(String sarasa) {
-        this.sarasa = sarasa;
     }
 
     public Country getCountry() {
@@ -130,7 +114,6 @@ public class City implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", postalCode='" + getPostalCode() + "'" +
-            ", sarasa='" + getSarasa() + "'" +
             "}";
     }
 }

@@ -50,24 +50,16 @@ public class SoftSkill implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+        this.normalizedName = name.trim().toLowerCase();
     }
 
     public SoftSkill name(String name) {
-        this.name = name;
+        this.setName(name);
         return this;
     }
 
     public String getNormalizedName() {
         return normalizedName;
-    }
-
-    public void setNormalizedName(String normalizedName) {
-        this.normalizedName = normalizedName;
-    }
-
-    public SoftSkill normalizedName(String normalizedName) {
-        this.normalizedName = normalizedName;
-        return this;
     }
 
     public String getDescription() {
