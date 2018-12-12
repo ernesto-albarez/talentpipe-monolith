@@ -95,7 +95,6 @@ public class StateBeforeTaxResourceIntTest {
     public static StateBeforeTax createEntity(EntityManager em) {
         StateBeforeTax stateBeforeTax = new StateBeforeTax()
             .name(DEFAULT_NAME)
-            .normalizedName(DEFAULT_NORMALIZED_NAME)
             .description(DEFAULT_DESCRIPTION);
         return stateBeforeTax;
     }
@@ -145,24 +144,6 @@ public class StateBeforeTaxResourceIntTest {
         int databaseSizeBeforeTest = stateBeforeTaxRepository.findAll().size();
         // set the field null
         stateBeforeTax.setName(null);
-
-        // Create the StateBeforeTax, which fails.
-
-        restStateBeforeTaxMockMvc.perform(post("/api/state-before-taxes")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(stateBeforeTax)))
-            .andExpect(status().isBadRequest());
-
-        List<StateBeforeTax> stateBeforeTaxList = stateBeforeTaxRepository.findAll();
-        assertThat(stateBeforeTaxList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkNormalizedNameIsRequired() throws Exception {
-        int databaseSizeBeforeTest = stateBeforeTaxRepository.findAll().size();
-        // set the field null
-        stateBeforeTax.setNormalizedName(null);
 
         // Create the StateBeforeTax, which fails.
 
@@ -231,7 +212,6 @@ public class StateBeforeTaxResourceIntTest {
         em.detach(updatedStateBeforeTax);
         updatedStateBeforeTax
             .name(UPDATED_NAME)
-            .normalizedName(UPDATED_NORMALIZED_NAME)
             .description(UPDATED_DESCRIPTION);
 
         restStateBeforeTaxMockMvc.perform(put("/api/state-before-taxes")

@@ -7,6 +7,7 @@ import io.kimos.talentppe.domain.Country;
 import io.kimos.talentppe.repository.CityRepository;
 import io.kimos.talentppe.repository.search.CitySearchRepository;
 import io.kimos.talentppe.service.CityService;
+import io.kimos.talentppe.web.rest.dto.CreateCityDTO;
 import io.kimos.talentppe.web.rest.dto.UpdateCityDTO;
 import io.kimos.talentppe.web.rest.errors.ExceptionTranslator;
 
@@ -54,9 +55,6 @@ public class CityResourceIntTest {
 
     private static final String DEFAULT_POSTAL_CODE = "AAAAAAAAAA";
     private static final String UPDATED_POSTAL_CODE = "BBBBBBBBBB";
-
-    private static final String DEFAULT_SARASA = "AAAAAAAAAA";
-    private static final String UPDATED_SARASA = "BBBBBBBBBB";
 
     @Autowired
     private CityRepository cityRepository;
@@ -130,10 +128,11 @@ public class CityResourceIntTest {
     public void createCity() throws Exception {
         int databaseSizeBeforeCreate = cityRepository.findAll().size();
 
+        CreateCityDTO request = orikaMapper.map(city, CreateCityDTO.class);
         // Create the City
         restCityMockMvc.perform(post("/api/cities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(city)))
+            .content(TestUtil.convertObjectToJsonBytes(request)))
             .andExpect(status().isCreated());
 
         // Validate the City in the database
