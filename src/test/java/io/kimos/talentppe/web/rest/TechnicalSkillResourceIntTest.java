@@ -140,28 +140,6 @@ public class TechnicalSkillResourceIntTest {
 
     @Test
     @Transactional
-    public void createTechnicalSkillWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = technicalSkillRepository.findAll().size();
-
-        // Create the TechnicalSkill with an existing ID
-        technicalSkill.setId(1L);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restTechnicalSkillMockMvc.perform(post("/api/technical-skills")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(technicalSkill)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the TechnicalSkill in the database
-        List<TechnicalSkill> technicalSkillList = technicalSkillRepository.findAll();
-        assertThat(technicalSkillList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the TechnicalSkill in Elasticsearch
-        verify(mockTechnicalSkillSearchRepository, times(0)).save(technicalSkill);
-    }
-
-    @Test
-    @Transactional
     public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = technicalSkillRepository.findAll().size();
         // set the field null

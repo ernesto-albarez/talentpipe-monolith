@@ -212,28 +212,6 @@ public class CompanyResourceIntTest {
 
     @Test
     @Transactional
-    public void createCompanyWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = companyRepository.findAll().size();
-
-        // Create the Company with an existing ID
-        company.setId(1L);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restCompanyMockMvc.perform(post("/api/companies")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(company)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the Company in the database
-        List<Company> companyList = companyRepository.findAll();
-        assertThat(companyList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the Company in Elasticsearch
-        verify(mockCompanySearchRepository, times(0)).save(company);
-    }
-
-    @Test
-    @Transactional
     public void checkTaxNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = companyRepository.findAll().size();
         // set the field null

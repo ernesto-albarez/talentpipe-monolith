@@ -185,28 +185,6 @@ public class RecruiterResourceIntTest {
 
     @Test
     @Transactional
-    public void createRecruiterWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = recruiterRepository.findAll().size();
-
-        // Create the Recruiter with an existing ID
-        recruiter.setId(1L);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restRecruiterMockMvc.perform(post("/api/recruiters")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(recruiter)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the Recruiter in the database
-        List<Recruiter> recruiterList = recruiterRepository.findAll();
-        assertThat(recruiterList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the Recruiter in Elasticsearch
-        verify(mockRecruiterSearchRepository, times(0)).save(recruiter);
-    }
-
-    @Test
-    @Transactional
     public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = recruiterRepository.findAll().size();
         // set the field null

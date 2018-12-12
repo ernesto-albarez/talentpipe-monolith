@@ -140,28 +140,6 @@ public class SectorResourceIntTest {
 
     @Test
     @Transactional
-    public void createSectorWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = sectorRepository.findAll().size();
-
-        // Create the Sector with an existing ID
-        sector.setId(1L);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restSectorMockMvc.perform(post("/api/sectors")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(sector)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the Sector in the database
-        List<Sector> sectorList = sectorRepository.findAll();
-        assertThat(sectorList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the Sector in Elasticsearch
-        verify(mockSectorSearchRepository, times(0)).save(sector);
-    }
-
-    @Test
-    @Transactional
     public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = sectorRepository.findAll().size();
         // set the field null

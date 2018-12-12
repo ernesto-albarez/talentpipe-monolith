@@ -140,28 +140,6 @@ public class BenefitResourceIntTest {
 
     @Test
     @Transactional
-    public void createBenefitWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = benefitRepository.findAll().size();
-
-        // Create the Benefit with an existing ID
-        benefit.setId(1L);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restBenefitMockMvc.perform(post("/api/benefits")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(benefit)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the Benefit in the database
-        List<Benefit> benefitList = benefitRepository.findAll();
-        assertThat(benefitList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the Benefit in Elasticsearch
-        verify(mockBenefitSearchRepository, times(0)).save(benefit);
-    }
-
-    @Test
-    @Transactional
     public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = benefitRepository.findAll().size();
         // set the field null

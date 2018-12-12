@@ -138,28 +138,6 @@ public class AreaResourceIntTest {
 
     @Test
     @Transactional
-    public void createAreaWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = areaRepository.findAll().size();
-
-        // Create the Area with an existing ID
-        area.setId(1L);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restAreaMockMvc.perform(post("/api/areas")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(area)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the Area in the database
-        List<Area> areaList = areaRepository.findAll();
-        assertThat(areaList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the Area in Elasticsearch
-        verify(mockAreaSearchRepository, times(0)).save(area);
-    }
-
-    @Test
-    @Transactional
     public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = areaRepository.findAll().size();
         // set the field null

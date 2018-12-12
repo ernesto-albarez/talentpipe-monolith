@@ -141,28 +141,6 @@ public class StateBeforeTaxResourceIntTest {
 
     @Test
     @Transactional
-    public void createStateBeforeTaxWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = stateBeforeTaxRepository.findAll().size();
-
-        // Create the StateBeforeTax with an existing ID
-        stateBeforeTax.setId(1L);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restStateBeforeTaxMockMvc.perform(post("/api/state-before-taxes")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(stateBeforeTax)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the StateBeforeTax in the database
-        List<StateBeforeTax> stateBeforeTaxList = stateBeforeTaxRepository.findAll();
-        assertThat(stateBeforeTaxList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the StateBeforeTax in Elasticsearch
-        verify(mockStateBeforeTaxSearchRepository, times(0)).save(stateBeforeTax);
-    }
-
-    @Test
-    @Transactional
     public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = stateBeforeTaxRepository.findAll().size();
         // set the field null

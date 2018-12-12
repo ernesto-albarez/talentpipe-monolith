@@ -140,28 +140,6 @@ public class SearchTypeResourceIntTest {
 
     @Test
     @Transactional
-    public void createSearchTypeWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = searchTypeRepository.findAll().size();
-
-        // Create the SearchType with an existing ID
-        searchType.setId(1L);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restSearchTypeMockMvc.perform(post("/api/search-types")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(searchType)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the SearchType in the database
-        List<SearchType> searchTypeList = searchTypeRepository.findAll();
-        assertThat(searchTypeList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the SearchType in Elasticsearch
-        verify(mockSearchTypeSearchRepository, times(0)).save(searchType);
-    }
-
-    @Test
-    @Transactional
     public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = searchTypeRepository.findAll().size();
         // set the field null

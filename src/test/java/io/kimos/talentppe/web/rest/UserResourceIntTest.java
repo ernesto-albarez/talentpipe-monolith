@@ -186,34 +186,6 @@ public class UserResourceIntTest {
 
     @Test
     @Transactional
-    public void createUserWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = userRepository.findAll().size();
-
-        ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setId(1L);
-        managedUserVM.setLogin(DEFAULT_LOGIN);
-        managedUserVM.setPassword(DEFAULT_PASSWORD);
-        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
-        managedUserVM.setLastName(DEFAULT_LASTNAME);
-        managedUserVM.setEmail(DEFAULT_EMAIL);
-        managedUserVM.setActivated(true);
-        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
-        managedUserVM.setLangKey(DEFAULT_LANGKEY);
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restUserMockMvc.perform(post("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the User in the database
-        List<User> userList = userRepository.findAll();
-        assertThat(userList).hasSize(databaseSizeBeforeCreate);
-    }
-
-    @Test
-    @Transactional
     public void createUserWithExistingLogin() throws Exception {
         // Initialize the database
         userRepository.saveAndFlush(user);
