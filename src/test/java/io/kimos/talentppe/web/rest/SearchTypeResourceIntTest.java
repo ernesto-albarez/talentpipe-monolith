@@ -6,6 +6,7 @@ import io.kimos.talentppe.repository.SearchTypeRepository;
 import io.kimos.talentppe.repository.search.SearchTypeSearchRepository;
 import io.kimos.talentppe.service.SearchTypeService;
 import io.kimos.talentppe.web.rest.errors.ExceptionTranslator;
+import ma.glasnost.orika.MapperFacade;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,8 +47,8 @@ public class SearchTypeResourceIntTest {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_NORMALIZED_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_NORMALIZED_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_NORMALIZED_NAME = "aaaaaaaaaa";
+    private static final String UPDATED_NORMALIZED_NAME = "bbbbbbbbbb";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -78,6 +79,9 @@ public class SearchTypeResourceIntTest {
     @Autowired
     private EntityManager em;
 
+    @Autowired
+    private MapperFacade orikaMapper;
+
     private MockMvc restSearchTypeMockMvc;
 
     private SearchType searchType;
@@ -91,7 +95,6 @@ public class SearchTypeResourceIntTest {
     public static SearchType createEntity(EntityManager em) {
         SearchType searchType = new SearchType()
             .name(DEFAULT_NAME)
-            .normalizedName(DEFAULT_NORMALIZED_NAME)
             .description(DEFAULT_DESCRIPTION);
         return searchType;
     }
@@ -99,7 +102,7 @@ public class SearchTypeResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final SearchTypeResource searchTypeResource = new SearchTypeResource(searchTypeService);
+        final SearchTypeResource searchTypeResource = new SearchTypeResource(searchTypeService, orikaMapper);
         this.restSearchTypeMockMvc = MockMvcBuilders.standaloneSetup(searchTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -177,24 +180,6 @@ public class SearchTypeResourceIntTest {
 
     @Test
     @Transactional
-    public void checkNormalizedNameIsRequired() throws Exception {
-        int databaseSizeBeforeTest = searchTypeRepository.findAll().size();
-        // set the field null
-        searchType.setNormalizedName(null);
-
-        // Create the SearchType, which fails.
-
-        restSearchTypeMockMvc.perform(post("/api/search-types")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(searchType)))
-            .andExpect(status().isBadRequest());
-
-        List<SearchType> searchTypeList = searchTypeRepository.findAll();
-        assertThat(searchTypeList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllSearchTypes() throws Exception {
         // Initialize the database
         searchTypeRepository.saveAndFlush(searchType);
@@ -249,7 +234,6 @@ public class SearchTypeResourceIntTest {
         em.detach(updatedSearchType);
         updatedSearchType
             .name(UPDATED_NAME)
-            .normalizedName(UPDATED_NORMALIZED_NAME)
             .description(UPDATED_DESCRIPTION);
 
         restSearchTypeMockMvc.perform(put("/api/search-types")

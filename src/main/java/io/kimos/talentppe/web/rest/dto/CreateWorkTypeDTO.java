@@ -32,4 +32,20 @@ public class CreateWorkTypeDTO {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public Integer getMinQuantityHours() {
+        return minQuantityHours;
+    }
+
+    public void setMinQuantityHours(Integer minQuantityHours) {
+        this.minQuantityHours = minQuantityHours;
+    }
+
+    public Integer getMaxQuantityHours() {
+        return maxQuantityHours;
+    }
+
+    public void setMaxQuantityHours(Integer maxQuantityHours) {
+        this.maxQuantityHours = maxQuantityHours;
+    }
 }

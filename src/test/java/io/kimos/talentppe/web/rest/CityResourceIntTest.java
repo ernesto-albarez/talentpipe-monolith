@@ -7,8 +7,10 @@ import io.kimos.talentppe.domain.Country;
 import io.kimos.talentppe.repository.CityRepository;
 import io.kimos.talentppe.repository.search.CitySearchRepository;
 import io.kimos.talentppe.service.CityService;
+import io.kimos.talentppe.web.rest.dto.UpdateCityDTO;
 import io.kimos.talentppe.web.rest.errors.ExceptionTranslator;
 
+import ma.glasnost.orika.MapperFacade;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -62,6 +64,9 @@ public class CityResourceIntTest {
     @Autowired
     private CityService cityService;
 
+    @Autowired
+    private MapperFacade orikaMapper;
+
     /**
      * This repository is mocked in the io.kimos.talentppe.repository.search test package.
      *
@@ -89,7 +94,7 @@ public class CityResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final CityResource cityResource = new CityResource(cityService);
+        final CityResource cityResource = new CityResource(cityService, orikaMapper);
         this.restCityMockMvc = MockMvcBuilders.standaloneSetup(cityResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -106,8 +111,7 @@ public class CityResourceIntTest {
     public static City createEntity(EntityManager em) {
         City city = new City()
             .name(DEFAULT_NAME)
-            .postalCode(DEFAULT_POSTAL_CODE)
-            .sarasa(DEFAULT_SARASA);
+            .postalCode(DEFAULT_POSTAL_CODE);
         // Add required entity
         Country country = CountryResourceIntTest.createEntity(em);
         em.persist(country);
@@ -138,32 +142,9 @@ public class CityResourceIntTest {
         City testCity = cityList.get(cityList.size() - 1);
         assertThat(testCity.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCity.getPostalCode()).isEqualTo(DEFAULT_POSTAL_CODE);
-        assertThat(testCity.getSarasa()).isEqualTo(DEFAULT_SARASA);
 
         // Validate the City in Elasticsearch
         verify(mockCitySearchRepository, times(1)).save(testCity);
-    }
-
-    @Test
-    @Transactional
-    public void createCityWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = cityRepository.findAll().size();
-
-        // Create the City with an existing ID
-        city.setId(1L);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restCityMockMvc.perform(post("/api/cities")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(city)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the City in the database
-        List<City> cityList = cityRepository.findAll();
-        assertThat(cityList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the City in Elasticsearch
-        verify(mockCitySearchRepository, times(0)).save(city);
     }
 
     @Test
@@ -214,8 +195,7 @@ public class CityResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(city.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
-            .andExpect(jsonPath("$.[*].postalCode").value(hasItem(DEFAULT_POSTAL_CODE.toString())))
-            .andExpect(jsonPath("$.[*].sarasa").value(hasItem(DEFAULT_SARASA.toString())));
+            .andExpect(jsonPath("$.[*].postalCode").value(hasItem(DEFAULT_POSTAL_CODE.toString())));
     }
     
     @Test
@@ -230,8 +210,7 @@ public class CityResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(city.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
-            .andExpect(jsonPath("$.postalCode").value(DEFAULT_POSTAL_CODE.toString()))
-            .andExpect(jsonPath("$.sarasa").value(DEFAULT_SARASA.toString()));
+            .andExpect(jsonPath("$.postalCode").value(DEFAULT_POSTAL_CODE.toString()));
     }
 
     @Test
@@ -258,12 +237,11 @@ public class CityResourceIntTest {
         em.detach(updatedCity);
         updatedCity
             .name(UPDATED_NAME)
-            .postalCode(UPDATED_POSTAL_CODE)
-            .sarasa(UPDATED_SARASA);
-
+            .postalCode(UPDATED_POSTAL_CODE);
+        UpdateCityDTO request = orikaMapper.map(updatedCity, UpdateCityDTO.class);
         restCityMockMvc.perform(put("/api/cities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedCity)))
+            .content(TestUtil.convertObjectToJsonBytes(request)))
             .andExpect(status().isOk());
 
         // Validate the City in the database
@@ -272,7 +250,6 @@ public class CityResourceIntTest {
         City testCity = cityList.get(cityList.size() - 1);
         assertThat(testCity.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCity.getPostalCode()).isEqualTo(UPDATED_POSTAL_CODE);
-        assertThat(testCity.getSarasa()).isEqualTo(UPDATED_SARASA);
 
         // Validate the City in Elasticsearch
         verify(mockCitySearchRepository, times(1)).save(testCity);
@@ -333,8 +310,7 @@ public class CityResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(city.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
-            .andExpect(jsonPath("$.[*].postalCode").value(hasItem(DEFAULT_POSTAL_CODE.toString())))
-            .andExpect(jsonPath("$.[*].sarasa").value(hasItem(DEFAULT_SARASA.toString())));
+            .andExpect(jsonPath("$.[*].postalCode").value(hasItem(DEFAULT_POSTAL_CODE.toString())));
     }
 
     @Test

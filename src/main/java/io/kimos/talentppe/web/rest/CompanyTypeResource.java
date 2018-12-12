@@ -12,7 +12,6 @@ import io.kimos.talentppe.web.rest.util.PaginationUtil;
 import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -36,12 +35,11 @@ public class CompanyTypeResource {
     private static final String ENTITY_NAME = "companyType";
     private final Logger log = LoggerFactory.getLogger(CompanyTypeResource.class);
     private final CompanyTypeService companyTypeService;
+    private final MapperFacade orikaMapper;
 
-    @Autowired
-    private MapperFacade orikaMapper;
-
-    public CompanyTypeResource(CompanyTypeService companyTypeService) {
+    public CompanyTypeResource(CompanyTypeService companyTypeService, MapperFacade orikaMapper) {
         this.companyTypeService = companyTypeService;
+        this.orikaMapper = orikaMapper;
     }
 
     /**

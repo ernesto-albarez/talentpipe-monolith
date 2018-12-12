@@ -6,6 +6,7 @@ import io.kimos.talentppe.repository.SoftSkillRepository;
 import io.kimos.talentppe.repository.search.SoftSkillSearchRepository;
 import io.kimos.talentppe.service.SoftSkillService;
 import io.kimos.talentppe.web.rest.errors.ExceptionTranslator;
+import ma.glasnost.orika.MapperFacade;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,8 +47,8 @@ public class SoftSkillResourceIntTest {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_NORMALIZED_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_NORMALIZED_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_NORMALIZED_NAME = "aaaaaaaaaa";
+    private static final String UPDATED_NORMALIZED_NAME = "bbbbbbbbbb";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -78,6 +79,9 @@ public class SoftSkillResourceIntTest {
     @Autowired
     private EntityManager em;
 
+    @Autowired
+    private MapperFacade orikaMapper;
+
     private MockMvc restSoftSkillMockMvc;
 
     private SoftSkill softSkill;
@@ -91,7 +95,6 @@ public class SoftSkillResourceIntTest {
     public static SoftSkill createEntity(EntityManager em) {
         SoftSkill softSkill = new SoftSkill()
             .name(DEFAULT_NAME)
-            .normalizedName(DEFAULT_NORMALIZED_NAME)
             .description(DEFAULT_DESCRIPTION);
         return softSkill;
     }
@@ -99,7 +102,7 @@ public class SoftSkillResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final SoftSkillResource softSkillResource = new SoftSkillResource(softSkillService);
+        final SoftSkillResource softSkillResource = new SoftSkillResource(softSkillService, orikaMapper);
         this.restSoftSkillMockMvc = MockMvcBuilders.standaloneSetup(softSkillResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -137,50 +140,10 @@ public class SoftSkillResourceIntTest {
 
     @Test
     @Transactional
-    public void createSoftSkillWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = softSkillRepository.findAll().size();
-
-        // Create the SoftSkill with an existing ID
-        softSkill.setId(1L);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restSoftSkillMockMvc.perform(post("/api/soft-skills")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(softSkill)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the SoftSkill in the database
-        List<SoftSkill> softSkillList = softSkillRepository.findAll();
-        assertThat(softSkillList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the SoftSkill in Elasticsearch
-        verify(mockSoftSkillSearchRepository, times(0)).save(softSkill);
-    }
-
-    @Test
-    @Transactional
     public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = softSkillRepository.findAll().size();
         // set the field null
         softSkill.setName(null);
-
-        // Create the SoftSkill, which fails.
-
-        restSoftSkillMockMvc.perform(post("/api/soft-skills")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(softSkill)))
-            .andExpect(status().isBadRequest());
-
-        List<SoftSkill> softSkillList = softSkillRepository.findAll();
-        assertThat(softSkillList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkNormalizedNameIsRequired() throws Exception {
-        int databaseSizeBeforeTest = softSkillRepository.findAll().size();
-        // set the field null
-        softSkill.setNormalizedName(null);
 
         // Create the SoftSkill, which fails.
 
@@ -249,7 +212,6 @@ public class SoftSkillResourceIntTest {
         em.detach(updatedSoftSkill);
         updatedSoftSkill
             .name(UPDATED_NAME)
-            .normalizedName(UPDATED_NORMALIZED_NAME)
             .description(UPDATED_DESCRIPTION);
 
         restSoftSkillMockMvc.perform(put("/api/soft-skills")

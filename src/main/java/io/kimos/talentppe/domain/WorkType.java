@@ -62,7 +62,7 @@ public class WorkType implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-        this.normalizedName = name.trim().toLowerCase();
+        this.normalizedName = name == null ? null : name.trim().toLowerCase();
     }
 
     public WorkType name(String name) {

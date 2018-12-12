@@ -1,7 +1,6 @@
 package io.kimos.talentppe.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.netflix.discovery.converters.Auto;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.kimos.talentppe.domain.WorkType;
 import io.kimos.talentppe.service.WorkTypeService;
@@ -12,7 +11,6 @@ import io.kimos.talentppe.web.rest.util.HeaderUtil;
 import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,11 +31,11 @@ public class WorkTypeResource {
     private final Logger log = LoggerFactory.getLogger(WorkTypeResource.class);
     private final WorkTypeService workTypeService;
 
-    @Autowired
-    private MapperFacade orikaMapper;
+    private final MapperFacade orikaMapper;
 
-    public WorkTypeResource(WorkTypeService workTypeService) {
+    public WorkTypeResource(WorkTypeService workTypeService, MapperFacade orikaMapper) {
         this.workTypeService = workTypeService;
+        this.orikaMapper = orikaMapper;
     }
 
     /**

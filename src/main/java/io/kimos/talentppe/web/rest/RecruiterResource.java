@@ -9,6 +9,7 @@ import io.kimos.talentppe.web.rest.util.PaginationUtil;
 import io.kimos.talentppe.service.dto.RecruiterCriteria;
 import io.kimos.talentppe.service.RecruiterQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
+import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -24,9 +25,6 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Recruiter.
@@ -42,10 +40,11 @@ public class RecruiterResource {
     private final RecruiterService recruiterService;
 
     private final RecruiterQueryService recruiterQueryService;
-
-    public RecruiterResource(RecruiterService recruiterService, RecruiterQueryService recruiterQueryService) {
+    private final MapperFacade orikaMapper;
+    public RecruiterResource(RecruiterService recruiterService, RecruiterQueryService recruiterQueryService, MapperFacade orikaMapper) {
         this.recruiterService = recruiterService;
         this.recruiterQueryService = recruiterQueryService;
+        this.orikaMapper = orikaMapper;
     }
 
     /**

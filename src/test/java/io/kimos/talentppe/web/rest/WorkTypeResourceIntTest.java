@@ -6,6 +6,7 @@ import io.kimos.talentppe.repository.WorkTypeRepository;
 import io.kimos.talentppe.repository.search.WorkTypeSearchRepository;
 import io.kimos.talentppe.service.WorkTypeService;
 import io.kimos.talentppe.web.rest.errors.ExceptionTranslator;
+import ma.glasnost.orika.MapperFacade;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,8 +45,8 @@ public class WorkTypeResourceIntTest {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_NORMALIZED_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_NORMALIZED_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_NORMALIZED_NAME = "aaaaaaaaaa";
+    private static final String UPDATED_NORMALIZED_NAME = "bbbbbbbbbb";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -61,6 +62,9 @@ public class WorkTypeResourceIntTest {
 
     @Autowired
     private WorkTypeService workTypeService;
+
+    @Autowired
+    private MapperFacade orikaMapper;
 
     /**
      * This repository is mocked in the io.kimos.talentppe.repository.search test package.
@@ -95,7 +99,6 @@ public class WorkTypeResourceIntTest {
     public static WorkType createEntity(EntityManager em) {
         WorkType workType = new WorkType()
             .name(DEFAULT_NAME)
-            .normalizedName(DEFAULT_NORMALIZED_NAME)
             .description(DEFAULT_DESCRIPTION)
             .minQuantityHours(DEFAULT_MIN_QUANTITY_HOURS)
             .maxQuantityHours(DEFAULT_MAX_QUANTITY_HOURS);
@@ -105,7 +108,7 @@ public class WorkTypeResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final WorkTypeResource workTypeResource = new WorkTypeResource(workTypeService);
+        final WorkTypeResource workTypeResource = new WorkTypeResource(workTypeService, orikaMapper);
         this.restWorkTypeMockMvc = MockMvcBuilders.standaloneSetup(workTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -145,50 +148,10 @@ public class WorkTypeResourceIntTest {
 
     @Test
     @Transactional
-    public void createWorkTypeWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = workTypeRepository.findAll().size();
-
-        // Create the WorkType with an existing ID
-        workType.setId(1L);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restWorkTypeMockMvc.perform(post("/api/work-types")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workType)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the WorkType in the database
-        List<WorkType> workTypeList = workTypeRepository.findAll();
-        assertThat(workTypeList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the WorkType in Elasticsearch
-        verify(mockWorkTypeSearchRepository, times(0)).save(workType);
-    }
-
-    @Test
-    @Transactional
     public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = workTypeRepository.findAll().size();
         // set the field null
         workType.setName(null);
-
-        // Create the WorkType, which fails.
-
-        restWorkTypeMockMvc.perform(post("/api/work-types")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workType)))
-            .andExpect(status().isBadRequest());
-
-        List<WorkType> workTypeList = workTypeRepository.findAll();
-        assertThat(workTypeList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkNormalizedNameIsRequired() throws Exception {
-        int databaseSizeBeforeTest = workTypeRepository.findAll().size();
-        // set the field null
-        workType.setNormalizedName(null);
 
         // Create the WorkType, which fails.
 
@@ -297,7 +260,6 @@ public class WorkTypeResourceIntTest {
         em.detach(updatedWorkType);
         updatedWorkType
             .name(UPDATED_NAME)
-            .normalizedName(UPDATED_NORMALIZED_NAME)
             .description(UPDATED_DESCRIPTION)
             .minQuantityHours(UPDATED_MIN_QUANTITY_HOURS)
             .maxQuantityHours(UPDATED_MAX_QUANTITY_HOURS);

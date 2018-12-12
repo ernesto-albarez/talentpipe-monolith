@@ -6,6 +6,7 @@ import io.kimos.talentppe.repository.AreaRepository;
 import io.kimos.talentppe.repository.search.AreaSearchRepository;
 import io.kimos.talentppe.service.AreaService;
 import io.kimos.talentppe.web.rest.errors.ExceptionTranslator;
+import ma.glasnost.orika.MapperFacade;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,8 +47,8 @@ public class AreaResourceIntTest {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_NORMALIZED_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_NORMALIZED_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_NORMALIZED_NAME = "aaaaaaaaaa";
+    private static final String UPDATED_NORMALIZED_NAME = "bbbbbbbbbb";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -81,6 +82,8 @@ public class AreaResourceIntTest {
     private MockMvc restAreaMockMvc;
 
     private Area area;
+    @Autowired
+    private MapperFacade orikaMapper;
 
     /**
      * Create an entity for this test.
@@ -91,7 +94,6 @@ public class AreaResourceIntTest {
     public static Area createEntity(EntityManager em) {
         Area area = new Area()
             .name(DEFAULT_NAME)
-            .normalizedName(DEFAULT_NORMALIZED_NAME)
             .description(DEFAULT_DESCRIPTION);
         return area;
     }
@@ -99,7 +101,7 @@ public class AreaResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AreaResource areaResource = new AreaResource(areaService);
+        final AreaResource areaResource = new AreaResource(areaService, orikaMapper);
         this.restAreaMockMvc = MockMvcBuilders.standaloneSetup(areaResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -128,7 +130,6 @@ public class AreaResourceIntTest {
         assertThat(areaList).hasSize(databaseSizeBeforeCreate + 1);
         Area testArea = areaList.get(areaList.size() - 1);
         assertThat(testArea.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testArea.getNormalizedName()).isEqualTo(DEFAULT_NORMALIZED_NAME);
         assertThat(testArea.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
 
         // Validate the Area in Elasticsearch
@@ -163,24 +164,6 @@ public class AreaResourceIntTest {
         int databaseSizeBeforeTest = areaRepository.findAll().size();
         // set the field null
         area.setName(null);
-
-        // Create the Area, which fails.
-
-        restAreaMockMvc.perform(post("/api/areas")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(area)))
-            .andExpect(status().isBadRequest());
-
-        List<Area> areaList = areaRepository.findAll();
-        assertThat(areaList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkNormalizedNameIsRequired() throws Exception {
-        int databaseSizeBeforeTest = areaRepository.findAll().size();
-        // set the field null
-        area.setNormalizedName(null);
 
         // Create the Area, which fails.
 
@@ -249,7 +232,6 @@ public class AreaResourceIntTest {
         em.detach(updatedArea);
         updatedArea
             .name(UPDATED_NAME)
-            .normalizedName(UPDATED_NORMALIZED_NAME)
             .description(UPDATED_DESCRIPTION);
 
         restAreaMockMvc.perform(put("/api/areas")
@@ -262,7 +244,6 @@ public class AreaResourceIntTest {
         assertThat(areaList).hasSize(databaseSizeBeforeUpdate);
         Area testArea = areaList.get(areaList.size() - 1);
         assertThat(testArea.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testArea.getNormalizedName()).isEqualTo(UPDATED_NORMALIZED_NAME);
         assertThat(testArea.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
 
         // Validate the Area in Elasticsearch

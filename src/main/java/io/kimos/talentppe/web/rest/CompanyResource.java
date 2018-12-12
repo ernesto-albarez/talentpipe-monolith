@@ -9,6 +9,7 @@ import io.kimos.talentppe.web.rest.util.PaginationUtil;
 import io.kimos.talentppe.service.dto.CompanyCriteria;
 import io.kimos.talentppe.service.CompanyQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
+import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -24,9 +25,6 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Company.
@@ -43,9 +41,12 @@ public class CompanyResource {
 
     private final CompanyQueryService companyQueryService;
 
-    public CompanyResource(CompanyService companyService, CompanyQueryService companyQueryService) {
+    private final MapperFacade orikaMapper;
+
+    public CompanyResource(CompanyService companyService, CompanyQueryService companyQueryService, MapperFacade orikaMapper) {
         this.companyService = companyService;
         this.companyQueryService = companyQueryService;
+        this.orikaMapper = orikaMapper;
     }
 
     /**

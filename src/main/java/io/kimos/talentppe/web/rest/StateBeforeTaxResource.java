@@ -4,9 +4,12 @@ import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.kimos.talentppe.domain.StateBeforeTax;
 import io.kimos.talentppe.service.StateBeforeTaxService;
+import io.kimos.talentppe.web.rest.dto.CreateStateBeforeTaxDTO;
+import io.kimos.talentppe.web.rest.dto.UpdateStateBeforeTaxDTO;
 import io.kimos.talentppe.web.rest.errors.BadRequestAlertException;
 import io.kimos.talentppe.web.rest.util.HeaderUtil;
 import io.kimos.talentppe.web.rest.util.PaginationUtil;
+import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -32,9 +35,10 @@ public class StateBeforeTaxResource {
     private static final String ENTITY_NAME = "stateBeforeTax";
     private final Logger log = LoggerFactory.getLogger(StateBeforeTaxResource.class);
     private final StateBeforeTaxService stateBeforeTaxService;
-
-    public StateBeforeTaxResource(StateBeforeTaxService stateBeforeTaxService) {
+    private final MapperFacade orikaMapper;
+    public StateBeforeTaxResource(StateBeforeTaxService stateBeforeTaxService, MapperFacade orikaMapper) {
         this.stateBeforeTaxService = stateBeforeTaxService;
+        this.orikaMapper = orikaMapper;
     }
 
     /**
@@ -46,12 +50,9 @@ public class StateBeforeTaxResource {
      */
     @PostMapping("/state-before-taxes")
     @Timed
-    public ResponseEntity<StateBeforeTax> createStateBeforeTax(@Valid @RequestBody StateBeforeTax stateBeforeTax) throws URISyntaxException {
+    public ResponseEntity<StateBeforeTax> createStateBeforeTax(@Valid @RequestBody CreateStateBeforeTaxDTO stateBeforeTax) throws URISyntaxException {
         log.debug("REST request to save StateBeforeTax : {}", stateBeforeTax);
-        if (stateBeforeTax.getId() != null) {
-            throw new BadRequestAlertException("A new stateBeforeTax cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        StateBeforeTax result = stateBeforeTaxService.save(stateBeforeTax);
+        StateBeforeTax result = stateBeforeTaxService.save(orikaMapper.map(stateBeforeTax, StateBeforeTax.class));
         return ResponseEntity.created(new URI("/api/state-before-taxes/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -68,12 +69,12 @@ public class StateBeforeTaxResource {
      */
     @PutMapping("/state-before-taxes")
     @Timed
-    public ResponseEntity<StateBeforeTax> updateStateBeforeTax(@Valid @RequestBody StateBeforeTax stateBeforeTax) throws URISyntaxException {
+    public ResponseEntity<StateBeforeTax> updateStateBeforeTax(@Valid @RequestBody UpdateStateBeforeTaxDTO stateBeforeTax) throws URISyntaxException {
         log.debug("REST request to update StateBeforeTax : {}", stateBeforeTax);
         if (stateBeforeTax.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        StateBeforeTax result = stateBeforeTaxService.save(stateBeforeTax);
+        StateBeforeTax result = stateBeforeTaxService.save(orikaMapper.map(stateBeforeTax, StateBeforeTax.class));
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, stateBeforeTax.getId().toString()))
             .body(result);

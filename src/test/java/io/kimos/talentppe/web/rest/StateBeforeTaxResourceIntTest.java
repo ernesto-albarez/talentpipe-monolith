@@ -6,6 +6,7 @@ import io.kimos.talentppe.repository.StateBeforeTaxRepository;
 import io.kimos.talentppe.repository.search.StateBeforeTaxSearchRepository;
 import io.kimos.talentppe.service.StateBeforeTaxService;
 import io.kimos.talentppe.web.rest.errors.ExceptionTranslator;
+import ma.glasnost.orika.MapperFacade;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,8 +47,8 @@ public class StateBeforeTaxResourceIntTest {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_NORMALIZED_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_NORMALIZED_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_NORMALIZED_NAME = "aaaaaaaaaa";
+    private static final String UPDATED_NORMALIZED_NAME = "bbbbbbbbbb";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -57,6 +58,9 @@ public class StateBeforeTaxResourceIntTest {
 
     @Autowired
     private StateBeforeTaxService stateBeforeTaxService;
+
+    @Autowired
+    private MapperFacade orikaMapper;
 
     /**
      * This repository is mocked in the io.kimos.talentppe.repository.search test package.
@@ -99,7 +103,7 @@ public class StateBeforeTaxResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final StateBeforeTaxResource stateBeforeTaxResource = new StateBeforeTaxResource(stateBeforeTaxService);
+        final StateBeforeTaxResource stateBeforeTaxResource = new StateBeforeTaxResource(stateBeforeTaxService, orikaMapper);
         this.restStateBeforeTaxMockMvc = MockMvcBuilders.standaloneSetup(stateBeforeTaxResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

@@ -6,6 +6,7 @@ import io.kimos.talentppe.repository.CompanyTypeRepository;
 import io.kimos.talentppe.repository.search.CompanyTypeSearchRepository;
 import io.kimos.talentppe.service.CompanyTypeService;
 import io.kimos.talentppe.web.rest.errors.ExceptionTranslator;
+import ma.glasnost.orika.MapperFacade;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,8 +47,8 @@ public class CompanyTypeResourceIntTest {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_NORMALIZED_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_NORMALIZED_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_NORMALIZED_NAME = "aaaaaaaaaa";
+    private static final String UPDATED_NORMALIZED_NAME = "bbbbbbbbbb";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -63,6 +64,9 @@ public class CompanyTypeResourceIntTest {
 
     @Autowired
     private CompanyTypeService companyTypeService;
+
+    @Autowired
+    private MapperFacade orikaMapper;
 
     /**
      * This repository is mocked in the io.kimos.talentppe.repository.search test package.
@@ -97,7 +101,6 @@ public class CompanyTypeResourceIntTest {
     public static CompanyType createEntity(EntityManager em) {
         CompanyType companyType = new CompanyType()
             .name(DEFAULT_NAME)
-            .normalizedName(DEFAULT_NORMALIZED_NAME)
             .description(DEFAULT_DESCRIPTION)
             .minEmployeesQuantity(DEFAULT_MIN_EMPLOYEES_QUANTITY)
             .maxEmployeesQuantity(DEFAULT_MAX_EMPLOYEES_QUANTITY);
@@ -107,7 +110,7 @@ public class CompanyTypeResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final CompanyTypeResource companyTypeResource = new CompanyTypeResource(companyTypeService);
+        final CompanyTypeResource companyTypeResource = new CompanyTypeResource(companyTypeService, orikaMapper);
         this.restCompanyTypeMockMvc = MockMvcBuilders.standaloneSetup(companyTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -147,50 +150,10 @@ public class CompanyTypeResourceIntTest {
 
     @Test
     @Transactional
-    public void createCompanyTypeWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = companyTypeRepository.findAll().size();
-
-        // Create the CompanyType with an existing ID
-        companyType.setId(1L);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restCompanyTypeMockMvc.perform(post("/api/company-types")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(companyType)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the CompanyType in the database
-        List<CompanyType> companyTypeList = companyTypeRepository.findAll();
-        assertThat(companyTypeList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the CompanyType in Elasticsearch
-        verify(mockCompanyTypeSearchRepository, times(0)).save(companyType);
-    }
-
-    @Test
-    @Transactional
     public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = companyTypeRepository.findAll().size();
         // set the field null
         companyType.setName(null);
-
-        // Create the CompanyType, which fails.
-
-        restCompanyTypeMockMvc.perform(post("/api/company-types")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(companyType)))
-            .andExpect(status().isBadRequest());
-
-        List<CompanyType> companyTypeList = companyTypeRepository.findAll();
-        assertThat(companyTypeList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkNormalizedNameIsRequired() throws Exception {
-        int databaseSizeBeforeTest = companyTypeRepository.findAll().size();
-        // set the field null
-        companyType.setNormalizedName(null);
 
         // Create the CompanyType, which fails.
 
@@ -281,7 +244,6 @@ public class CompanyTypeResourceIntTest {
         em.detach(updatedCompanyType);
         updatedCompanyType
             .name(UPDATED_NAME)
-            .normalizedName(UPDATED_NORMALIZED_NAME)
             .description(UPDATED_DESCRIPTION)
             .minEmployeesQuantity(UPDATED_MIN_EMPLOYEES_QUANTITY)
             .maxEmployeesQuantity(UPDATED_MAX_EMPLOYEES_QUANTITY);

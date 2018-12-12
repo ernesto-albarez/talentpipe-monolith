@@ -6,6 +6,7 @@ import io.kimos.talentppe.repository.CountryRepository;
 import io.kimos.talentppe.repository.search.CountrySearchRepository;
 import io.kimos.talentppe.service.CountryService;
 import io.kimos.talentppe.web.rest.errors.ExceptionTranslator;
+import ma.glasnost.orika.MapperFacade;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,8 +47,8 @@ public class CountryResourceIntTest {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_NORMALIZED_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_NORMALIZED_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_NORMALIZED_NAME = "aaaaaaaaaa";
+    private static final String UPDATED_NORMALIZED_NAME = "bbbbbbbbbb";
 
     private static final String DEFAULT_CODE = "AAAAAAAAAA";
     private static final String UPDATED_CODE = "BBBBBBBBBB";
@@ -63,6 +64,9 @@ public class CountryResourceIntTest {
 
     @Autowired
     private CountryService countryService;
+
+    @Autowired
+    private MapperFacade orikaMapper;
 
     /**
      * This repository is mocked in the io.kimos.talentppe.repository.search test package.
@@ -97,7 +101,6 @@ public class CountryResourceIntTest {
     public static Country createEntity(EntityManager em) {
         Country country = new Country()
             .name(DEFAULT_NAME)
-            .normalizedName(DEFAULT_NORMALIZED_NAME)
             .code(DEFAULT_CODE)
             .phoneCode(DEFAULT_PHONE_CODE)
             .currency(DEFAULT_CURRENCY);
@@ -107,7 +110,7 @@ public class CountryResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final CountryResource countryResource = new CountryResource(countryService);
+        final CountryResource countryResource = new CountryResource(countryService, orikaMapper);
         this.restCountryMockMvc = MockMvcBuilders.standaloneSetup(countryResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -173,24 +176,6 @@ public class CountryResourceIntTest {
         int databaseSizeBeforeTest = countryRepository.findAll().size();
         // set the field null
         country.setName(null);
-
-        // Create the Country, which fails.
-
-        restCountryMockMvc.perform(post("/api/countries")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(country)))
-            .andExpect(status().isBadRequest());
-
-        List<Country> countryList = countryRepository.findAll();
-        assertThat(countryList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkNormalizedNameIsRequired() throws Exception {
-        int databaseSizeBeforeTest = countryRepository.findAll().size();
-        // set the field null
-        country.setNormalizedName(null);
 
         // Create the Country, which fails.
 
@@ -281,7 +266,6 @@ public class CountryResourceIntTest {
         em.detach(updatedCountry);
         updatedCountry
             .name(UPDATED_NAME)
-            .normalizedName(UPDATED_NORMALIZED_NAME)
             .code(UPDATED_CODE)
             .phoneCode(UPDATED_PHONE_CODE)
             .currency(UPDATED_CURRENCY);

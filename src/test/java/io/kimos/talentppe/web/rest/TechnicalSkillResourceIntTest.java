@@ -6,6 +6,7 @@ import io.kimos.talentppe.repository.TechnicalSkillRepository;
 import io.kimos.talentppe.repository.search.TechnicalSkillSearchRepository;
 import io.kimos.talentppe.service.TechnicalSkillService;
 import io.kimos.talentppe.web.rest.errors.ExceptionTranslator;
+import ma.glasnost.orika.MapperFacade;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,8 +47,8 @@ public class TechnicalSkillResourceIntTest {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_NORMALIZED_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_NORMALIZED_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_NORMALIZED_NAME = "aaaaaaaaaa";
+    private static final String UPDATED_NORMALIZED_NAME = "bbbbbbbbbb";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -57,6 +58,9 @@ public class TechnicalSkillResourceIntTest {
 
     @Autowired
     private TechnicalSkillService technicalSkillService;
+
+    @Autowired
+    private MapperFacade orikaMapper;
 
     /**
      * This repository is mocked in the io.kimos.talentppe.repository.search test package.
@@ -91,7 +95,6 @@ public class TechnicalSkillResourceIntTest {
     public static TechnicalSkill createEntity(EntityManager em) {
         TechnicalSkill technicalSkill = new TechnicalSkill()
             .name(DEFAULT_NAME)
-            .normalizedName(DEFAULT_NORMALIZED_NAME)
             .description(DEFAULT_DESCRIPTION);
         return technicalSkill;
     }
@@ -99,7 +102,7 @@ public class TechnicalSkillResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final TechnicalSkillResource technicalSkillResource = new TechnicalSkillResource(technicalSkillService);
+        final TechnicalSkillResource technicalSkillResource = new TechnicalSkillResource(technicalSkillService, orikaMapper);
         this.restTechnicalSkillMockMvc = MockMvcBuilders.standaloneSetup(technicalSkillResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -177,24 +180,6 @@ public class TechnicalSkillResourceIntTest {
 
     @Test
     @Transactional
-    public void checkNormalizedNameIsRequired() throws Exception {
-        int databaseSizeBeforeTest = technicalSkillRepository.findAll().size();
-        // set the field null
-        technicalSkill.setNormalizedName(null);
-
-        // Create the TechnicalSkill, which fails.
-
-        restTechnicalSkillMockMvc.perform(post("/api/technical-skills")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(technicalSkill)))
-            .andExpect(status().isBadRequest());
-
-        List<TechnicalSkill> technicalSkillList = technicalSkillRepository.findAll();
-        assertThat(technicalSkillList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllTechnicalSkills() throws Exception {
         // Initialize the database
         technicalSkillRepository.saveAndFlush(technicalSkill);
@@ -249,7 +234,6 @@ public class TechnicalSkillResourceIntTest {
         em.detach(updatedTechnicalSkill);
         updatedTechnicalSkill
             .name(UPDATED_NAME)
-            .normalizedName(UPDATED_NORMALIZED_NAME)
             .description(UPDATED_DESCRIPTION);
 
         restTechnicalSkillMockMvc.perform(put("/api/technical-skills")

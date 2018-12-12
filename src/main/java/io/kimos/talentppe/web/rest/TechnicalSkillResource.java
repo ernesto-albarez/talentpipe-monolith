@@ -12,7 +12,6 @@ import io.kimos.talentppe.web.rest.util.PaginationUtil;
 import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -36,12 +35,11 @@ public class TechnicalSkillResource {
     private static final String ENTITY_NAME = "technicalSkill";
     private final Logger log = LoggerFactory.getLogger(TechnicalSkillResource.class);
     private final TechnicalSkillService technicalSkillService;
+    private final MapperFacade orikaMapper;
 
-    @Autowired
-    private MapperFacade orikaMapper;
-
-    public TechnicalSkillResource(TechnicalSkillService technicalSkillService) {
+    public TechnicalSkillResource(TechnicalSkillService technicalSkillService, MapperFacade orikaMapper) {
         this.technicalSkillService = technicalSkillService;
+        this.orikaMapper = orikaMapper;
     }
 
     /**

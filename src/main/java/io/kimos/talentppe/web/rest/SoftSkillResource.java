@@ -12,7 +12,6 @@ import io.kimos.talentppe.web.rest.util.PaginationUtil;
 import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -36,12 +35,11 @@ public class SoftSkillResource {
     private static final String ENTITY_NAME = "softSkill";
     private final Logger log = LoggerFactory.getLogger(SoftSkillResource.class);
     private final SoftSkillService softSkillService;
+    private final MapperFacade orikaMapper;
 
-    @Autowired
-    private MapperFacade orikaMapper;
-
-    public SoftSkillResource(SoftSkillService softSkillService) {
+    public SoftSkillResource(SoftSkillService softSkillService, MapperFacade orikaMapper) {
         this.softSkillService = softSkillService;
+        this.orikaMapper = orikaMapper;
     }
 
     /**

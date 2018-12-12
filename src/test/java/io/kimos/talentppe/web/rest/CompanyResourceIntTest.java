@@ -11,9 +11,9 @@ import io.kimos.talentppe.repository.CompanyRepository;
 import io.kimos.talentppe.repository.search.CompanySearchRepository;
 import io.kimos.talentppe.service.CompanyService;
 import io.kimos.talentppe.web.rest.errors.ExceptionTranslator;
-import io.kimos.talentppe.service.dto.CompanyCriteria;
 import io.kimos.talentppe.service.CompanyQueryService;
 
+import ma.glasnost.orika.MapperFacade;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -114,6 +114,9 @@ public class CompanyResourceIntTest {
     @Autowired
     private EntityManager em;
 
+    @Autowired
+    private MapperFacade orikaMapper;
+
     private MockMvc restCompanyMockMvc;
 
     private Company company;
@@ -121,7 +124,7 @@ public class CompanyResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final CompanyResource companyResource = new CompanyResource(companyService, companyQueryService);
+        final CompanyResource companyResource = new CompanyResource(companyService, companyQueryService, orikaMapper);
         this.restCompanyMockMvc = MockMvcBuilders.standaloneSetup(companyResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

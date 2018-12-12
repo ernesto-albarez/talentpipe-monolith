@@ -9,9 +9,9 @@ import io.kimos.talentppe.repository.RecruiterRepository;
 import io.kimos.talentppe.repository.search.RecruiterSearchRepository;
 import io.kimos.talentppe.service.RecruiterService;
 import io.kimos.talentppe.web.rest.errors.ExceptionTranslator;
-import io.kimos.talentppe.service.dto.RecruiterCriteria;
 import io.kimos.talentppe.service.RecruiterQueryService;
 
+import ma.glasnost.orika.MapperFacade;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -83,6 +83,9 @@ public class RecruiterResourceIntTest {
     @Autowired
     private RecruiterService recruiterService;
 
+    @Autowired
+    private MapperFacade orikaMapper;
+
     /**
      * This repository is mocked in the io.kimos.talentppe.repository.search test package.
      *
@@ -113,7 +116,7 @@ public class RecruiterResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final RecruiterResource recruiterResource = new RecruiterResource(recruiterService, recruiterQueryService);
+        final RecruiterResource recruiterResource = new RecruiterResource(recruiterService, recruiterQueryService, orikaMapper);
         this.restRecruiterMockMvc = MockMvcBuilders.standaloneSetup(recruiterResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

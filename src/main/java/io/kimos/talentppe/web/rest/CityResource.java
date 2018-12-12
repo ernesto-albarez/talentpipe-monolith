@@ -12,7 +12,6 @@ import io.github.jhipster.web.util.ResponseUtil;
 import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -26,9 +25,6 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing City.
@@ -43,11 +39,11 @@ public class CityResource {
 
     private final CityService cityService;
 
-    @Autowired
-    private MapperFacade orikaMapper;
+    private final MapperFacade orikaMapper;
 
-    public CityResource(CityService cityService) {
+    public CityResource(CityService cityService, MapperFacade orikaMapper) {
         this.cityService = cityService;
+        this.orikaMapper = orikaMapper;
     }
 
     /**

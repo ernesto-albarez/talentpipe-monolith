@@ -1,7 +1,6 @@
 package io.kimos.talentppe.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.netflix.discovery.converters.Auto;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.kimos.talentppe.domain.Sector;
 import io.kimos.talentppe.service.SectorService;
@@ -13,7 +12,6 @@ import io.kimos.talentppe.web.rest.util.PaginationUtil;
 import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -37,12 +35,11 @@ public class SectorResource {
     private static final String ENTITY_NAME = "sector";
     private final Logger log = LoggerFactory.getLogger(SectorResource.class);
     private final SectorService sectorService;
+    private final MapperFacade orikaMapper;
 
-    @Autowired
-    private MapperFacade orikaMapper;
-
-    public SectorResource(SectorService sectorService) {
+    public SectorResource(SectorService sectorService, MapperFacade orikaMapper) {
         this.sectorService = sectorService;
+        this.orikaMapper = orikaMapper;
     }
 
     /**

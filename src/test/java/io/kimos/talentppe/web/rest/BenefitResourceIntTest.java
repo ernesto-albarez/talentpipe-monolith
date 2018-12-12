@@ -6,6 +6,7 @@ import io.kimos.talentppe.repository.BenefitRepository;
 import io.kimos.talentppe.repository.search.BenefitSearchRepository;
 import io.kimos.talentppe.service.BenefitService;
 import io.kimos.talentppe.web.rest.errors.ExceptionTranslator;
+import ma.glasnost.orika.MapperFacade;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,8 +47,8 @@ public class BenefitResourceIntTest {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_NORMALIZED_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_NORMALIZED_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_NORMALIZED_NAME = "aaaaaaaaaa";
+    private static final String UPDATED_NORMALIZED_NAME = "bbbbbbbbbb";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -57,6 +58,9 @@ public class BenefitResourceIntTest {
 
     @Autowired
     private BenefitService benefitService;
+
+    @Autowired
+    private MapperFacade orikaMapper;
 
     /**
      * This repository is mocked in the io.kimos.talentppe.repository.search test package.
@@ -91,7 +95,6 @@ public class BenefitResourceIntTest {
     public static Benefit createEntity(EntityManager em) {
         Benefit benefit = new Benefit()
             .name(DEFAULT_NAME)
-            .normalizedName(DEFAULT_NORMALIZED_NAME)
             .description(DEFAULT_DESCRIPTION);
         return benefit;
     }
@@ -99,7 +102,7 @@ public class BenefitResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final BenefitResource benefitResource = new BenefitResource(benefitService);
+        final BenefitResource benefitResource = new BenefitResource(benefitService, orikaMapper);
         this.restBenefitMockMvc = MockMvcBuilders.standaloneSetup(benefitResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -177,24 +180,6 @@ public class BenefitResourceIntTest {
 
     @Test
     @Transactional
-    public void checkNormalizedNameIsRequired() throws Exception {
-        int databaseSizeBeforeTest = benefitRepository.findAll().size();
-        // set the field null
-        benefit.setNormalizedName(null);
-
-        // Create the Benefit, which fails.
-
-        restBenefitMockMvc.perform(post("/api/benefits")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(benefit)))
-            .andExpect(status().isBadRequest());
-
-        List<Benefit> benefitList = benefitRepository.findAll();
-        assertThat(benefitList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllBenefits() throws Exception {
         // Initialize the database
         benefitRepository.saveAndFlush(benefit);
@@ -249,7 +234,6 @@ public class BenefitResourceIntTest {
         em.detach(updatedBenefit);
         updatedBenefit
             .name(UPDATED_NAME)
-            .normalizedName(UPDATED_NORMALIZED_NAME)
             .description(UPDATED_DESCRIPTION);
 
         restBenefitMockMvc.perform(put("/api/benefits")

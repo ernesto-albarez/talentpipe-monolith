@@ -57,7 +57,7 @@ public class Country implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-        this.normalizedName = name.trim().toLowerCase();
+        this.normalizedName = name == null ? null : new String(name).trim().toLowerCase();
     }
 
     public Country name(String name) {
