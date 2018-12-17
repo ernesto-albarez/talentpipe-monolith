@@ -85,9 +85,7 @@ public class Company implements Serializable {
     @Column(name = "last_update_date", nullable = false)
     private Instant lastUpdateDate;
 
-    @OneToOne(optional = false, cascade = {
-        CascadeType.PERSIST, CascadeType.MERGE
-    })
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
     @NotNull
     @JoinColumn(unique = true)
     @JsonIgnore
