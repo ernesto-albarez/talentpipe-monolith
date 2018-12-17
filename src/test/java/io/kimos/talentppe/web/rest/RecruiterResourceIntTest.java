@@ -173,7 +173,7 @@ public class RecruiterResourceIntTest {
         assertThat(testRecruiter.getLastName()).isEqualTo(DEFAULT_LAST_NAME);
         assertThat(testRecruiter.getEmail()).isEqualTo(DEFAULT_EMAIL);
         assertThat(testRecruiter.getTaxId()).isEqualTo(DEFAULT_TAX_ID);
-        assertThat(testRecruiter.getPhone()).isEqualTo(DEFAULT_PHONE);
+        assertThat(testRecruiter.getPhoneNumber()).isEqualTo(DEFAULT_PHONE);
         assertThat(testRecruiter.getStreet()).isEqualTo(DEFAULT_STREET);
         assertThat(testRecruiter.getNumber()).isEqualTo(DEFAULT_NUMBER);
         assertThat(testRecruiter.getFloor()).isEqualTo(DEFAULT_FLOOR);
@@ -260,7 +260,7 @@ public class RecruiterResourceIntTest {
     public void checkPhoneIsRequired() throws Exception {
         int databaseSizeBeforeTest = recruiterRepository.findAll().size();
         // set the field null
-        recruiter.setPhone(null);
+        recruiter.setPhoneNumber(null);
 
         // Create the Recruiter, which fails.
 
@@ -872,7 +872,7 @@ public class RecruiterResourceIntTest {
         assertThat(testRecruiter.getLastName()).isEqualTo(UPDATED_LAST_NAME);
         assertThat(testRecruiter.getEmail()).isEqualTo(UPDATED_EMAIL);
         assertThat(testRecruiter.getTaxId()).isEqualTo(UPDATED_TAX_ID);
-        assertThat(testRecruiter.getPhone()).isEqualTo(UPDATED_PHONE);
+        assertThat(testRecruiter.getPhoneNumber()).isEqualTo(UPDATED_PHONE);
         assertThat(testRecruiter.getStreet()).isEqualTo(UPDATED_STREET);
         assertThat(testRecruiter.getNumber()).isEqualTo(UPDATED_NUMBER);
         assertThat(testRecruiter.getFloor()).isEqualTo(UPDATED_FLOOR);

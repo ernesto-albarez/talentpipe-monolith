@@ -203,7 +203,7 @@ public class CompanyResourceIntTest {
         assertThat(testCompany.getNumber()).isEqualTo(DEFAULT_NUMBER);
         assertThat(testCompany.getApartment()).isEqualTo(DEFAULT_APARTMENT);
         assertThat(testCompany.getPostalCode()).isEqualTo(DEFAULT_POSTAL_CODE);
-        assertThat(testCompany.getPhone()).isEqualTo(DEFAULT_PHONE);
+        assertThat(testCompany.getPhoneNumber()).isEqualTo(DEFAULT_PHONE);
         assertThat(testCompany.getContactName()).isEqualTo(DEFAULT_CONTACT_NAME);
 
         // Validate the Company in Elasticsearch
@@ -323,7 +323,7 @@ public class CompanyResourceIntTest {
     public void checkPhoneIsRequired() throws Exception {
         int databaseSizeBeforeTest = companyRepository.findAll().size();
         // set the field null
-        company.setPhone(null);
+        company.setPhoneNumber(null);
 
         // Create the Company, which fails.
 
@@ -1046,7 +1046,7 @@ public class CompanyResourceIntTest {
         assertThat(testCompany.getNumber()).isEqualTo(UPDATED_NUMBER);
         assertThat(testCompany.getApartment()).isEqualTo(UPDATED_APARTMENT);
         assertThat(testCompany.getPostalCode()).isEqualTo(UPDATED_POSTAL_CODE);
-        assertThat(testCompany.getPhone()).isEqualTo(UPDATED_PHONE);
+        assertThat(testCompany.getPhoneNumber()).isEqualTo(UPDATED_PHONE);
         assertThat(testCompany.getContactName()).isEqualTo(UPDATED_CONTACT_NAME);
 
         // Validate the Company in Elasticsearch

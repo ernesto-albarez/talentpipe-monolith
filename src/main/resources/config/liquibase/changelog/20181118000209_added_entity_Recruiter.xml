@@ -38,8 +38,12 @@
                 <constraints nullable="false" />
             </column>
 
-            <column name="phoneNumber" type="varchar(255)">
+            <column name="phone_number" type="varchar(255)">
                 <constraints nullable="false" />
+            </column>
+
+            <column name="phone_prefix" type="varchar(255)">
+                <constraints nullable="true" />
             </column>
 
             <column name="street" type="varchar(255)">

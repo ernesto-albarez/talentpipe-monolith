@@ -43,8 +43,11 @@ public class Recruiter implements Serializable {
     private String taxId;
 
     @NotNull
-    @Column(name = "phone", nullable = false)
-    private String phone;
+    @Column(name = "phone_number", nullable = false)
+    private String phoneNumber;
+
+    @Column(name = "phone_prefix")
+    private String phonePrefix;
 
     @NotNull
     @Column(name = "street", nullable = false)
@@ -132,17 +135,17 @@ public class Recruiter implements Serializable {
         this.taxId = taxId;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public Recruiter phone(String phone) {
-        this.phone = phone;
+        this.phoneNumber = phone;
         return this;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getStreet() {
@@ -191,6 +194,19 @@ public class Recruiter implements Serializable {
     public Recruiter apartment(String apartment) {
         this.apartment = apartment;
         return this;
+    }
+
+    public Recruiter phonePrefix(String phonePrefix) {
+        this.phonePrefix = phonePrefix;
+        return this;
+    }
+
+    public String getPhonePrefix() {
+        return phonePrefix;
+    }
+
+    public void setPhonePrefix(String phonePrefix) {
+        this.phonePrefix = phonePrefix;
     }
 
     public void setApartment(String apartment) {
@@ -252,7 +268,7 @@ public class Recruiter implements Serializable {
             ", lastName='" + getLastName() + "'" +
             ", email='" + getEmail() + "'" +
             ", taxId='" + getTaxId() + "'" +
-            ", phone='" + getPhone() + "'" +
+            ", phoneNumber='" + getPhoneNumber() + "'" +
             ", street='" + getStreet() + "'" +
             ", number=" + getNumber() +
             ", floor=" + getFloor() +
