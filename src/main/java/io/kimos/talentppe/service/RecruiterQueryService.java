@@ -86,7 +86,7 @@ public class RecruiterQueryService extends QueryService<Recruiter> {
                 specification = specification.and(buildStringSpecification(criteria.getTaxId(), Recruiter_.taxId));
             }
             if (criteria.getPhone() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getPhone(), Recruiter_.phone));
+                specification = specification.and(buildStringSpecification(criteria.getPhone(), Recruiter_.phoneNumber));
             }
             if (criteria.getStreet() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getStreet(), Recruiter_.street));
