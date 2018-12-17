@@ -303,4 +303,36 @@ public class UserService {
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
     }
+
+    public User registerCompanyUser(User user) {
+        userRepository.findOneByLogin(user.getLogin().toLowerCase()).ifPresent(existingUser -> {
+            boolean removed = removeNonActivatedUser(existingUser);
+            if (!removed) {
+                throw new LoginAlreadyUsedException();
+            }
+        });
+        userRepository.findOneByEmailIgnoreCase(user.getEmail()).ifPresent(existingUser -> {
+            boolean removed = removeNonActivatedUser(existingUser);
+            if (!removed) {
+                throw new EmailAlreadyUsedException();
+            }
+        });
+        String encryptedPassword = passwordEncoder.encode(user.getPassword());
+        user.setLogin(user.getLogin().toLowerCase());
+        // new user gets initially a generated password
+        user.setPassword(encryptedPassword);
+        user.setEmail(user.getEmail().toLowerCase());
+        // new user is not active
+        user.setActivated(false);
+        // new user gets registration key
+        user.setActivationKey(RandomUtil.generateActivationKey());
+        Set<Authority> authorities = new HashSet<>();
+        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+        user.setAuthorities(authorities);
+        user = userRepository.save(user);
+        userSearchRepository.save(user);
+        this.clearUserCaches(user);
+        log.debug("Created Information for User: {}", user);
+        return user;
+    }
 }

@@ -1,9 +1,11 @@
 package io.kimos.talentppe.service.impl;
 
+import io.kimos.talentppe.domain.User;
 import io.kimos.talentppe.service.CompanyService;
 import io.kimos.talentppe.domain.Company;
 import io.kimos.talentppe.repository.CompanyRepository;
 import io.kimos.talentppe.repository.search.CompanySearchRepository;
+import io.kimos.talentppe.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.Optional;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
@@ -29,9 +32,12 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final CompanySearchRepository companySearchRepository;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository, CompanySearchRepository companySearchRepository) {
+    private final UserService userService;
+
+    public CompanyServiceImpl(CompanyRepository companyRepository, CompanySearchRepository companySearchRepository, UserService userService) {
         this.companyRepository = companyRepository;
         this.companySearchRepository = companySearchRepository;
+        this.userService = userService;
     }
 
     /**
@@ -42,9 +48,14 @@ public class CompanyServiceImpl implements CompanyService {
      */
     @Override
     public Company save(Company company) {
-        log.debug("Request to save Company : {}", company);        Company result = companyRepository.save(company);
+        log.debug("Request to save Company : {}", company);
+        Company result = companyRepository.save(company.getId() == null? prepareToCreate(company) : prepareToUpdate(company));
         companySearchRepository.save(result);
         return result;
+    }
+
+    private Company prepareToUpdate(Company company) {
+        return company;
     }
 
     /**
@@ -98,4 +109,24 @@ public class CompanyServiceImpl implements CompanyService {
     public Page<Company> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Companies for query {}", query);
         return companySearchRepository.search(queryStringQuery(query), pageable);    }
+
+    @Override
+    @Transactional
+    public Company createCompany(Company company, String password) {
+        User user = new User();
+        user.setLogin(company.getEmail());
+        user.setFirstName(company.getContactName());
+        user.setLangKey(company.getContactLastName());
+        user.setEmail(company.getEmail());
+        user.setPassword(password);
+        user = userService.registerCompanyUser(user);
+        company.setMainUser(user);
+        return this.save(company);
+    }
+
+    private Company prepareToCreate(Company company) {
+        company.setCreationDate(Instant.now());
+        company.setLastUpdateDate(Instant.now());
+        return company;
+    }
 }

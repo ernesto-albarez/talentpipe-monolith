@@ -36,6 +36,7 @@
             <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
+            <column name="company_id" type="bigint" />
             <column name="created_date" type="timestamp" defaultValueDate="${now}">
                 <constraints nullable="false"/>
             </column>

@@ -1,5 +1,6 @@
 package io.kimos.talentppe.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -8,7 +9,10 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.stereotype.Component;
+
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 
 /**
@@ -38,52 +42,66 @@ public class Company implements Serializable {
     @Column(name = "email", nullable = false)
     private String email;
 
+    @NotNull
     @Column(name = "name")
     private String name;
 
-    @NotNull
     @Column(name = "street", nullable = false)
     private String street;
 
     @Column(name = "floor")
     private Integer floor;
 
-    @NotNull
     @Column(name = "jhi_number", nullable = false)
     private Integer number;
 
     @Column(name = "apartment")
     private String apartment;
 
-    @NotNull
     @Column(name = "postal_code", nullable = false)
     private String postalCode;
 
     @NotNull
-    @Column(name = "phone", nullable = false)
-    private String phone;
+    @Column(name = "phone_number", nullable = false)
+    private String phoneNumber;
+
+    @NotNull
+    @Column(name = "phone_prefix", nullable = false)
+    private String phonePrefix;
 
     @NotNull
     @Column(name = "contact_name", nullable = false)
     private String contactName;
 
-    @OneToOne(optional = false)
+    @NotNull
+    @Column(name="contact_lastname", nullable = false)
+    private String contactLastName;
+
+    @NotNull
+    @Column(name="creation_date", nullable = false)
+    private Instant creationDate;
+
+    @NotNull
+    @Column(name = "last_update_date", nullable = false)
+    private Instant lastUpdateDate;
+
+    @OneToOne(optional = false, cascade = {
+        CascadeType.PERSIST, CascadeType.MERGE
+    })
     @NotNull
     @JoinColumn(unique = true)
+    @JsonIgnore
     private User mainUser;
 
     @ManyToOne(optional = false)
-    @NotNull
     @JsonIgnoreProperties("")
     private Sector sector;
 
     @ManyToOne(optional = false)
-    @NotNull
     @JsonIgnoreProperties("")
     private City city;
 
     @ManyToOne(optional = false)
-    @NotNull
     @JsonIgnoreProperties("")
     private CompanyType companyType;
 
@@ -213,17 +231,17 @@ public class Company implements Serializable {
         this.postalCode = postalCode;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public Company phone(String phone) {
-        this.phone = phone;
+        this.phoneNumber = phone;
         return this;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getContactName() {
@@ -250,6 +268,7 @@ public class Company implements Serializable {
 
     public void setMainUser(User user) {
         this.mainUser = user;
+        user.setCompany(this);
     }
 
     public Sector getSector() {
@@ -285,6 +304,38 @@ public class Company implements Serializable {
     public Company companyType(CompanyType companyType) {
         this.companyType = companyType;
         return this;
+    }
+
+    public Instant getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Instant creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Instant getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+
+    public void setLastUpdateDate(Instant lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
+    }
+
+    public String getPhonePrefix() {
+        return phonePrefix;
+    }
+
+    public void setPhonePrefix(String phonePrefix) {
+        this.phonePrefix = phonePrefix;
+    }
+
+    public String getContactLastName() {
+        return contactLastName;
+    }
+
+    public void setContactLastName(String contactLastName) {
+        this.contactLastName = contactLastName;
     }
 
     public void setCompanyType(CompanyType companyType) {
@@ -325,7 +376,7 @@ public class Company implements Serializable {
             ", number=" + getNumber() +
             ", apartment='" + getApartment() + "'" +
             ", postalCode='" + getPostalCode() + "'" +
-            ", phone='" + getPhone() + "'" +
+            ", phoneNumber='" + getPhoneNumber() + "'" +
             ", contactName='" + getContactName() + "'" +
             "}";
     }

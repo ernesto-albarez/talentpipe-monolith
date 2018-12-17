@@ -7,9 +7,6 @@ public class CreateSearchTypeDTO {
     @NotNull
     @NotBlank
     private String name;
-    @NotNull
-    @NotBlank
-    private String normalizedName;
     private String description;
 
     public String getName() {
@@ -18,14 +15,6 @@ public class CreateSearchTypeDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getNormalizedName() {
-        return normalizedName;
-    }
-
-    public void setNormalizedName(String normalizedName) {
-        this.normalizedName = normalizedName;
     }
 
     public String getDescription() {

@@ -101,7 +101,7 @@ public class CompanyQueryService extends QueryService<Company> {
                 specification = specification.and(buildStringSpecification(criteria.getPostalCode(), Company_.postalCode));
             }
             if (criteria.getPhone() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getPhone(), Company_.phone));
+                specification = specification.and(buildStringSpecification(criteria.getPhone(), Company_.phoneNumber));
             }
             if (criteria.getContactName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getContactName(), Company_.contactName));

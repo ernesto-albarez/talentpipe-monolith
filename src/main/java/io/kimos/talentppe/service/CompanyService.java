@@ -53,4 +53,6 @@ public interface CompanyService {
      * @return the list of entities
      */
     Page<Company> search(String query, Pageable pageable);
+
+    Company createCompany(Company company, String password);
 }

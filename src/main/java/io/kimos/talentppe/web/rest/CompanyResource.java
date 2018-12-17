@@ -3,6 +3,7 @@ package io.kimos.talentppe.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import io.kimos.talentppe.domain.Company;
 import io.kimos.talentppe.service.CompanyService;
+import io.kimos.talentppe.web.rest.dto.CreateCompanyRequest;
 import io.kimos.talentppe.web.rest.errors.BadRequestAlertException;
 import io.kimos.talentppe.web.rest.util.HeaderUtil;
 import io.kimos.talentppe.web.rest.util.PaginationUtil;
@@ -10,6 +11,7 @@ import io.kimos.talentppe.service.dto.CompanyCriteria;
 import io.kimos.talentppe.service.CompanyQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import ma.glasnost.orika.MapperFacade;
+import org.checkerframework.checker.units.qual.Time;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -67,6 +69,12 @@ public class CompanyResource {
         return ResponseEntity.created(new URI("/api/companies/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    @PostMapping("/companies/register")
+    @Timed
+    public void registerCompany(@Valid @RequestBody CreateCompanyRequest request) {
+        companyService.createCompany(orikaMapper.map(request, Company.class), request.getPassword());
     }
 
     /**

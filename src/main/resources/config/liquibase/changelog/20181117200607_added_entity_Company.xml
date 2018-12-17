@@ -39,7 +39,7 @@
             </column>
 
             <column name="street" type="varchar(255)">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
             </column>
 
             <column name="floor" type="integer">
@@ -47,7 +47,7 @@
             </column>
 
             <column name="jhi_number" type="integer">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
             </column>
 
             <column name="apartment" type="varchar(255)">
@@ -55,29 +55,44 @@
             </column>
 
             <column name="postal_code" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="creation_date" type="timestamp">
                 <constraints nullable="false" />
             </column>
 
-            <column name="phone" type="varchar(255)">
+            <column name="last_update_date" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="phone_number" type="varchar(100)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="phone_prefix" type="varchar(20)">
                 <constraints nullable="false" />
             </column>
 
             <column name="contact_name" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
+            <column name="contact_lastname" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
             <column name="main_user_id" type="bigint">
                 <constraints unique="true" nullable="false" uniqueConstraintName="ux_company_main_user_id" />
             </column>
             <column name="sector_id" type="bigint">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
             </column>
 
             <column name="city_id" type="bigint">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
             </column>
 
             <column name="company_type_id" type="bigint">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
             </column>
 
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
