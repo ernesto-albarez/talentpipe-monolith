@@ -69,8 +69,8 @@ public class RecruiterResource {
             .body(result);
     }
 
-    @PostMapping
-    public void registerRecruiter(@NotNull @Valid RegistryRecruiterRequest request) throws URISyntaxException {
+    @PostMapping("/recruiters/register")
+    public void registerRecruiter(@NotNull @Valid @RequestBody RegistryRecruiterRequest request) throws URISyntaxException {
         recruiterService.registryRecruiter(orikaMapper.map(request, Recruiter.class), request.getPassword());
     }
 

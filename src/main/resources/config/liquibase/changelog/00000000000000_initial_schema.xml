@@ -43,10 +43,10 @@
             <column name="reset_date" type="timestamp">
                 <constraints nullable="true"/>
             </column>
-            <column name="accept_terms_of_service">
+            <column name="accept_terms_of_service" type="boolean" valueBoolean="false">
                 <constraints nullable="false"/>
             </column>
-            <column name="want_news_letter">
+            <column name="want_news_letter" type="boolean" valueBoolean="false">
                 <constraints nullable="true"/>
             </column>
             <column name="last_modified_by" type="varchar(50)"/>

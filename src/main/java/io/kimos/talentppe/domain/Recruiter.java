@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import org.springframework.data.elasticsearch.annotations.Document;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -50,11 +51,9 @@ public class Recruiter implements Serializable {
     @Column(name = "phone_prefix", nullable = false)
     private String phonePrefix;
 
-    @NotNull
     @Column(name = "street")
     private String street;
 
-    @NotNull
     @Column(name = "jhi_number")
     private Integer number;
 
@@ -67,7 +66,6 @@ public class Recruiter implements Serializable {
     private String apartment;
 
     @ManyToOne()
-    @NotNull
     @JsonIgnoreProperties("")
     private City city;
 
