@@ -116,7 +116,7 @@ public class CompanyServiceImpl implements CompanyService {
         User user = new User();
         user.setLogin(company.getEmail());
         user.setFirstName(company.getContactName());
-        user.setLangKey(company.getContactLastName());
+        user.setLastName(company.getContactLastName());
         user.setEmail(company.getEmail());
         user.setPassword(password);
         user = userService.registerCompanyUser(user);

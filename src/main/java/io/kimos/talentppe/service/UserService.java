@@ -335,4 +335,8 @@ public class UserService {
         log.debug("Created Information for User: {}", user);
         return user;
     }
+
+    public User registerRecruiterUser(User user) {
+        return null;
+    }
 }

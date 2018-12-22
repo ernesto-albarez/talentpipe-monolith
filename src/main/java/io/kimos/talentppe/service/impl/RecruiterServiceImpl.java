@@ -1,9 +1,11 @@
 package io.kimos.talentppe.service.impl;
 
+import io.kimos.talentppe.domain.User;
 import io.kimos.talentppe.service.RecruiterService;
 import io.kimos.talentppe.domain.Recruiter;
 import io.kimos.talentppe.repository.RecruiterRepository;
 import io.kimos.talentppe.repository.search.RecruiterSearchRepository;
+import io.kimos.talentppe.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,9 +31,12 @@ public class RecruiterServiceImpl implements RecruiterService {
 
     private final RecruiterSearchRepository recruiterSearchRepository;
 
-    public RecruiterServiceImpl(RecruiterRepository recruiterRepository, RecruiterSearchRepository recruiterSearchRepository) {
+    private final UserService userService;
+
+    public RecruiterServiceImpl(RecruiterRepository recruiterRepository, RecruiterSearchRepository recruiterSearchRepository, UserService userService) {
         this.recruiterRepository = recruiterRepository;
         this.recruiterSearchRepository = recruiterSearchRepository;
+        this.userService = userService;
     }
 
     /**
@@ -42,7 +47,8 @@ public class RecruiterServiceImpl implements RecruiterService {
      */
     @Override
     public Recruiter save(Recruiter recruiter) {
-        log.debug("Request to save Recruiter : {}", recruiter);        Recruiter result = recruiterRepository.save(recruiter);
+        log.debug("Request to save Recruiter : {}", recruiter);
+        Recruiter result = recruiterRepository.save(recruiter);
         recruiterSearchRepository.save(result);
         return result;
     }
@@ -98,4 +104,17 @@ public class RecruiterServiceImpl implements RecruiterService {
     public Page<Recruiter> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Recruiters for query {}", query);
         return recruiterSearchRepository.search(queryStringQuery(query), pageable);    }
+
+    @Override
+    public Recruiter registryRecruiter(Recruiter recruiter, String password) {
+        log.debug("Request to registry Recruiter : {}", recruiter);
+        User user = new User();
+        user.setFirstName(recruiter.getName());
+        user.setLastName(recruiter.getLastName());
+        user.setLogin(recruiter.getEmail());
+        user.setEmail(recruiter.getEmail());
+        user.setPassword(password);
+        recruiter.setUser(userService.registerRecruiterUser(user));
+        return this.save(recruiter);
+    }
 }

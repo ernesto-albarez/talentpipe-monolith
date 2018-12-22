@@ -1,5 +1,6 @@
 package io.kimos.talentppe.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -46,15 +47,15 @@ public class Recruiter implements Serializable {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    @Column(name = "phone_prefix")
+    @Column(name = "phone_prefix", nullable = false)
     private String phonePrefix;
 
     @NotNull
-    @Column(name = "street", nullable = false)
+    @Column(name = "street")
     private String street;
 
     @NotNull
-    @Column(name = "jhi_number", nullable = false)
+    @Column(name = "jhi_number")
     private Integer number;
 
     @Min(value = 0)
@@ -65,7 +66,7 @@ public class Recruiter implements Serializable {
     @Column(name = "apartment")
     private String apartment;
 
-    @ManyToOne(optional = false)
+    @ManyToOne()
     @NotNull
     @JsonIgnoreProperties("")
     private City city;
@@ -73,6 +74,10 @@ public class Recruiter implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties("")
     private Sector sector;
+
+    @OneToOne(optional = false)
+    @JsonIgnore
+    private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -238,6 +243,15 @@ public class Recruiter implements Serializable {
     public void setSector(Sector sector) {
         this.sector = sector;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override

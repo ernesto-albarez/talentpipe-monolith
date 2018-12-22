@@ -3,6 +3,7 @@ package io.kimos.talentppe.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import io.kimos.talentppe.domain.Recruiter;
 import io.kimos.talentppe.service.RecruiterService;
+import io.kimos.talentppe.web.rest.dto.RegistryRecruiterRequest;
 import io.kimos.talentppe.web.rest.errors.BadRequestAlertException;
 import io.kimos.talentppe.web.rest.util.HeaderUtil;
 import io.kimos.talentppe.web.rest.util.PaginationUtil;
@@ -20,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -65,6 +67,11 @@ public class RecruiterResource {
         return ResponseEntity.created(new URI("/api/recruiters/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    @PostMapping
+    public void registerRecruiter(@NotNull @Valid RegistryRecruiterRequest request) throws URISyntaxException {
+        recruiterService.registryRecruiter(orikaMapper.map(request, Recruiter.class), request.getPassword());
     }
 
     /**

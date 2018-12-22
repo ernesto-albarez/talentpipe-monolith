@@ -53,4 +53,6 @@ public interface RecruiterService {
      * @return the list of entities
      */
     Page<Recruiter> search(String query, Pageable pageable);
+
+    Recruiter registryRecruiter(Recruiter map, String password);
 }

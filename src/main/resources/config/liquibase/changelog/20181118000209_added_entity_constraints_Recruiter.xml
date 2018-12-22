@@ -20,5 +20,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="sector"/>
 
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="recruiter"
+                                 constraintName="fk_recruiter_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user"/>
+
     </changeSet>
 </databaseChangeLog>

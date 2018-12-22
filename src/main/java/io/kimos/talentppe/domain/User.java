@@ -84,6 +84,12 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "reset_date")
     private Instant resetDate = null;
 
+    @Column(name = "want_news_letter")
+    private Boolean wantsNewsLetter;
+
+    @Column(name = "accept_terms_of_service", nullable = false)
+    private Boolean acceptTermsOfService;
+
     @ManyToOne(cascade = CascadeType.ALL, optional = true)
     private Company company;
 
@@ -208,6 +214,22 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
+    }
+
+    public Boolean getWantsNewsLetter() {
+        return wantsNewsLetter;
+    }
+
+    public void setWantsNewsLetter(Boolean wantsNewsLetter) {
+        this.wantsNewsLetter = wantsNewsLetter;
+    }
+
+    public Boolean getAcceptTermsOfService() {
+        return acceptTermsOfService;
+    }
+
+    public void setAcceptTermsOfService(Boolean acceptTermsOfService) {
+        this.acceptTermsOfService = acceptTermsOfService;
     }
 
     @Override

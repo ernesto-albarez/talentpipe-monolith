@@ -43,15 +43,15 @@
             </column>
 
             <column name="phone_prefix" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
 
             <column name="street" type="varchar(255)">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
             </column>
 
             <column name="jhi_number" type="integer">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
             </column>
 
             <column name="floor" type="integer">
@@ -63,10 +63,14 @@
             </column>
 
             <column name="city_id" type="bigint">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
             </column>
 
             <column name="sector_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="user_is">
                 <constraints nullable="true" />
             </column>
 
