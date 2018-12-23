@@ -12,7 +12,7 @@
                                  baseTableName="company"
                                  constraintName="fk_company_main_user_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="jhi_user"/>
+                                 referencedTableName="user"/>
 
         <addForeignKeyConstraint baseColumnNames="sector_id"
                                  baseTableName="company"

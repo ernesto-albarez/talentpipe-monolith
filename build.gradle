@@ -22,6 +22,7 @@ plugins {
     id "net.ltgt.apt" version "0.18"
     id "io.spring.dependency-management" version "1.0.6.RELEASE"
     id 'org.liquibase.gradle' version '2.0.1'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.11'
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
 
@@ -61,7 +62,7 @@ war {
 }
 
 springBoot {
-    mainClassName = 'io.kimos.talentppe.MonolithApp'
+    mainClassName = 'io.kimos.talentpipe.MonolithApp'
     buildInfo()
 }
 
@@ -277,6 +278,8 @@ dependencies {
     testCompile "org.hamcrest:hamcrest-library"
     testCompile "com.h2database:h2"
     liquibaseRuntime "com.h2database:h2"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compile 'org.jetbrains.kotlin:kotlin-reflect'
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
@@ -294,3 +297,13 @@ task stage(dependsOn: 'bootWar') {
 compileJava.dependsOn processResources
 processResources.dependsOn cleanResources,bootBuildInfo
 bootBuildInfo.mustRunAfter cleanResources
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
