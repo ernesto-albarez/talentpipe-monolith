@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity SearchRequest.
+    -->
+    <changeSet id="20181226224336-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="company_id"
+                                 baseTableName="search_request"
+                                 constraintName="fk_search_request_company_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="company"/>
+
+        <addForeignKeyConstraint baseColumnNames="expertise_level_id"
+                                 baseTableName="search_request"
+                                 constraintName="fk_search_request_expertise_level_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="expertise_level"/>
+
+        <addForeignKeyConstraint baseColumnNames="search_requests_id"
+                                 baseTableName="search_request_required_technical_skills"
+                                 constraintName="fk_search_request_required_technical_skills_search_requests_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="search_request"/>
+        <addForeignKeyConstraint baseColumnNames="required_technical_skills_id"
+                                 baseTableName="search_request_required_technical_skills"
+                                 constraintName="search_request_required_technic_required_technical_skills_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="technical_skill"/>
+        
+        <addForeignKeyConstraint baseColumnNames="search_requests_id"
+                                 baseTableName="search_request_non_required_technical_skills"
+                                 constraintName="search_request_non_required_tec_search_requests_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="search_request"/>
+        <addForeignKeyConstraint baseColumnNames="non_required_technical_skills_id"
+                                 baseTableName="search_request_non_required_technical_skills"
+                                 constraintName="search_request_non_required_tec_non_required_technical_skills_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="technical_skill"/>
+        
+        <addForeignKeyConstraint baseColumnNames="search_requests_id"
+                                 baseTableName="search_request_required_soft_skills"
+                                 constraintName="fk_search_request_required_soft_skills_search_requests_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="search_request"/>
+        <addForeignKeyConstraint baseColumnNames="required_soft_skills_id"
+                                 baseTableName="search_request_required_soft_skills"
+                                 constraintName="fk_search_request_required_soft_skills_required_soft_skills_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="soft_skill"/>
+        
+        <addForeignKeyConstraint baseColumnNames="search_requests_id"
+                                 baseTableName="search_request_non_required_soft_skills"
+                                 constraintName="fk_search_request_non_required_soft_skills_search_requests_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="search_request"/>
+        <addForeignKeyConstraint baseColumnNames="non_required_soft_skills_id"
+                                 baseTableName="search_request_non_required_soft_skills"
+                                 constraintName="search_request_non_required_sof_non_required_soft_skills_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="soft_skill"/>
+        
+        <addForeignKeyConstraint baseColumnNames="search_requests_id"
+                                 baseTableName="search_request_benefits"
+                                 constraintName="fk_search_request_benefits_search_requests_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="search_request"/>
+        <addForeignKeyConstraint baseColumnNames="benefits_id"
+                                 baseTableName="search_request_benefits"
+                                 constraintName="fk_search_request_benefits_benefits_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName=" benefit"/>
+        
+    </changeSet>
+</databaseChangeLog>
