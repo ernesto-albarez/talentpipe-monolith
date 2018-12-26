@@ -95,7 +95,7 @@ public class UserService {
 
     public User registerUser(UserDTO userDTO, String password) {
         User newUser = new User();
-        newUser.setAcceptTermsOfService(true);
+        newUser.setAcceptTermsOfService(userDTO.getAcceptTermsOfService());
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(userDTO.getLogin().toLowerCase());
         // new user gets initially a generated password
@@ -331,5 +331,6 @@ public class UserService {
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail().toLowerCase());
         user.setImageUrl(userDTO.getImageUrl());
+        user.setAcceptTermsOfService(userDTO.getAcceptTermsOfService());
     }
 }

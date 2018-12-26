@@ -166,6 +166,8 @@ public class UserResourceIntTest {
         managedUserVM.setActivated(true);
         managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
         managedUserVM.setLangKey(DEFAULT_LANGKEY);
+        managedUserVM.setAcceptTermsOfService(true);
+
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         restUserMockMvc.perform(post("/api/users")
@@ -398,6 +400,7 @@ public class UserResourceIntTest {
         anotherUser.setLastName("hipster");
         anotherUser.setImageUrl("");
         anotherUser.setLangKey("en");
+        anotherUser.setAcceptTermsOfService(true);
         userRepository.saveAndFlush(anotherUser);
         mockUserSearchRepository.save(anotherUser);
 
@@ -442,6 +445,7 @@ public class UserResourceIntTest {
         anotherUser.setLastName("hipster");
         anotherUser.setImageUrl("");
         anotherUser.setLangKey("en");
+        anotherUser.setAcceptTermsOfService(true);
         userRepository.saveAndFlush(anotherUser);
         mockUserSearchRepository.save(anotherUser);
 

@@ -42,6 +42,8 @@ public class UserDTO {
     @Size(min = 2, max = 6)
     private String langKey;
 
+    private Boolean acceptTermsOfService;
+
     private String createdBy;
 
     private Instant createdDate;
@@ -67,6 +69,7 @@ public class UserDTO {
         this.langKey = user.getLangKey();
         this.createdBy = user.getCreatedBy();
         this.createdDate = user.getCreatedDate();
+        this.acceptTermsOfService = user.getAcceptTermsOfService();
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
         this.authorities = user.getAuthorities().stream()
@@ -176,6 +179,14 @@ public class UserDTO {
 
     public void setAuthorities(Set<String> authorities) {
         this.authorities = authorities;
+    }
+
+    public Boolean getAcceptTermsOfService() {
+        return acceptTermsOfService;
+    }
+
+    public void setAcceptTermsOfService(Boolean acceptTermsOfService) {
+        this.acceptTermsOfService = acceptTermsOfService;
     }
 
     @Override
