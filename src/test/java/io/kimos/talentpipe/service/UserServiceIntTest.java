@@ -66,6 +66,7 @@ public class UserServiceIntTest {
         user.setEmail("johndoe@localhost");
         user.setFirstName("john");
         user.setLastName("doe");
+        user.setAcceptTermsOfService(true);
         user.setImageUrl("http://placehold.it/50x50");
         user.setLangKey("en");
 
