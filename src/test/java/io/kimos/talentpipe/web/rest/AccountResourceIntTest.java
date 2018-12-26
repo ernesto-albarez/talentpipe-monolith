@@ -307,6 +307,7 @@ public class AccountResourceIntTest {
         secondUser.setCreatedDate(firstUser.getCreatedDate());
         secondUser.setLastModifiedBy(firstUser.getLastModifiedBy());
         secondUser.setLastModifiedDate(firstUser.getLastModifiedDate());
+        secondUser.setAcceptTermsOfService(true);
         secondUser.setAuthorities(new HashSet<>(firstUser.getAuthorities()));
 
         // First user
@@ -370,6 +371,7 @@ public class AccountResourceIntTest {
         secondUser.setEmail(firstUser.getEmail());
         secondUser.setImageUrl(firstUser.getImageUrl());
         secondUser.setLangKey(firstUser.getLangKey());
+        secondUser.setAcceptTermsOfService(true);
         secondUser.setAuthorities(new HashSet<>(firstUser.getAuthorities()));
 
         // Register second (non activated) user
@@ -395,6 +397,7 @@ public class AccountResourceIntTest {
         userWithUpperCaseEmail.setEmail("TEST-register-duplicate-email@example.com");
         userWithUpperCaseEmail.setImageUrl(firstUser.getImageUrl());
         userWithUpperCaseEmail.setLangKey(firstUser.getLangKey());
+        userWithUpperCaseEmail.setAcceptTermsOfService(true);
         userWithUpperCaseEmail.setAuthorities(new HashSet<>(firstUser.getAuthorities()));
 
         // Register third (not activated) user
