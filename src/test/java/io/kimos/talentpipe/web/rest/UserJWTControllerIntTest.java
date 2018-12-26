@@ -64,6 +64,7 @@ public class UserJWTControllerIntTest {
         user.setEmail("user-jwt-controller@example.com");
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test"));
+
         user.setAcceptTermsOfService(true);
         userRepository.saveAndFlush(user);
 

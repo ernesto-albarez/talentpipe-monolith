@@ -127,6 +127,7 @@ public class UserService {
     public User createUser(UserDTO userDTO) {
         User user = new User();
         updateUserBasicProperties(userDTO, user);
+        user.setAcceptTermsOfService(true);
         if (userDTO.getLangKey() == null) {
             user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
         } else {
@@ -331,6 +332,5 @@ public class UserService {
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail().toLowerCase());
         user.setImageUrl(userDTO.getImageUrl());
-        user.setAcceptTermsOfService(userDTO.getAcceptTermsOfService());
     }
 }
