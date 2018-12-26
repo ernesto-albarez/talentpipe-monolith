@@ -169,6 +169,7 @@ public class AccountResourceIntTest {
         validUser.setLastName("Test");
         validUser.setEmail("test-register-valid@example.com");
         validUser.setImageUrl("http://placehold.it/50x50");
+        validUser.setAcceptTermsOfService(true);
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
         assertThat(userRepository.findOneByLogin("test-register-valid").isPresent()).isFalse();
@@ -289,6 +290,7 @@ public class AccountResourceIntTest {
         firstUser.setLastName("Something");
         firstUser.setEmail("alice@example.com");
         firstUser.setImageUrl("http://placehold.it/50x50");
+        firstUser.setAcceptTermsOfService(true);
         firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         firstUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
@@ -346,6 +348,7 @@ public class AccountResourceIntTest {
         firstUser.setEmail("test-register-duplicate-email@example.com");
         firstUser.setImageUrl("http://placehold.it/50x50");
         firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
+        firstUser.setAcceptTermsOfService(true);
         firstUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // Register first user

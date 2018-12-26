@@ -64,7 +64,7 @@ public class UserJWTControllerIntTest {
         user.setEmail("user-jwt-controller@example.com");
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test"));
-
+        user.setAcceptTermsOfService(true);
         userRepository.saveAndFlush(user);
 
         LoginVM login = new LoginVM();
@@ -87,6 +87,7 @@ public class UserJWTControllerIntTest {
         user.setLogin("user-jwt-controller-remember-me");
         user.setEmail("user-jwt-controller-remember-me@example.com");
         user.setActivated(true);
+        user.setAcceptTermsOfService(true);
         user.setPassword(passwordEncoder.encode("test"));
 
         userRepository.saveAndFlush(user);
