@@ -1,10 +1,10 @@
-package io.kimos.talentppe.web.rest;
+package io.kimos.talentpipe.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import io.kimos.talentppe.domain.SearchStatus;
-import io.kimos.talentppe.service.SearchStatusService;
-import io.kimos.talentppe.web.rest.errors.BadRequestAlertException;
-import io.kimos.talentppe.web.rest.util.HeaderUtil;
+import io.kimos.talentpipe.domain.SearchStatus;
+import io.kimos.talentpipe.service.SearchStatusService;
+import io.kimos.talentpipe.web.rest.errors.BadRequestAlertException;
+import io.kimos.talentpipe.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

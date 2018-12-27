@@ -1,4 +1,4 @@
-package io.kimos.talentppe.domain;
+package io.kimos.talentpipe.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
@@ -92,7 +92,7 @@ public class SearchRequest implements Serializable {
     @JoinTable(name = "search_request_benefits",
                joinColumns = @JoinColumn(name = "search_requests_id", referencedColumnName = "id"),
                inverseJoinColumns = @JoinColumn(name = "benefits_id", referencedColumnName = "id"))
-    private Set< Benefit> benefits = new HashSet<>();
+    private Set<Benefit> benefits = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {

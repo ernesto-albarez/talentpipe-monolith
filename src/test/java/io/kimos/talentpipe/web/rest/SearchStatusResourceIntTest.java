@@ -1,12 +1,12 @@
-package io.kimos.talentppe.web.rest;
+package io.kimos.talentpipe.web.rest;
 
-import io.kimos.talentppe.MonolithApp;
+import io.kimos.talentpipe.MonolithApp;
 
-import io.kimos.talentppe.domain.SearchStatus;
-import io.kimos.talentppe.repository.SearchStatusRepository;
-import io.kimos.talentppe.repository.search.SearchStatusSearchRepository;
-import io.kimos.talentppe.service.SearchStatusService;
-import io.kimos.talentppe.web.rest.errors.ExceptionTranslator;
+import io.kimos.talentpipe.domain.SearchStatus;
+import io.kimos.talentpipe.repository.SearchStatusRepository;
+import io.kimos.talentpipe.repository.search.SearchStatusSearchRepository;
+import io.kimos.talentpipe.service.SearchStatusService;
+import io.kimos.talentpipe.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +27,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-import static io.kimos.talentppe.web.rest.TestUtil.createFormattingConversionService;
+import static io.kimos.talentpipe.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
@@ -47,8 +47,8 @@ public class SearchStatusResourceIntTest {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_NORMALIZED_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_NORMALIZED_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_NORMALIZED_NAME = "aaaaaaaaaa";
+    private static final String UPDATED_NORMALIZED_NAME = "bbbbbbbbbb";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -60,9 +60,9 @@ public class SearchStatusResourceIntTest {
     private SearchStatusService searchStatusService;
 
     /**
-     * This repository is mocked in the io.kimos.talentppe.repository.search test package.
+     * This repository is mocked in the io.kimos.talentpipe.repository.search test package.
      *
-     * @see io.kimos.talentppe.repository.search.SearchStatusSearchRepositoryMockConfiguration
+     * @see io.kimos.talentpipe.repository.search.SearchStatusSearchRepositoryMockConfiguration
      */
     @Autowired
     private SearchStatusSearchRepository mockSearchStatusSearchRepository;
@@ -103,7 +103,6 @@ public class SearchStatusResourceIntTest {
     public static SearchStatus createEntity(EntityManager em) {
         SearchStatus searchStatus = new SearchStatus()
             .name(DEFAULT_NAME)
-            .normalizedName(DEFAULT_NORMALIZED_NAME)
             .description(DEFAULT_DESCRIPTION);
         return searchStatus;
     }
@@ -178,24 +177,6 @@ public class SearchStatusResourceIntTest {
 
     @Test
     @Transactional
-    public void checkNormalizedNameIsRequired() throws Exception {
-        int databaseSizeBeforeTest = searchStatusRepository.findAll().size();
-        // set the field null
-        searchStatus.setNormalizedName(null);
-
-        // Create the SearchStatus, which fails.
-
-        restSearchStatusMockMvc.perform(post("/api/search-statuses")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(searchStatus)))
-            .andExpect(status().isBadRequest());
-
-        List<SearchStatus> searchStatusList = searchStatusRepository.findAll();
-        assertThat(searchStatusList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllSearchStatuses() throws Exception {
         // Initialize the database
         searchStatusRepository.saveAndFlush(searchStatus);
@@ -250,7 +231,6 @@ public class SearchStatusResourceIntTest {
         em.detach(updatedSearchStatus);
         updatedSearchStatus
             .name(UPDATED_NAME)
-            .normalizedName(UPDATED_NORMALIZED_NAME)
             .description(UPDATED_DESCRIPTION);
 
         restSearchStatusMockMvc.perform(put("/api/search-statuses")

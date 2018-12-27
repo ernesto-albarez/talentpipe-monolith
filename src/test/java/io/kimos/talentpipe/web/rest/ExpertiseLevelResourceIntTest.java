@@ -1,13 +1,12 @@
-package io.kimos.talentppe.web.rest;
+package io.kimos.talentpipe.web.rest;
 
-import io.kimos.talentppe.MonolithApp;
-
-import io.kimos.talentppe.domain.ExpertiseLevel;
-import io.kimos.talentppe.repository.ExpertiseLevelRepository;
-import io.kimos.talentppe.repository.search.ExpertiseLevelSearchRepository;
-import io.kimos.talentppe.service.ExpertiseLevelService;
-import io.kimos.talentppe.web.rest.errors.ExceptionTranslator;
-
+import io.kimos.talentpipe.MonolithApp;
+import io.kimos.talentpipe.domain.ExpertiseLevel;
+import io.kimos.talentpipe.repository.ExpertiseLevelRepository;
+import io.kimos.talentpipe.repository.search.ExpertiseLevelSearchRepository;
+import io.kimos.talentpipe.service.ExpertiseLevelService;
+import io.kimos.talentpipe.web.rest.errors.ExceptionTranslator;
+import ma.glasnost.orika.MapperFacade;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,8 +25,7 @@ import javax.persistence.EntityManager;
 import java.util.Collections;
 import java.util.List;
 
-
-import static io.kimos.talentppe.web.rest.TestUtil.createFormattingConversionService;
+import static io.kimos.talentpipe.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
@@ -47,8 +45,8 @@ public class ExpertiseLevelResourceIntTest {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_NORMALIZED_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_NORMALIZED_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_NORMALIZED_NAME = "aaaaaaaaaa";
+    private static final String UPDATED_NORMALIZED_NAME = "bbbbbbbbbb";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -62,7 +60,7 @@ public class ExpertiseLevelResourceIntTest {
     /**
      * This repository is mocked in the io.kimos.talentppe.repository.search test package.
      *
-     * @see io.kimos.talentppe.repository.search.ExpertiseLevelSearchRepositoryMockConfiguration
+     * @see io.kimos.talentpipe.repository.search.ExpertiseLevelSearchRepositoryMockConfiguration
      */
     @Autowired
     private ExpertiseLevelSearchRepository mockExpertiseLevelSearchRepository;
@@ -77,35 +75,37 @@ public class ExpertiseLevelResourceIntTest {
     private ExceptionTranslator exceptionTranslator;
 
     @Autowired
+    private MapperFacade orikaMapper;
+
+    @Autowired
     private EntityManager em;
 
     private MockMvc restExpertiseLevelMockMvc;
 
     private ExpertiseLevel expertiseLevel;
 
-    @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        final ExpertiseLevelResource expertiseLevelResource = new ExpertiseLevelResource(expertiseLevelService);
-        this.restExpertiseLevelMockMvc = MockMvcBuilders.standaloneSetup(expertiseLevelResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
-    }
-
     /**
      * Create an entity for this test.
-     *
+     * <p>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
     public static ExpertiseLevel createEntity(EntityManager em) {
         ExpertiseLevel expertiseLevel = new ExpertiseLevel()
             .name(DEFAULT_NAME)
-            .normalizedName(DEFAULT_NORMALIZED_NAME)
             .description(DEFAULT_DESCRIPTION);
         return expertiseLevel;
+    }
+
+    @Before
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        final ExpertiseLevelResource expertiseLevelResource = new ExpertiseLevelResource(expertiseLevelService, orikaMapper);
+        this.restExpertiseLevelMockMvc = MockMvcBuilders.standaloneSetup(expertiseLevelResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
     }
 
     @Before
@@ -178,24 +178,6 @@ public class ExpertiseLevelResourceIntTest {
 
     @Test
     @Transactional
-    public void checkNormalizedNameIsRequired() throws Exception {
-        int databaseSizeBeforeTest = expertiseLevelRepository.findAll().size();
-        // set the field null
-        expertiseLevel.setNormalizedName(null);
-
-        // Create the ExpertiseLevel, which fails.
-
-        restExpertiseLevelMockMvc.perform(post("/api/expertise-levels")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(expertiseLevel)))
-            .andExpect(status().isBadRequest());
-
-        List<ExpertiseLevel> expertiseLevelList = expertiseLevelRepository.findAll();
-        assertThat(expertiseLevelList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllExpertiseLevels() throws Exception {
         // Initialize the database
         expertiseLevelRepository.saveAndFlush(expertiseLevel);
@@ -209,7 +191,7 @@ public class ExpertiseLevelResourceIntTest {
             .andExpect(jsonPath("$.[*].normalizedName").value(hasItem(DEFAULT_NORMALIZED_NAME.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
     }
-    
+
     @Test
     @Transactional
     public void getExpertiseLevel() throws Exception {
@@ -250,7 +232,6 @@ public class ExpertiseLevelResourceIntTest {
         em.detach(updatedExpertiseLevel);
         updatedExpertiseLevel
             .name(UPDATED_NAME)
-            .normalizedName(UPDATED_NORMALIZED_NAME)
             .description(UPDATED_DESCRIPTION);
 
         restExpertiseLevelMockMvc.perform(put("/api/expertise-levels")

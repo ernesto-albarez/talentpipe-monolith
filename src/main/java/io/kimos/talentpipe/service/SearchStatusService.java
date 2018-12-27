@@ -1,6 +1,6 @@
-package io.kimos.talentppe.service;
+package io.kimos.talentpipe.service;
 
-import io.kimos.talentppe.domain.SearchStatus;
+import io.kimos.talentpipe.domain.SearchStatus;
 
 import java.util.List;
 import java.util.Optional;

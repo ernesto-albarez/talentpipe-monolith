@@ -1,6 +1,6 @@
-package io.kimos.talentppe.service;
+package io.kimos.talentpipe.service;
 
-import io.kimos.talentppe.domain.SearchRequest;
+import io.kimos.talentpipe.domain.SearchRequest;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

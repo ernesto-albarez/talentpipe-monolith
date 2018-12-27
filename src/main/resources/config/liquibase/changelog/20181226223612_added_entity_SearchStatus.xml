@@ -18,7 +18,7 @@
         Added the entity SearchStatus.
     -->
     <changeSet id="20181226223612-1" author="jhipster">
-        <createTable tableName="expertise_level">
+        <createTable tableName="search_status">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>

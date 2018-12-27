@@ -1,11 +1,14 @@
-package io.kimos.talentppe.web.rest;
+package io.kimos.talentpipe.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import io.kimos.talentppe.domain.ExpertiseLevel;
-import io.kimos.talentppe.service.ExpertiseLevelService;
-import io.kimos.talentppe.web.rest.errors.BadRequestAlertException;
-import io.kimos.talentppe.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import io.kimos.talentpipe.domain.ExpertiseLevel;
+import io.kimos.talentpipe.service.ExpertiseLevelService;
+import io.kimos.talentpipe.web.rest.dto.CreateExpertiseLevelDTO;
+import io.kimos.talentpipe.web.rest.dto.UpdateExpertiseLevelDTO;
+import io.kimos.talentpipe.web.rest.errors.BadRequestAlertException;
+import io.kimos.talentpipe.web.rest.util.HeaderUtil;
+import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing ExpertiseLevel.
@@ -28,14 +27,14 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 @RequestMapping("/api")
 public class ExpertiseLevelResource {
 
-    private final Logger log = LoggerFactory.getLogger(ExpertiseLevelResource.class);
-
     private static final String ENTITY_NAME = "expertiseLevel";
-
+    private final Logger log = LoggerFactory.getLogger(ExpertiseLevelResource.class);
     private final ExpertiseLevelService expertiseLevelService;
+    private final MapperFacade orikaMapper;
 
-    public ExpertiseLevelResource(ExpertiseLevelService expertiseLevelService) {
+    public ExpertiseLevelResource(ExpertiseLevelService expertiseLevelService, MapperFacade orikaMapper) {
         this.expertiseLevelService = expertiseLevelService;
+        this.orikaMapper = orikaMapper;
     }
 
     /**
@@ -47,12 +46,9 @@ public class ExpertiseLevelResource {
      */
     @PostMapping("/expertise-levels")
     @Timed
-    public ResponseEntity<ExpertiseLevel> createExpertiseLevel(@Valid @RequestBody ExpertiseLevel expertiseLevel) throws URISyntaxException {
+    public ResponseEntity<ExpertiseLevel> createExpertiseLevel(@Valid @RequestBody CreateExpertiseLevelDTO expertiseLevel) throws URISyntaxException {
         log.debug("REST request to save ExpertiseLevel : {}", expertiseLevel);
-        if (expertiseLevel.getId() != null) {
-            throw new BadRequestAlertException("A new expertiseLevel cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        ExpertiseLevel result = expertiseLevelService.save(expertiseLevel);
+        ExpertiseLevel result = expertiseLevelService.save(orikaMapper.map(expertiseLevel, ExpertiseLevel.class));
         return ResponseEntity.created(new URI("/api/expertise-levels/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -69,12 +65,12 @@ public class ExpertiseLevelResource {
      */
     @PutMapping("/expertise-levels")
     @Timed
-    public ResponseEntity<ExpertiseLevel> updateExpertiseLevel(@Valid @RequestBody ExpertiseLevel expertiseLevel) throws URISyntaxException {
+    public ResponseEntity<ExpertiseLevel> updateExpertiseLevel(@Valid @RequestBody UpdateExpertiseLevelDTO expertiseLevel) throws URISyntaxException {
         log.debug("REST request to update ExpertiseLevel : {}", expertiseLevel);
         if (expertiseLevel.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ExpertiseLevel result = expertiseLevelService.save(expertiseLevel);
+        ExpertiseLevel result = expertiseLevelService.save(orikaMapper.map(expertiseLevel, ExpertiseLevel.class));
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, expertiseLevel.getId().toString()))
             .body(result);

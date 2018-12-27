@@ -1,4 +1,4 @@
-package io.kimos.talentppe.domain;
+package io.kimos.talentpipe.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -11,13 +11,13 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * A SearchStatus.
+ * A ExpertiseLevel.
  */
 @Entity
 @Table(name = "expertise_level")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Document(indexName = "searchstatus")
-public class SearchStatus implements Serializable {
+@Document(indexName = "expertiselevel")
+public class ExpertiseLevel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -49,33 +49,25 @@ public class SearchStatus implements Serializable {
         return name;
     }
 
-    public SearchStatus name(String name) {
+    public ExpertiseLevel name(String name) {
         this.name = name;
         return this;
     }
 
     public void setName(String name) {
         this.name = name;
+        this.normalizedName = name.trim().toLowerCase();
     }
 
     public String getNormalizedName() {
         return normalizedName;
     }
 
-    public SearchStatus normalizedName(String normalizedName) {
-        this.normalizedName = normalizedName;
-        return this;
-    }
-
-    public void setNormalizedName(String normalizedName) {
-        this.normalizedName = normalizedName;
-    }
-
     public String getDescription() {
         return description;
     }
 
-    public SearchStatus description(String description) {
+    public ExpertiseLevel description(String description) {
         this.description = description;
         return this;
     }
@@ -93,11 +85,11 @@ public class SearchStatus implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        SearchStatus searchStatus = (SearchStatus) o;
-        if (searchStatus.getId() == null || getId() == null) {
+        ExpertiseLevel expertiseLevel = (ExpertiseLevel) o;
+        if (expertiseLevel.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), searchStatus.getId());
+        return Objects.equals(getId(), expertiseLevel.getId());
     }
 
     @Override
@@ -107,7 +99,7 @@ public class SearchStatus implements Serializable {
 
     @Override
     public String toString() {
-        return "SearchStatus{" +
+        return "ExpertiseLevel{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", normalizedName='" + getNormalizedName() + "'" +

@@ -1,6 +1,6 @@
-package io.kimos.talentppe.repository.search;
+package io.kimos.talentpipe.repository.search;
 
-import io.kimos.talentppe.domain.ExpertiseLevel;
+import io.kimos.talentpipe.domain.ExpertiseLevel;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**

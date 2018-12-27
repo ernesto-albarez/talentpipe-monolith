@@ -1,9 +1,9 @@
-package io.kimos.talentppe.service.impl;
+package io.kimos.talentpipe.service.impl;
 
-import io.kimos.talentppe.service.SearchStatusService;
-import io.kimos.talentppe.domain.SearchStatus;
-import io.kimos.talentppe.repository.SearchStatusRepository;
-import io.kimos.talentppe.repository.search.SearchStatusSearchRepository;
+import io.kimos.talentpipe.service.SearchStatusService;
+import io.kimos.talentpipe.domain.SearchStatus;
+import io.kimos.talentpipe.repository.SearchStatusRepository;
+import io.kimos.talentpipe.repository.search.SearchStatusSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

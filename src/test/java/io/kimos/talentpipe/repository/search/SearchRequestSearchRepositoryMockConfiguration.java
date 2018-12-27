@@ -1,5 +1,6 @@
-package io.kimos.talentppe.repository.search;
+package io.kimos.talentpipe.repository.search;
 
+import io.kimos.talentpipe.repository.search.SearchRequestSearchRepository;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Configuration;
 

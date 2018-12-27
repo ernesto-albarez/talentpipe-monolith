@@ -1,12 +1,12 @@
-package io.kimos.talentppe.web.rest;
+package io.kimos.talentpipe.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import io.kimos.talentppe.domain.SearchRequest;
-import io.kimos.talentppe.service.SearchRequestService;
-import io.kimos.talentppe.web.rest.errors.BadRequestAlertException;
-import io.kimos.talentppe.web.rest.util.HeaderUtil;
-import io.kimos.talentppe.web.rest.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import io.kimos.talentpipe.web.rest.errors.BadRequestAlertException;
+import io.kimos.talentpipe.web.rest.util.HeaderUtil;
+import io.kimos.talentpipe.web.rest.util.PaginationUtil;
+import io.kimos.talentpipe.domain.SearchRequest;
+import io.kimos.talentpipe.service.SearchRequestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -19,12 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing SearchRequest.
@@ -33,10 +29,8 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 @RequestMapping("/api")
 public class SearchRequestResource {
 
-    private final Logger log = LoggerFactory.getLogger(SearchRequestResource.class);
-
     private static final String ENTITY_NAME = "searchRequest";
-
+    private final Logger log = LoggerFactory.getLogger(SearchRequestResource.class);
     private final SearchRequestService searchRequestService;
 
     public SearchRequestResource(SearchRequestService searchRequestService) {
@@ -88,7 +82,7 @@ public class SearchRequestResource {
     /**
      * GET  /search-requests : get all the searchRequests.
      *
-     * @param pageable the pagination information
+     * @param pageable  the pagination information
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many)
      * @return the ResponseEntity with status 200 (OK) and the list of searchRequests in body
      */
@@ -138,7 +132,7 @@ public class SearchRequestResource {
      * SEARCH  /_search/search-requests?query=:query : search for the searchRequest corresponding
      * to the query.
      *
-     * @param query the query of the searchRequest search
+     * @param query    the query of the searchRequest search
      * @param pageable the pagination information
      * @return the result of the search
      */

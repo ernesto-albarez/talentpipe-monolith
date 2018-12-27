@@ -1,6 +1,6 @@
-package io.kimos.talentppe.repository;
+package io.kimos.talentpipe.repository;
 
-import io.kimos.talentppe.domain.SearchRequest;
+import io.kimos.talentpipe.domain.SearchRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;

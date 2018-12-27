@@ -1,14 +1,12 @@
-package io.kimos.talentppe.web.rest;
+package io.kimos.talentpipe.web.rest;
 
-import io.kimos.talentppe.MonolithApp;
-
-import io.kimos.talentppe.domain.SearchRequest;
-import io.kimos.talentppe.domain.Company;
-import io.kimos.talentppe.repository.SearchRequestRepository;
-import io.kimos.talentppe.repository.search.SearchRequestSearchRepository;
-import io.kimos.talentppe.service.SearchRequestService;
-import io.kimos.talentppe.web.rest.errors.ExceptionTranslator;
-
+import io.kimos.talentpipe.MonolithApp;
+import io.kimos.talentpipe.domain.Company;
+import io.kimos.talentpipe.domain.SearchRequest;
+import io.kimos.talentpipe.repository.SearchRequestRepository;
+import io.kimos.talentpipe.repository.search.SearchRequestSearchRepository;
+import io.kimos.talentpipe.service.SearchRequestService;
+import io.kimos.talentpipe.web.rest.errors.ExceptionTranslator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,8 +30,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
-import static io.kimos.talentppe.web.rest.TestUtil.createFormattingConversionService;
+import static io.kimos.talentpipe.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
@@ -80,7 +77,7 @@ public class SearchRequestResourceIntTest {
     /**
      * This repository is mocked in the io.kimos.talentppe.repository.search test package.
      *
-     * @see io.kimos.talentppe.repository.search.SearchRequestSearchRepositoryMockConfiguration
+     * @see io.kimos.talentpipe.repository.search.SearchRequestSearchRepositoryMockConfiguration
      */
     @Autowired
     private SearchRequestSearchRepository mockSearchRequestSearchRepository;
@@ -101,20 +98,9 @@ public class SearchRequestResourceIntTest {
 
     private SearchRequest searchRequest;
 
-    @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        final SearchRequestResource searchRequestResource = new SearchRequestResource(searchRequestService);
-        this.restSearchRequestMockMvc = MockMvcBuilders.standaloneSetup(searchRequestResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
-    }
-
     /**
      * Create an entity for this test.
-     *
+     * <p>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
@@ -131,6 +117,17 @@ public class SearchRequestResourceIntTest {
         em.flush();
         searchRequest.setCompany(company);
         return searchRequest;
+    }
+
+    @Before
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        final SearchRequestResource searchRequestResource = new SearchRequestResource(searchRequestService);
+        this.restSearchRequestMockMvc = MockMvcBuilders.standaloneSetup(searchRequestResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
     }
 
     @Before
@@ -274,7 +271,7 @@ public class SearchRequestResourceIntTest {
             .andExpect(jsonPath("$.[*].maxSalary").value(hasItem(DEFAULT_MAX_SALARY.intValue())))
             .andExpect(jsonPath("$.[*].position").value(hasItem(DEFAULT_POSITION.toString())));
     }
-    
+
     @SuppressWarnings({"unchecked"})
     public void getAllSearchRequestsWithEagerRelationshipsIsEnabled() throws Exception {
         SearchRequestResource searchRequestResource = new SearchRequestResource(searchRequestServiceMock);
@@ -287,7 +284,7 @@ public class SearchRequestResourceIntTest {
             .setMessageConverters(jacksonMessageConverter).build();
 
         restSearchRequestMockMvc.perform(get("/api/search-requests?eagerload=true"))
-        .andExpect(status().isOk());
+            .andExpect(status().isOk());
 
         verify(searchRequestServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
@@ -295,17 +292,17 @@ public class SearchRequestResourceIntTest {
     @SuppressWarnings({"unchecked"})
     public void getAllSearchRequestsWithEagerRelationshipsIsNotEnabled() throws Exception {
         SearchRequestResource searchRequestResource = new SearchRequestResource(searchRequestServiceMock);
-            when(searchRequestServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-            MockMvc restSearchRequestMockMvc = MockMvcBuilders.standaloneSetup(searchRequestResource)
+        when(searchRequestServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        MockMvc restSearchRequestMockMvc = MockMvcBuilders.standaloneSetup(searchRequestResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter).build();
 
         restSearchRequestMockMvc.perform(get("/api/search-requests?eagerload=true"))
-        .andExpect(status().isOk());
+            .andExpect(status().isOk());
 
-            verify(searchRequestServiceMock, times(1)).findAllWithEagerRelationships(any());
+        verify(searchRequestServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test

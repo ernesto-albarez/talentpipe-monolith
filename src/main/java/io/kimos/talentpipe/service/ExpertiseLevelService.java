@@ -1,6 +1,6 @@
-package io.kimos.talentppe.service;
+package io.kimos.talentpipe.service;
 
-import io.kimos.talentppe.domain.ExpertiseLevel;
+import io.kimos.talentpipe.domain.ExpertiseLevel;
 
 import java.util.List;
 import java.util.Optional;

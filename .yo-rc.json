@@ -1,14 +1,14 @@
 {
   "generator-jhipster": {
     "promptValues": {
-      "packageName": "io.kimos.talentppe",
+      "packageName": "io.kimos.talentpipe",
       "nativeLanguage": "es"
     },
     "jhipsterVersion": "5.3.4",
     "applicationType": "monolith",
     "baseName": "monolith",
-    "packageName": "io.kimos.talentppe",
-    "packageFolder": "io/kimos/talentppe",
+    "packageName": "io.kimos.talentpipe",
+    "packageFolder": "io/kimos/talentpipe",
     "serverPort": "8080",
     "authenticationType": "jwt",
     "cacheProvider": "hazelcast",

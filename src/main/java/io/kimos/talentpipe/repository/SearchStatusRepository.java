@@ -1,6 +1,6 @@
-package io.kimos.talentppe.repository;
+package io.kimos.talentpipe.repository;
 
-import io.kimos.talentppe.domain.SearchStatus;
+import io.kimos.talentpipe.domain.SearchStatus;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 

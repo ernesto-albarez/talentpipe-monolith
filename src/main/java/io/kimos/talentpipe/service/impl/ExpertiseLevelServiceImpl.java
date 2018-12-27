@@ -1,9 +1,9 @@
-package io.kimos.talentppe.service.impl;
+package io.kimos.talentpipe.service.impl;
 
-import io.kimos.talentppe.service.ExpertiseLevelService;
-import io.kimos.talentppe.domain.ExpertiseLevel;
-import io.kimos.talentppe.repository.ExpertiseLevelRepository;
-import io.kimos.talentppe.repository.search.ExpertiseLevelSearchRepository;
+import io.kimos.talentpipe.service.ExpertiseLevelService;
+import io.kimos.talentpipe.domain.ExpertiseLevel;
+import io.kimos.talentpipe.repository.ExpertiseLevelRepository;
+import io.kimos.talentpipe.repository.search.ExpertiseLevelSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
