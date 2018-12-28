@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Test class for the SearchStatusResource REST controller.
  *
- * @see SearchStatusResource
+ * @see SearchStatusRestController
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = MonolithApp.class)
@@ -86,7 +86,7 @@ public class SearchStatusResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final SearchStatusResource searchStatusResource = new SearchStatusResource(searchStatusService);
+        final SearchStatusRestController searchStatusResource = new SearchStatusRestController(searchStatusService);
         this.restSearchStatusMockMvc = MockMvcBuilders.standaloneSetup(searchStatusResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
