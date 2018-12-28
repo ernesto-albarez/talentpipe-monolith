@@ -28,7 +28,6 @@ import javax.servlet.*;
 import java.nio.charset.StandardCharsets;
 import java.util.EnumSet;
 
-
 /**
  * Configuration of web application with Servlet 3.0 APIs.
  */

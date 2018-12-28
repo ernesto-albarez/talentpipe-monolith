@@ -27,7 +27,6 @@ public interface SectorService {
      */
     Page<Sector> findAll(Pageable pageable);
 
-
     /**
      * Get the "id" sector.
      *

@@ -27,7 +27,6 @@ public interface StateBeforeTaxService {
      */
     Page<StateBeforeTax> findAll(Pageable pageable);
 
-
     /**
      * Get the "id" stateBeforeTax.
      *

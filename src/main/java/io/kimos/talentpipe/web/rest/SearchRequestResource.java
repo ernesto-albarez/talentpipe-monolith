@@ -2,11 +2,11 @@ package io.kimos.talentpipe.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
+import io.kimos.talentpipe.domain.SearchRequest;
+import io.kimos.talentpipe.service.SearchRequestService;
 import io.kimos.talentpipe.web.rest.errors.BadRequestAlertException;
 import io.kimos.talentpipe.web.rest.util.HeaderUtil;
 import io.kimos.talentpipe.web.rest.util.PaginationUtil;
-import io.kimos.talentpipe.domain.SearchRequest;
-import io.kimos.talentpipe.service.SearchRequestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;

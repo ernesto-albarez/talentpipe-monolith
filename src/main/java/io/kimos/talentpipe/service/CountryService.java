@@ -27,7 +27,6 @@ public interface CountryService {
      */
     Page<Country> findAll(Pageable pageable);
 
-
     /**
      * Get the "id" country.
      *

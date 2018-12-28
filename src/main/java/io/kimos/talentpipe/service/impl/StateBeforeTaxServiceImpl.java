@@ -60,7 +60,6 @@ public class StateBeforeTaxServiceImpl implements StateBeforeTaxService {
         return stateBeforeTaxRepository.findAll(pageable);
     }
 
-
     /**
      * Get one stateBeforeTax by id.
      *

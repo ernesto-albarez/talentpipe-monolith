@@ -3,16 +3,17 @@ package io.kimos.talentpipe.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import org.springframework.data.elasticsearch.annotations.Document;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A SearchRequest.
@@ -62,36 +63,36 @@ public class SearchRequest implements Serializable {
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "search_request_required_technical_skills",
-               joinColumns = @JoinColumn(name = "search_requests_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "required_technical_skills_id", referencedColumnName = "id"))
+        joinColumns = @JoinColumn(name = "search_requests_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "required_technical_skills_id", referencedColumnName = "id"))
     private Set<TechnicalSkill> requiredTechnicalSkills = new HashSet<>();
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "search_request_non_required_technical_skills",
-               joinColumns = @JoinColumn(name = "search_requests_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "non_required_technical_skills_id", referencedColumnName = "id"))
+        joinColumns = @JoinColumn(name = "search_requests_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "non_required_technical_skills_id", referencedColumnName = "id"))
     private Set<TechnicalSkill> nonRequiredTechnicalSkills = new HashSet<>();
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "search_request_required_soft_skills",
-               joinColumns = @JoinColumn(name = "search_requests_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "required_soft_skills_id", referencedColumnName = "id"))
+        joinColumns = @JoinColumn(name = "search_requests_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "required_soft_skills_id", referencedColumnName = "id"))
     private Set<SoftSkill> requiredSoftSkills = new HashSet<>();
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "search_request_non_required_soft_skills",
-               joinColumns = @JoinColumn(name = "search_requests_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "non_required_soft_skills_id", referencedColumnName = "id"))
+        joinColumns = @JoinColumn(name = "search_requests_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "non_required_soft_skills_id", referencedColumnName = "id"))
     private Set<SoftSkill> nonRequiredSoftSkills = new HashSet<>();
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "search_request_benefits",
-               joinColumns = @JoinColumn(name = "search_requests_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "benefits_id", referencedColumnName = "id"))
+        joinColumns = @JoinColumn(name = "search_requests_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "benefits_id", referencedColumnName = "id"))
     private Set<Benefit> benefits = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -286,27 +287,27 @@ public class SearchRequest implements Serializable {
         this.nonRequiredSoftSkills = softSkills;
     }
 
-    public Set< Benefit> getBenefits() {
+    public Set<Benefit> getBenefits() {
         return benefits;
     }
 
-    public SearchRequest benefits(Set< Benefit>  Benefits) {
-        this.benefits =  Benefits;
+    public SearchRequest benefits(Set<Benefit> Benefits) {
+        this.benefits = Benefits;
         return this;
     }
 
-    public SearchRequest addBenefits( Benefit  Benefit) {
-        this.benefits.add( Benefit);
+    public SearchRequest addBenefits(Benefit Benefit) {
+        this.benefits.add(Benefit);
         return this;
     }
 
-    public SearchRequest removeBenefits( Benefit  Benefit) {
-        this.benefits.remove( Benefit);
+    public SearchRequest removeBenefits(Benefit Benefit) {
+        this.benefits.remove(Benefit);
         return this;
     }
 
-    public void setBenefits(Set< Benefit>  Benefits) {
-        this.benefits =  Benefits;
+    public void setBenefits(Set<Benefit> Benefits) {
+        this.benefits = Benefits;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

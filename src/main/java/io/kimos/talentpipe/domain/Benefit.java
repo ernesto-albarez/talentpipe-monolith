@@ -35,6 +35,9 @@ public class Benefit implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @ManyToOne
+    private Company company;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -50,7 +53,7 @@ public class Benefit implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-        this.normalizedName = name == null ? null : new String(name).trim().toLowerCase();
+        this.normalizedName = name == null ? null : name.trim().toLowerCase();
     }
 
     public Benefit name(String name) {
@@ -74,6 +77,15 @@ public class Benefit implements Serializable {
         this.description = description;
         return this;
     }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override

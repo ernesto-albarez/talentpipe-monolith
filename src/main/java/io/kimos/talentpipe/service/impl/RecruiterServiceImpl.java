@@ -1,14 +1,13 @@
 package io.kimos.talentpipe.service.impl;
 
-import io.kimos.talentpipe.domain.User;
-import io.kimos.talentpipe.service.RecruiterService;
 import io.kimos.talentpipe.domain.Recruiter;
+import io.kimos.talentpipe.domain.User;
 import io.kimos.talentpipe.repository.RecruiterRepository;
 import io.kimos.talentpipe.repository.search.RecruiterSearchRepository;
+import io.kimos.talentpipe.service.RecruiterService;
 import io.kimos.talentpipe.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * Service Implementation for managing Recruiter.
@@ -66,7 +65,6 @@ public class RecruiterServiceImpl implements RecruiterService {
         return recruiterRepository.findAll(pageable);
     }
 
-
     /**
      * Get one recruiter by id.
      *
@@ -95,7 +93,7 @@ public class RecruiterServiceImpl implements RecruiterService {
     /**
      * Search for the recruiter corresponding to the query.
      *
-     * @param query the query of the search
+     * @param query    the query of the search
      * @param pageable the pagination information
      * @return the list of entities
      */
@@ -103,7 +101,8 @@ public class RecruiterServiceImpl implements RecruiterService {
     @Transactional(readOnly = true)
     public Page<Recruiter> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Recruiters for query {}", query);
-        return recruiterSearchRepository.search(queryStringQuery(query), pageable);    }
+        return recruiterSearchRepository.search(queryStringQuery(query), pageable);
+    }
 
     @Override
     public Recruiter registryRecruiter(Recruiter recruiter, String password) {

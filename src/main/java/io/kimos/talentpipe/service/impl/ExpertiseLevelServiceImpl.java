@@ -1,12 +1,11 @@
 package io.kimos.talentpipe.service.impl;
 
-import io.kimos.talentpipe.service.ExpertiseLevelService;
 import io.kimos.talentpipe.domain.ExpertiseLevel;
 import io.kimos.talentpipe.repository.ExpertiseLevelRepository;
 import io.kimos.talentpipe.repository.search.ExpertiseLevelSearchRepository;
+import io.kimos.talentpipe.service.ExpertiseLevelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * Service Implementation for managing ExpertiseLevel.
@@ -60,7 +59,6 @@ public class ExpertiseLevelServiceImpl implements ExpertiseLevelService {
         log.debug("Request to get all ExpertiseLevels");
         return expertiseLevelRepository.findAll();
     }
-
 
     /**
      * Get one expertiseLevel by id.

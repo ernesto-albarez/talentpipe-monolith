@@ -9,6 +9,7 @@ public class CreateCityDTO {
     @NotNull
     private String postalCode;
     private Long countryId;
+
     @NotNull
     public String getName() {
         return name;

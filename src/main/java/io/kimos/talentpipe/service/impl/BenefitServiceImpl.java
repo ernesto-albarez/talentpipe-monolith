@@ -60,7 +60,6 @@ public class BenefitServiceImpl implements BenefitService {
         return benefitRepository.findAll(pageable);
     }
 
-
     /**
      * Get one benefit by id.
      *

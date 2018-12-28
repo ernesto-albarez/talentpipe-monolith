@@ -1,12 +1,11 @@
 package io.kimos.talentpipe.service.impl;
 
-import io.kimos.talentpipe.service.CityService;
 import io.kimos.talentpipe.domain.City;
 import io.kimos.talentpipe.repository.CityRepository;
 import io.kimos.talentpipe.repository.search.CitySearchRepository;
+import io.kimos.talentpipe.service.CityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * Service Implementation for managing City.
@@ -42,7 +41,8 @@ public class CityServiceImpl implements CityService {
      */
     @Override
     public City save(City city) {
-        log.debug("Request to save City : {}", city);        City result = cityRepository.save(city);
+        log.debug("Request to save City : {}", city);
+        City result = cityRepository.save(city);
         citySearchRepository.save(result);
         return result;
     }
@@ -59,7 +59,6 @@ public class CityServiceImpl implements CityService {
         log.debug("Request to get all Cities");
         return cityRepository.findAll(pageable);
     }
-
 
     /**
      * Get one city by id.
@@ -89,7 +88,7 @@ public class CityServiceImpl implements CityService {
     /**
      * Search for the city corresponding to the query.
      *
-     * @param query the query of the search
+     * @param query    the query of the search
      * @param pageable the pagination information
      * @return the list of entities
      */
@@ -97,5 +96,6 @@ public class CityServiceImpl implements CityService {
     @Transactional(readOnly = true)
     public Page<City> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Cities for query {}", query);
-        return citySearchRepository.search(queryStringQuery(query), pageable);    }
+        return citySearchRepository.search(queryStringQuery(query), pageable);
+    }
 }

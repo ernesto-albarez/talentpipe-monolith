@@ -1,15 +1,15 @@
 package io.kimos.talentpipe.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import io.github.jhipster.web.util.ResponseUtil;
 import io.kimos.talentpipe.domain.Recruiter;
+import io.kimos.talentpipe.service.RecruiterQueryService;
 import io.kimos.talentpipe.service.RecruiterService;
+import io.kimos.talentpipe.service.dto.RecruiterCriteria;
 import io.kimos.talentpipe.web.rest.dto.RegistryRecruiterRequest;
 import io.kimos.talentpipe.web.rest.errors.BadRequestAlertException;
 import io.kimos.talentpipe.web.rest.util.HeaderUtil;
 import io.kimos.talentpipe.web.rest.util.PaginationUtil;
-import io.kimos.talentpipe.service.dto.RecruiterCriteria;
-import io.kimos.talentpipe.service.RecruiterQueryService;
-import io.github.jhipster.web.util.ResponseUtil;
 import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +42,7 @@ public class RecruiterResource {
 
     private final RecruiterQueryService recruiterQueryService;
     private final MapperFacade orikaMapper;
+
     public RecruiterResource(RecruiterService recruiterService, RecruiterQueryService recruiterQueryService, MapperFacade orikaMapper) {
         this.recruiterService = recruiterService;
         this.recruiterQueryService = recruiterQueryService;
@@ -144,7 +144,7 @@ public class RecruiterResource {
      * SEARCH  /_search/recruiters?query=:query : search for the recruiter corresponding
      * to the query.
      *
-     * @param query the query of the recruiter search
+     * @param query    the query of the recruiter search
      * @param pageable the pagination information
      * @return the result of the search
      */

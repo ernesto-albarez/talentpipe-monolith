@@ -60,7 +60,6 @@ public class CountryServiceImpl implements CountryService {
         return countryRepository.findAll(pageable);
     }
 
-
     /**
      * Get one country by id.
      *

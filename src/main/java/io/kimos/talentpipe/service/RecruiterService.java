@@ -1,7 +1,6 @@
 package io.kimos.talentpipe.service;
 
 import io.kimos.talentpipe.domain.Recruiter;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -28,7 +27,6 @@ public interface RecruiterService {
      */
     Page<Recruiter> findAll(Pageable pageable);
 
-
     /**
      * Get the "id" recruiter.
      *
@@ -47,8 +45,7 @@ public interface RecruiterService {
     /**
      * Search for the recruiter corresponding to the query.
      *
-     * @param query the query of the search
-     * 
+     * @param query    the query of the search
      * @param pageable the pagination information
      * @return the list of entities
      */

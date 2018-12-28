@@ -1,14 +1,13 @@
 package io.kimos.talentpipe.service.impl;
 
-import io.kimos.talentpipe.domain.User;
-import io.kimos.talentpipe.service.CompanyService;
 import io.kimos.talentpipe.domain.Company;
+import io.kimos.talentpipe.domain.User;
 import io.kimos.talentpipe.repository.CompanyRepository;
 import io.kimos.talentpipe.repository.search.CompanySearchRepository;
+import io.kimos.talentpipe.service.CompanyService;
 import io.kimos.talentpipe.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.Optional;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * Service Implementation for managing Company.
@@ -49,7 +48,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Company save(Company company) {
         log.debug("Request to save Company : {}", company);
-        Company result = companyRepository.save(company.getId() == null? prepareToCreate(company) : prepareToUpdate(company));
+        Company result = companyRepository.save(company.getId() == null ? prepareToCreate(company) : prepareToUpdate(company));
         companySearchRepository.save(result);
         return result;
     }
@@ -70,7 +69,6 @@ public class CompanyServiceImpl implements CompanyService {
         log.debug("Request to get all Companies");
         return companyRepository.findAll(pageable);
     }
-
 
     /**
      * Get one company by id.
@@ -100,7 +98,7 @@ public class CompanyServiceImpl implements CompanyService {
     /**
      * Search for the company corresponding to the query.
      *
-     * @param query the query of the search
+     * @param query    the query of the search
      * @param pageable the pagination information
      * @return the list of entities
      */
@@ -108,7 +106,8 @@ public class CompanyServiceImpl implements CompanyService {
     @Transactional(readOnly = true)
     public Page<Company> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Companies for query {}", query);
-        return companySearchRepository.search(queryStringQuery(query), pageable);    }
+        return companySearchRepository.search(queryStringQuery(query), pageable);
+    }
 
     @Override
     @Transactional

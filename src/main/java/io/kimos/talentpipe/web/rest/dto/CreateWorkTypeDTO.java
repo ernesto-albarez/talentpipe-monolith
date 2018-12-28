@@ -17,6 +17,7 @@ public class CreateWorkTypeDTO {
     @NotNull
     @Max(value = 24)
     private Integer maxQuantityHours;
+
     public String getName() {
         return name;
     }

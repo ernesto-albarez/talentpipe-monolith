@@ -25,7 +25,6 @@ public interface SearchStatusService {
      */
     List<SearchStatus> findAll();
 
-
     /**
      * Get the "id" searchStatus.
      *
@@ -45,7 +44,6 @@ public interface SearchStatusService {
      * Search for the searchStatus corresponding to the query.
      *
      * @param query the query of the search
-     * 
      * @return the list of entities
      */
     List<SearchStatus> search(String query);

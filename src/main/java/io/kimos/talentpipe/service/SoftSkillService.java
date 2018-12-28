@@ -27,7 +27,6 @@ public interface SoftSkillService {
      */
     Page<SoftSkill> findAll(Pageable pageable);
 
-
     /**
      * Get the "id" softSkill.
      *

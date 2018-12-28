@@ -60,7 +60,6 @@ public class SectorServiceImpl implements SectorService {
         return sectorRepository.findAll(pageable);
     }
 
-
     /**
      * Get one sector by id.
      *

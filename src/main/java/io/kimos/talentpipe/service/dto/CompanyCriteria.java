@@ -1,12 +1,12 @@
 package io.kimos.talentpipe.service.dto;
 
-import java.io.Serializable;
-import java.util.Objects;
-
 import io.github.jhipster.service.filter.Filter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Criteria class for the Company entity. This class is used in CompanyResource to
@@ -183,7 +183,6 @@ public class CompanyCriteria implements Serializable {
         this.companyTypeId = companyTypeId;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -195,64 +194,64 @@ public class CompanyCriteria implements Serializable {
         final CompanyCriteria that = (CompanyCriteria) o;
         return
             Objects.equals(id, that.id) &&
-            Objects.equals(taxName, that.taxName) &&
-            Objects.equals(taxId, that.taxId) &&
-            Objects.equals(email, that.email) &&
-            Objects.equals(name, that.name) &&
-            Objects.equals(street, that.street) &&
-            Objects.equals(floor, that.floor) &&
-            Objects.equals(number, that.number) &&
-            Objects.equals(apartment, that.apartment) &&
-            Objects.equals(postalCode, that.postalCode) &&
-            Objects.equals(phone, that.phone) &&
-            Objects.equals(contactName, that.contactName) &&
-            Objects.equals(mainUserId, that.mainUserId) &&
-            Objects.equals(sectorId, that.sectorId) &&
-            Objects.equals(cityId, that.cityId) &&
-            Objects.equals(companyTypeId, that.companyTypeId);
+                Objects.equals(taxName, that.taxName) &&
+                Objects.equals(taxId, that.taxId) &&
+                Objects.equals(email, that.email) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(street, that.street) &&
+                Objects.equals(floor, that.floor) &&
+                Objects.equals(number, that.number) &&
+                Objects.equals(apartment, that.apartment) &&
+                Objects.equals(postalCode, that.postalCode) &&
+                Objects.equals(phone, that.phone) &&
+                Objects.equals(contactName, that.contactName) &&
+                Objects.equals(mainUserId, that.mainUserId) &&
+                Objects.equals(sectorId, that.sectorId) &&
+                Objects.equals(cityId, that.cityId) &&
+                Objects.equals(companyTypeId, that.companyTypeId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
-        id,
-        taxName,
-        taxId,
-        email,
-        name,
-        street,
-        floor,
-        number,
-        apartment,
-        postalCode,
-        phone,
-        contactName,
-        mainUserId,
-        sectorId,
-        cityId,
-        companyTypeId
+            id,
+            taxName,
+            taxId,
+            email,
+            name,
+            street,
+            floor,
+            number,
+            apartment,
+            postalCode,
+            phone,
+            contactName,
+            mainUserId,
+            sectorId,
+            cityId,
+            companyTypeId
         );
     }
 
     @Override
     public String toString() {
         return "CompanyCriteria{" +
-                (id != null ? "id=" + id + ", " : "") +
-                (taxName != null ? "taxName=" + taxName + ", " : "") +
-                (taxId != null ? "taxId=" + taxId + ", " : "") +
-                (email != null ? "email=" + email + ", " : "") +
-                (name != null ? "name=" + name + ", " : "") +
-                (street != null ? "street=" + street + ", " : "") +
-                (floor != null ? "floor=" + floor + ", " : "") +
-                (number != null ? "number=" + number + ", " : "") +
-                (apartment != null ? "apartment=" + apartment + ", " : "") +
-                (postalCode != null ? "postalCode=" + postalCode + ", " : "") +
-                (phone != null ? "phone=" + phone + ", " : "") +
-                (contactName != null ? "contactName=" + contactName + ", " : "") +
-                (mainUserId != null ? "mainUserId=" + mainUserId + ", " : "") +
-                (sectorId != null ? "sectorId=" + sectorId + ", " : "") +
-                (cityId != null ? "cityId=" + cityId + ", " : "") +
-                (companyTypeId != null ? "companyTypeId=" + companyTypeId + ", " : "") +
+            (id != null ? "id=" + id + ", " : "") +
+            (taxName != null ? "taxName=" + taxName + ", " : "") +
+            (taxId != null ? "taxId=" + taxId + ", " : "") +
+            (email != null ? "email=" + email + ", " : "") +
+            (name != null ? "name=" + name + ", " : "") +
+            (street != null ? "street=" + street + ", " : "") +
+            (floor != null ? "floor=" + floor + ", " : "") +
+            (number != null ? "number=" + number + ", " : "") +
+            (apartment != null ? "apartment=" + apartment + ", " : "") +
+            (postalCode != null ? "postalCode=" + postalCode + ", " : "") +
+            (phone != null ? "phone=" + phone + ", " : "") +
+            (contactName != null ? "contactName=" + contactName + ", " : "") +
+            (mainUserId != null ? "mainUserId=" + mainUserId + ", " : "") +
+            (sectorId != null ? "sectorId=" + sectorId + ", " : "") +
+            (cityId != null ? "cityId=" + cityId + ", " : "") +
+            (companyTypeId != null ? "companyTypeId=" + companyTypeId + ", " : "") +
             "}";
     }
 

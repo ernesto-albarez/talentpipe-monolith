@@ -25,7 +25,6 @@ public interface WorkTypeService {
      */
     List<WorkType> findAll();
 
-
     /**
      * Get the "id" workType.
      *

@@ -36,6 +36,7 @@ public class StateBeforeTaxResource {
     private final Logger log = LoggerFactory.getLogger(StateBeforeTaxResource.class);
     private final StateBeforeTaxService stateBeforeTaxService;
     private final MapperFacade orikaMapper;
+
     public StateBeforeTaxResource(StateBeforeTaxService stateBeforeTaxService, MapperFacade orikaMapper) {
         this.stateBeforeTaxService = stateBeforeTaxService;
         this.orikaMapper = orikaMapper;

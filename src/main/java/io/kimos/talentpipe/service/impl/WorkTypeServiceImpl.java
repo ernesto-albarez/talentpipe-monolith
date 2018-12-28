@@ -60,7 +60,6 @@ public class WorkTypeServiceImpl implements WorkTypeService {
         return workTypeRepository.findAll();
     }
 
-
     /**
      * Get one workType by id.
      *

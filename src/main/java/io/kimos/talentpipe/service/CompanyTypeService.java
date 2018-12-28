@@ -27,7 +27,6 @@ public interface CompanyTypeService {
      */
     Page<CompanyType> findAll(Pageable pageable);
 
-
     /**
      * Get the "id" companyType.
      *

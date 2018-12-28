@@ -25,7 +25,6 @@ public interface ExpertiseLevelService {
      */
     List<ExpertiseLevel> findAll();
 
-
     /**
      * Get the "id" expertiseLevel.
      *
@@ -45,7 +44,6 @@ public interface ExpertiseLevelService {
      * Search for the expertiseLevel corresponding to the query.
      *
      * @param query the query of the search
-     * 
      * @return the list of entities
      */
     List<ExpertiseLevel> search(String query);

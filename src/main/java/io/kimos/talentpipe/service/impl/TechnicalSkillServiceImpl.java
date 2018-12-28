@@ -60,7 +60,6 @@ public class TechnicalSkillServiceImpl implements TechnicalSkillService {
         return technicalSkillRepository.findAll(pageable);
     }
 
-
     /**
      * Get one technicalSkill by id.
      *

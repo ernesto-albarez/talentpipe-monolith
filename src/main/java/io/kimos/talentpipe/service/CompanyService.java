@@ -1,7 +1,6 @@
 package io.kimos.talentpipe.service;
 
 import io.kimos.talentpipe.domain.Company;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -28,7 +27,6 @@ public interface CompanyService {
      */
     Page<Company> findAll(Pageable pageable);
 
-
     /**
      * Get the "id" company.
      *
@@ -47,8 +45,7 @@ public interface CompanyService {
     /**
      * Search for the company corresponding to the query.
      *
-     * @param query the query of the search
-     * 
+     * @param query    the query of the search
      * @param pageable the pagination information
      * @return the list of entities
      */

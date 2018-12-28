@@ -280,6 +280,7 @@ public class UserService {
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
     }
+
     @Transactional
     public User registerCompanyUser(User user) {
         Set<Authority> authorities = new HashSet<>();
@@ -318,6 +319,7 @@ public class UserService {
         log.debug("Created Information for User: {}", user);
         return user;
     }
+
     @Transactional
     public User registerRecruiterUser(User user) {
         Set<Authority> authorities = new HashSet<>();

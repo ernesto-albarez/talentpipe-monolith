@@ -60,7 +60,6 @@ public class SearchTypeServiceImpl implements SearchTypeService {
         return searchTypeRepository.findAll(pageable);
     }
 
-
     /**
      * Get one searchType by id.
      *

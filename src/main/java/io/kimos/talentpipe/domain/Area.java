@@ -50,7 +50,8 @@ public class Area implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-        this.normalizedName = name == null ? null : new String(name).trim().toLowerCase();    }
+        this.normalizedName = name == null ? null : name.trim().toLowerCase();
+    }
 
     public Area name(String name) {
         this.setName(name);

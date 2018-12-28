@@ -60,7 +60,6 @@ public class CompanyTypeServiceImpl implements CompanyTypeService {
         return companyTypeRepository.findAll(pageable);
     }
 
-
     /**
      * Get one companyType by id.
      *

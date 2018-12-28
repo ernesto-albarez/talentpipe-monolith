@@ -1,12 +1,12 @@
 package io.kimos.talentpipe.service.dto;
 
-import java.io.Serializable;
-import java.util.Objects;
-
 import io.github.jhipster.service.filter.Filter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Criteria class for the Recruiter entity. This class is used in RecruiterResource to
@@ -143,7 +143,6 @@ public class RecruiterCriteria implements Serializable {
         this.sectorId = sectorId;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -155,52 +154,52 @@ public class RecruiterCriteria implements Serializable {
         final RecruiterCriteria that = (RecruiterCriteria) o;
         return
             Objects.equals(id, that.id) &&
-            Objects.equals(name, that.name) &&
-            Objects.equals(lastName, that.lastName) &&
-            Objects.equals(email, that.email) &&
-            Objects.equals(taxId, that.taxId) &&
-            Objects.equals(phone, that.phone) &&
-            Objects.equals(street, that.street) &&
-            Objects.equals(number, that.number) &&
-            Objects.equals(floor, that.floor) &&
-            Objects.equals(apartment, that.apartment) &&
-            Objects.equals(cityId, that.cityId) &&
-            Objects.equals(sectorId, that.sectorId);
+                Objects.equals(name, that.name) &&
+                Objects.equals(lastName, that.lastName) &&
+                Objects.equals(email, that.email) &&
+                Objects.equals(taxId, that.taxId) &&
+                Objects.equals(phone, that.phone) &&
+                Objects.equals(street, that.street) &&
+                Objects.equals(number, that.number) &&
+                Objects.equals(floor, that.floor) &&
+                Objects.equals(apartment, that.apartment) &&
+                Objects.equals(cityId, that.cityId) &&
+                Objects.equals(sectorId, that.sectorId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
-        id,
-        name,
-        lastName,
-        email,
-        taxId,
-        phone,
-        street,
-        number,
-        floor,
-        apartment,
-        cityId,
-        sectorId
+            id,
+            name,
+            lastName,
+            email,
+            taxId,
+            phone,
+            street,
+            number,
+            floor,
+            apartment,
+            cityId,
+            sectorId
         );
     }
 
     @Override
     public String toString() {
         return "RecruiterCriteria{" +
-                (id != null ? "id=" + id + ", " : "") +
-                (name != null ? "name=" + name + ", " : "") +
-                (lastName != null ? "lastName=" + lastName + ", " : "") +
-                (email != null ? "email=" + email + ", " : "") +
-                (taxId != null ? "taxId=" + taxId + ", " : "") +
-                (phone != null ? "phone=" + phone + ", " : "") +
-                (street != null ? "street=" + street + ", " : "") +
-                (number != null ? "number=" + number + ", " : "") +
-                (floor != null ? "floor=" + floor + ", " : "") +
-                (apartment != null ? "apartment=" + apartment + ", " : "") +
-                (cityId != null ? "cityId=" + cityId + ", " : "") +
-                (sectorId != null ? "sectorId=" + sectorId + ", " : "") +
+            (id != null ? "id=" + id + ", " : "") +
+            (name != null ? "name=" + name + ", " : "") +
+            (lastName != null ? "lastName=" + lastName + ", " : "") +
+            (email != null ? "email=" + email + ", " : "") +
+            (taxId != null ? "taxId=" + taxId + ", " : "") +
+            (phone != null ? "phone=" + phone + ", " : "") +
+            (street != null ? "street=" + street + ", " : "") +
+            (number != null ? "number=" + number + ", " : "") +
+            (floor != null ? "floor=" + floor + ", " : "") +
+            (apartment != null ? "apartment=" + apartment + ", " : "") +
+            (cityId != null ? "cityId=" + cityId + ", " : "") +
+            (sectorId != null ? "sectorId=" + sectorId + ", " : "") +
             "}";
     }
 

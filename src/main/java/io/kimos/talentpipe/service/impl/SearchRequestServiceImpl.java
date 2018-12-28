@@ -1,12 +1,11 @@
 package io.kimos.talentpipe.service.impl;
 
-import io.kimos.talentpipe.service.SearchRequestService;
 import io.kimos.talentpipe.domain.SearchRequest;
 import io.kimos.talentpipe.repository.SearchRequestRepository;
 import io.kimos.talentpipe.repository.search.SearchRequestSearchRepository;
+import io.kimos.talentpipe.service.SearchRequestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * Service Implementation for managing SearchRequest.
@@ -69,7 +68,6 @@ public class SearchRequestServiceImpl implements SearchRequestService {
     public Page<SearchRequest> findAllWithEagerRelationships(Pageable pageable) {
         return searchRequestRepository.findAllWithEagerRelationships(pageable);
     }
-    
 
     /**
      * Get one searchRequest by id.
@@ -99,7 +97,7 @@ public class SearchRequestServiceImpl implements SearchRequestService {
     /**
      * Search for the searchRequest corresponding to the query.
      *
-     * @param query the query of the search
+     * @param query    the query of the search
      * @param pageable the pagination information
      * @return the list of entities
      */
@@ -107,5 +105,6 @@ public class SearchRequestServiceImpl implements SearchRequestService {
     @Transactional(readOnly = true)
     public Page<SearchRequest> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of SearchRequests for query {}", query);
-        return searchRequestSearchRepository.search(queryStringQuery(query), pageable);    }
+        return searchRequestSearchRepository.search(queryStringQuery(query), pageable);
+    }
 }

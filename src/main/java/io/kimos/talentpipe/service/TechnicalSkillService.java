@@ -27,7 +27,6 @@ public interface TechnicalSkillService {
      */
     Page<TechnicalSkill> findAll(Pageable pageable);
 
-
     /**
      * Get the "id" technicalSkill.
      *

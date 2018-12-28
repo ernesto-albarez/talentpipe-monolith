@@ -27,7 +27,6 @@ public interface AreaService {
      */
     Page<Area> findAll(Pageable pageable);
 
-
     /**
      * Get the "id" area.
      *

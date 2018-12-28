@@ -27,7 +27,6 @@ public interface SearchTypeService {
      */
     Page<SearchType> findAll(Pageable pageable);
 
-
     /**
      * Get the "id" searchType.
      *

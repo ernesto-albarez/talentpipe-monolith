@@ -1,7 +1,13 @@
 package io.kimos.talentpipe.service;
 
-import java.util.List;
-
+import io.github.jhipster.service.QueryService;
+import io.kimos.talentpipe.domain.City_;
+import io.kimos.talentpipe.domain.Recruiter;
+import io.kimos.talentpipe.domain.Recruiter_;
+import io.kimos.talentpipe.domain.Sector_;
+import io.kimos.talentpipe.repository.RecruiterRepository;
+import io.kimos.talentpipe.repository.search.RecruiterSearchRepository;
+import io.kimos.talentpipe.service.dto.RecruiterCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -10,13 +16,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.github.jhipster.service.QueryService;
-
-import io.kimos.talentpipe.domain.Recruiter;
-import io.kimos.talentpipe.domain.*; // for static metamodels
-import io.kimos.talentpipe.repository.RecruiterRepository;
-import io.kimos.talentpipe.repository.search.RecruiterSearchRepository;
-import io.kimos.talentpipe.service.dto.RecruiterCriteria;
+import java.util.List;
 
 /**
  * Service for executing complex queries for Recruiter entities in the database.
@@ -41,6 +41,7 @@ public class RecruiterQueryService extends QueryService<Recruiter> {
 
     /**
      * Return a {@link List} of {@link Recruiter} which matches the criteria from the database
+     *
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching entities.
      */
@@ -53,8 +54,9 @@ public class RecruiterQueryService extends QueryService<Recruiter> {
 
     /**
      * Return a {@link Page} of {@link Recruiter} which matches the criteria from the database
+     *
      * @param criteria The object which holds all the filters, which the entities should match.
-     * @param page The page, which should be returned.
+     * @param page     The page, which should be returned.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)

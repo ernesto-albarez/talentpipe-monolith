@@ -1,15 +1,15 @@
 package io.kimos.talentpipe.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import io.github.jhipster.web.util.ResponseUtil;
 import io.kimos.talentpipe.domain.Company;
+import io.kimos.talentpipe.service.CompanyQueryService;
 import io.kimos.talentpipe.service.CompanyService;
+import io.kimos.talentpipe.service.dto.CompanyCriteria;
 import io.kimos.talentpipe.web.rest.dto.CreateCompanyRequest;
 import io.kimos.talentpipe.web.rest.errors.BadRequestAlertException;
 import io.kimos.talentpipe.web.rest.util.HeaderUtil;
 import io.kimos.talentpipe.web.rest.util.PaginationUtil;
-import io.kimos.talentpipe.service.dto.CompanyCriteria;
-import io.kimos.talentpipe.service.CompanyQueryService;
-import io.github.jhipster.web.util.ResponseUtil;
 import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -146,7 +145,7 @@ public class CompanyResource {
      * SEARCH  /_search/companies?query=:query : search for the company corresponding
      * to the query.
      *
-     * @param query the query of the company search
+     * @param query    the query of the company search
      * @param pageable the pagination information
      * @return the result of the search
      */

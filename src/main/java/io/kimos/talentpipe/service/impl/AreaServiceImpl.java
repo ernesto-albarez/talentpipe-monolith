@@ -60,7 +60,6 @@ public class AreaServiceImpl implements AreaService {
         return areaRepository.findAll(pageable);
     }
 
-
     /**
      * Get one area by id.
      *

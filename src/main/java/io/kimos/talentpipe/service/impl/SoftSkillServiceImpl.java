@@ -60,7 +60,6 @@ public class SoftSkillServiceImpl implements SoftSkillService {
         return softSkillRepository.findAll(pageable);
     }
 
-
     /**
      * Get one softSkill by id.
      *

@@ -50,7 +50,7 @@ public class StateBeforeTax implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-        this.normalizedName = name == null? null : name.toLowerCase().trim();
+        this.normalizedName = name == null ? null : name.toLowerCase().trim();
     }
 
     public StateBeforeTax name(String name) {

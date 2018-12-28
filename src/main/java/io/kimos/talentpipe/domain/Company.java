@@ -4,12 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import org.springframework.data.elasticsearch.annotations.Document;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
@@ -73,11 +71,11 @@ public class Company implements Serializable {
     private String contactName;
 
     @NotNull
-    @Column(name="contact_lastname", nullable = false)
+    @Column(name = "contact_lastname", nullable = false)
     private String contactLastName;
 
     @NotNull
-    @Column(name="creation_date", nullable = false)
+    @Column(name = "creation_date", nullable = false)
     private Instant creationDate;
 
     @NotNull

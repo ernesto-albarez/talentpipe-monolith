@@ -1,7 +1,6 @@
 package io.kimos.talentpipe.service;
 
 import io.kimos.talentpipe.domain.City;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -28,7 +27,6 @@ public interface CityService {
      */
     Page<City> findAll(Pageable pageable);
 
-
     /**
      * Get the "id" city.
      *
@@ -47,8 +45,7 @@ public interface CityService {
     /**
      * Search for the city corresponding to the query.
      *
-     * @param query the query of the search
-     * 
+     * @param query    the query of the search
      * @param pageable the pagination information
      * @return the list of entities
      */

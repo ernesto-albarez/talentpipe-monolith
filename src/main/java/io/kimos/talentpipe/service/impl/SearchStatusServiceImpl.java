@@ -1,12 +1,11 @@
 package io.kimos.talentpipe.service.impl;
 
-import io.kimos.talentpipe.service.SearchStatusService;
 import io.kimos.talentpipe.domain.SearchStatus;
 import io.kimos.talentpipe.repository.SearchStatusRepository;
 import io.kimos.talentpipe.repository.search.SearchStatusSearchRepository;
+import io.kimos.talentpipe.service.SearchStatusService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * Service Implementation for managing SearchStatus.
@@ -60,7 +59,6 @@ public class SearchStatusServiceImpl implements SearchStatusService {
         log.debug("Request to get all SearchStatuses");
         return searchStatusRepository.findAll();
     }
-
 
     /**
      * Get one searchStatus by id.

@@ -27,7 +27,6 @@ public interface BenefitService {
      */
     Page<Benefit> findAll(Pageable pageable);
 
-
     /**
      * Get the "id" benefit.
      *

@@ -2,11 +2,10 @@ package io.kimos.talentpipe.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import org.springframework.data.elasticsearch.annotations.Document;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -35,6 +34,9 @@ public class ExpertiseLevel implements Serializable {
 
     @Column(name = "description")
     private String description;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Company company;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -70,6 +72,19 @@ public class ExpertiseLevel implements Serializable {
     public ExpertiseLevel description(String description) {
         this.description = description;
         return this;
+    }
+
+    public ExpertiseLevel company(Company company) {
+        this.setCompany(company);
+        return this;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public void setDescription(String description) {
