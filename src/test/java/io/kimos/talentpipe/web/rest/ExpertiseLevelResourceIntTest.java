@@ -138,28 +138,6 @@ public class ExpertiseLevelResourceIntTest {
 
     @Test
     @Transactional
-    public void createExpertiseLevelWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = expertiseLevelRepository.findAll().size();
-
-        // Create the ExpertiseLevel with an existing ID
-        expertiseLevel.setId(1L);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restExpertiseLevelMockMvc.perform(post("/api/expertise-levels")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(expertiseLevel)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the ExpertiseLevel in the database
-        List<ExpertiseLevel> expertiseLevelList = expertiseLevelRepository.findAll();
-        assertThat(expertiseLevelList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the ExpertiseLevel in Elasticsearch
-        verify(mockExpertiseLevelSearchRepository, times(0)).save(expertiseLevel);
-    }
-
-    @Test
-    @Transactional
     public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = expertiseLevelRepository.findAll().size();
         // set the field null

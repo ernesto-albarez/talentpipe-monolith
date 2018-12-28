@@ -50,13 +50,13 @@ public class ExpertiseLevel implements Serializable {
     }
 
     public ExpertiseLevel name(String name) {
-        this.name = name;
+        this.setName(name);
         return this;
     }
 
     public void setName(String name) {
         this.name = name;
-        this.normalizedName = name.trim().toLowerCase();
+        this.normalizedName = name == null ? null : name.trim().toLowerCase();
     }
 
     public String getNormalizedName() {
