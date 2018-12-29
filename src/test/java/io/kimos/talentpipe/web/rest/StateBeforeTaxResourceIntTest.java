@@ -1,6 +1,5 @@
 package io.kimos.talentpipe.web.rest;
 
-import io.kimos.talentpipe.MonolithApp;
 import io.kimos.talentpipe.domain.StateBeforeTax;
 import io.kimos.talentpipe.repository.StateBeforeTaxRepository;
 import io.kimos.talentpipe.repository.search.StateBeforeTaxSearchRepository;

@@ -1,7 +1,6 @@
 package io.kimos.talentpipe.service;
 
 import io.github.jhipster.config.JHipsterProperties;
-import io.kimos.talentpipe.MonolithApp;
 import io.kimos.talentpipe.config.Constants;
 import io.kimos.talentpipe.domain.User;
 import org.junit.Before;

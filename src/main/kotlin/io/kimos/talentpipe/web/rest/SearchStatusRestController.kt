@@ -4,8 +4,12 @@ import com.codahale.metrics.annotation.Timed
 import io.github.jhipster.web.util.ResponseUtil
 import io.kimos.talentpipe.domain.SearchStatus
 import io.kimos.talentpipe.service.SearchStatusService
+import io.kimos.talentpipe.service.UserService
+import io.kimos.talentpipe.web.dto.CreateSearchStatusRequest
 import io.kimos.talentpipe.web.rest.errors.BadRequestAlertException
+import io.kimos.talentpipe.web.rest.errors.UserNotAuthenticatedException
 import io.kimos.talentpipe.web.rest.util.HeaderUtil
+import ma.glasnost.orika.MapperFacade
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -16,27 +20,29 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api")
-open class SearchStatusRestController @Autowired constructor(private val searchStatusService : SearchStatusService) {
+open class SearchStatusRestController @Autowired constructor(private val searchStatusService : SearchStatusService,
+                                                             private val orikaMapper:MapperFacade,
+                                                             private val userService: UserService) {
 
     private val log = LoggerFactory.getLogger(javaClass);
 
     private val ENTITY_NAME = "searchStatus"
 
     /**
-     * POST  /search-statuses : Create a new searchStatus.
+     * POST  /search-statuses : Create a new request.
      *
-     * @param searchStatus the searchStatus to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new searchStatus, or with status 400 (Bad Request) if the searchStatus has already an ID
+     * @param request the request to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new request, or with status 400 (Bad Request) if the request has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/search-statuses")
     @Timed
     @Throws(URISyntaxException::class)
-    fun createSearchStatus(@Valid @RequestBody searchStatus: SearchStatus): ResponseEntity<SearchStatus> {
-        log.debug("REST request to save SearchStatus : {}", searchStatus)
-        if (searchStatus.id != null) {
-            throw BadRequestAlertException("A new searchStatus cannot already have an ID", ENTITY_NAME, "idexists")
-        }
+    fun createSearchStatus(@Valid @RequestBody request: CreateSearchStatusRequest): ResponseEntity<SearchStatus> {
+        log.debug("REST request to save SearchStatus : {}", request)
+        val user = userService.userWithAuthorities.orElseThrow{UserNotAuthenticatedException()}
+        val searchStatus = orikaMapper.map(request, SearchStatus::class.java)
+        searchStatus.company = user.company;
         val result = searchStatusService.save(searchStatus)
         return ResponseEntity.created(URI("/api/search-statuses/" + result.id!!))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.id!!.toString()))

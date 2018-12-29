@@ -1,7 +1,5 @@
 package io.kimos.talentpipe.web.rest;
 
-import io.kimos.talentpipe.MonolithApp;
-
 import io.kimos.talentpipe.domain.City;
 import io.kimos.talentpipe.domain.Country;
 import io.kimos.talentpipe.repository.CityRepository;

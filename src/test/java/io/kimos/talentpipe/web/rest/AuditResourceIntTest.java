@@ -1,6 +1,5 @@
 package io.kimos.talentpipe.web.rest;
 
-import io.kimos.talentpipe.MonolithApp;
 import io.kimos.talentpipe.config.audit.AuditEventConverter;
 import io.kimos.talentpipe.domain.PersistentAuditEvent;
 import io.kimos.talentpipe.repository.PersistenceAuditEventRepository;

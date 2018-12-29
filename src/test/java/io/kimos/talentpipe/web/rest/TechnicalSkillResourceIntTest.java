@@ -1,6 +1,5 @@
 package io.kimos.talentpipe.web.rest;
 
-import io.kimos.talentpipe.MonolithApp;
 import io.kimos.talentpipe.domain.TechnicalSkill;
 import io.kimos.talentpipe.repository.TechnicalSkillRepository;
 import io.kimos.talentpipe.repository.search.TechnicalSkillSearchRepository;

@@ -3,6 +3,7 @@ package io.kimos.talentpipe.service.impl;
 import io.kimos.talentpipe.domain.SearchStatus;
 import io.kimos.talentpipe.repository.SearchStatusRepository;
 import io.kimos.talentpipe.repository.search.SearchStatusSearchRepository;
+import io.kimos.talentpipe.security.SecurityUtils;
 import io.kimos.talentpipe.service.SearchStatusService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

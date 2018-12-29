@@ -1,6 +1,5 @@
 package io.kimos.talentpipe.web.rest;
 
-import io.kimos.talentpipe.MonolithApp;
 import io.kimos.talentpipe.domain.SearchType;
 import io.kimos.talentpipe.repository.SearchTypeRepository;
 import io.kimos.talentpipe.repository.search.SearchTypeSearchRepository;
