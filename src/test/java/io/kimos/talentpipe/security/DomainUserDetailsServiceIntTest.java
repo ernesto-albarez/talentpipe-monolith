@@ -1,5 +1,6 @@
 package io.kimos.talentpipe.security;
 
+import io.kimos.talentpipe.MonolithApp;
 import io.kimos.talentpipe.domain.User;
 import io.kimos.talentpipe.repository.UserRepository;
 import org.apache.commons.lang3.RandomStringUtils;

@@ -1,11 +1,13 @@
 package io.kimos.talentpipe.web.rest;
 
+import io.kimos.talentpipe.MonolithApp;
 import io.kimos.talentpipe.domain.SearchStatus;
 import io.kimos.talentpipe.repository.SearchStatusRepository;
 import io.kimos.talentpipe.repository.search.SearchStatusSearchRepository;
 import io.kimos.talentpipe.service.SearchStatusService;
+import io.kimos.talentpipe.service.UserService;
 import io.kimos.talentpipe.web.rest.errors.ExceptionTranslator;
-
+import ma.glasnost.orika.MapperFacade;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.Collections;
 import java.util.List;
-
 
 import static io.kimos.talentpipe.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -57,6 +58,12 @@ public class SearchStatusResourceIntTest {
     @Autowired
     private SearchStatusService searchStatusService;
 
+    @Autowired
+    private MapperFacade orikaMapper;
+
+    @Autowired
+    private UserService userService;
+
     /**
      * This repository is mocked in the io.kimos.talentpipe.repository.search test package.
      *
@@ -81,20 +88,9 @@ public class SearchStatusResourceIntTest {
 
     private SearchStatus searchStatus;
 
-    @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        final SearchStatusRestController searchStatusResource = new SearchStatusRestController(searchStatusService);
-        this.restSearchStatusMockMvc = MockMvcBuilders.standaloneSetup(searchStatusResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
-    }
-
     /**
      * Create an entity for this test.
-     *
+     * <p>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
@@ -103,6 +99,17 @@ public class SearchStatusResourceIntTest {
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION);
         return searchStatus;
+    }
+
+    @Before
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        final SearchStatusRestController searchStatusResource = new SearchStatusRestController(searchStatusService, orikaMapper, userService);
+        this.restSearchStatusMockMvc = MockMvcBuilders.standaloneSetup(searchStatusResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
     }
 
     @Before
@@ -188,7 +195,7 @@ public class SearchStatusResourceIntTest {
             .andExpect(jsonPath("$.[*].normalizedName").value(hasItem(DEFAULT_NORMALIZED_NAME.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
     }
-    
+
     @Test
     @Transactional
     public void getSearchStatus() throws Exception {

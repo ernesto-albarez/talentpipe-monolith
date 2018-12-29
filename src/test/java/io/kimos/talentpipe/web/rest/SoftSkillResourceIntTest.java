@@ -1,5 +1,6 @@
 package io.kimos.talentpipe.web.rest;
 
+import io.kimos.talentpipe.MonolithApp;
 import io.kimos.talentpipe.domain.SoftSkill;
 import io.kimos.talentpipe.repository.SoftSkillRepository;
 import io.kimos.talentpipe.repository.search.SoftSkillSearchRepository;

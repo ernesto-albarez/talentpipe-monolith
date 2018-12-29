@@ -1,5 +1,6 @@
 package io.kimos.talentpipe.web.rest;
 
+import io.kimos.talentpipe.MonolithApp;
 import io.kimos.talentpipe.domain.Recruiter;
 import io.kimos.talentpipe.domain.City;
 import io.kimos.talentpipe.domain.Sector;

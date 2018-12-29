@@ -1,5 +1,6 @@
 package io.kimos.talentpipe.web.rest.errors;
 
+import io.kimos.talentpipe.MonolithApp;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,5 +1,6 @@
 package io.kimos.talentpipe.web.rest;
 
+import io.kimos.talentpipe.MonolithApp;
 import io.kimos.talentpipe.domain.User;
 import io.kimos.talentpipe.repository.UserRepository;
 import io.kimos.talentpipe.security.jwt.TokenProvider;

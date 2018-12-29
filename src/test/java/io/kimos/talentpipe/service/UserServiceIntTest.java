@@ -1,5 +1,6 @@
 package io.kimos.talentpipe.service;
 
+import io.kimos.talentpipe.MonolithApp;
 import io.kimos.talentpipe.config.Constants;
 import io.kimos.talentpipe.domain.User;
 import io.kimos.talentpipe.repository.UserRepository;

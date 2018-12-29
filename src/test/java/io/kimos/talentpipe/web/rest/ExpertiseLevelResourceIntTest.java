@@ -1,5 +1,6 @@
 package io.kimos.talentpipe.web.rest;
 
+import io.kimos.talentpipe.MonolithApp;
 import io.kimos.talentpipe.domain.ExpertiseLevel;
 import io.kimos.talentpipe.repository.ExpertiseLevelRepository;
 import io.kimos.talentpipe.repository.search.ExpertiseLevelSearchRepository;
