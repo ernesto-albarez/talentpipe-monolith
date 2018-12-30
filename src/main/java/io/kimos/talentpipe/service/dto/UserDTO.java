@@ -1,6 +1,7 @@
 package io.kimos.talentpipe.service.dto;
 
 import io.kimos.talentpipe.config.Constants;
+import io.kimos.talentpipe.domain.Authority;
 import io.kimos.talentpipe.domain.Role;
 import io.kimos.talentpipe.domain.User;
 
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -54,6 +56,8 @@ public class UserDTO {
 
     private Set<Long> roleIds;
 
+    private Set<String> authorities;
+
     public UserDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -75,6 +79,10 @@ public class UserDTO {
         this.roleIds = user.getRoles().stream()
             .map(Role::getId)
             .collect(Collectors.toSet());
+        this.authorities = new HashSet<>();
+        for(Role role : user.getRoles()) {
+            authorities.addAll(role.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet()));
+        }
     }
 
     public Long getId() {
@@ -179,6 +187,14 @@ public class UserDTO {
 
     public void setRoleIds(Set<Role> roles) {
         this.roleIds = roles.stream().map(Role::getId).collect(Collectors.toSet());
+    }
+
+    public Set<String> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<String> authorities) {
+        this.authorities = authorities;
     }
 
     public Boolean getAcceptTermsOfService() {

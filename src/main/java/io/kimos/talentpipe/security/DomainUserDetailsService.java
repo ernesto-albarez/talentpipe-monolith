@@ -58,7 +58,6 @@ public class DomainUserDetailsService implements UserDetailsService {
         }
         Set<Authority> authorities = new HashSet<>();
         for (Role role : user.getRoles()) {
-            Hibernate.initialize(role.getAuthorities());
             authorities.addAll(role.getAuthorities());
         }
         return new org.springframework.security.core.userdetails.User(user.getLogin(),
