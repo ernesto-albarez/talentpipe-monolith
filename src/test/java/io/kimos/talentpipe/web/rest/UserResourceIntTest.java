@@ -555,7 +555,7 @@ public class UserResourceIntTest {
         assertThat(user.getCreatedDate()).isNotNull();
         assertThat(user.getLastModifiedBy()).isNull();
         assertThat(user.getLastModifiedDate()).isNotNull();
-        assertThat(user.getAuthorities()).extracting("name").containsExactly(AuthoritiesConstants.USER);
+        assertThat(user.getRoles()).extracting("name").containsExactly(AuthoritiesConstants.USER);
     }
 
     @Test
@@ -569,7 +569,7 @@ public class UserResourceIntTest {
         Authority authority = new Authority();
         authority.setName(AuthoritiesConstants.USER);
         authorities.add(authority);
-        user.setAuthorities(authorities);
+        user.setRoles(authorities);
 
         UserDTO userDTO = userMapper.userToUserDTO(user);
 

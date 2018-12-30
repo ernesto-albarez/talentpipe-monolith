@@ -2,11 +2,12 @@ package io.kimos.talentpipe.service;
 
 import io.kimos.talentpipe.config.Constants;
 import io.kimos.talentpipe.domain.Authority;
+import io.kimos.talentpipe.domain.Role;
 import io.kimos.talentpipe.domain.User;
 import io.kimos.talentpipe.repository.AuthorityRepository;
 import io.kimos.talentpipe.repository.UserRepository;
 import io.kimos.talentpipe.repository.search.UserSearchRepository;
-import io.kimos.talentpipe.security.AuthoritiesConstants;
+import io.kimos.talentpipe.security.RoleConstants;
 import io.kimos.talentpipe.security.SecurityUtils;
 import io.kimos.talentpipe.service.dto.UserDTO;
 import io.kimos.talentpipe.service.util.RandomUtil;
@@ -46,13 +47,16 @@ public class UserService {
 
     private final AuthorityRepository authorityRepository;
 
+    private final RoleService roleService;
+
     private final CacheManager cacheManager;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserSearchRepository userSearchRepository, AuthorityRepository authorityRepository, CacheManager cacheManager) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserSearchRepository userSearchRepository, AuthorityRepository authorityRepository, RoleService roleService, CacheManager cacheManager) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userSearchRepository = userSearchRepository;
         this.authorityRepository = authorityRepository;
+        this.roleService = roleService;
         this.cacheManager = cacheManager;
     }
 
@@ -115,8 +119,13 @@ public class UserService {
         newUser.setActivated(false);
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
-        Set<Authority> authorities = new HashSet<>();
-        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+        Set<Role> authorities = new HashSet<>();
+        //Ask for the roles if exists and map to role list for asign to the user
+        newUser.setRoles(userDTO.getRoles().stream()
+                        .map(roleService::findOne)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .collect(Collectors.toSet()));
         return registerUser(newUser, authorities);
     }
 
@@ -144,13 +153,13 @@ public class UserService {
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
         user.setActivated(true);
-        if (userDTO.getAuthorities() != null) {
-            Set<Authority> authorities = userDTO.getAuthorities().stream()
-                .map(authorityRepository::findById)
+        if (userDTO.getRoles() != null) {
+            Set<Role> roles = userDTO.getRoles().stream()
+                .map(roleService::findOne)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toSet());
-            user.setAuthorities(authorities);
+            user.setRoles(roles);
         }
         userRepository.save(user);
         userSearchRepository.save(user);
@@ -199,13 +208,13 @@ public class UserService {
                 updateUserBasicProperties(userDTO, user);
                 user.setActivated(userDTO.isActivated());
                 user.setLangKey(userDTO.getLangKey());
-                Set<Authority> managedAuthorities = user.getAuthorities();
-                managedAuthorities.clear();
-                userDTO.getAuthorities().stream()
-                    .map(authorityRepository::findById)
+                Set<Role> managedRoles = user.getRoles();
+                managedRoles.clear();
+                userDTO.getRoles().stream()
+                    .map(roleService::findOne)
                     .filter(Optional::isPresent)
                     .map(Optional::get)
-                    .forEach(managedAuthorities::add);
+                    .forEach(managedRoles::add);
                 userSearchRepository.save(user);
                 this.clearUserCaches(user);
                 log.debug("Changed Information for User: {}", user);
@@ -291,15 +300,14 @@ public class UserService {
     }
 
     @Transactional
-    public User registerCompanyUser(User user) {
-        Set<Authority> authorities = new HashSet<>();
-        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
-        authorityRepository.findById(AuthoritiesConstants.COMPANY).ifPresent(authorities::add);
+    public User registerCompanyUserAdministrator(User user) {
+        Set<Role> authorities = new HashSet<>();
+        roleService.findByName(RoleConstants.COMPANY_ADMINISTRATOR);
         return registerUser(user, authorities);
     }
 
     @Transactional
-    public User registerUser(User user, Set<Authority> authorities) {
+    public User registerUser(User user, Set<Role> roles) {
         userRepository.findOneByLogin(user.getLogin().toLowerCase()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
@@ -314,7 +322,7 @@ public class UserService {
         });
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setLogin(user.getLogin().toLowerCase());
-        user.setAuthorities(authorities);
+        user.setRoles(roles);
         // new user gets initially a generated password
         user.setPassword(encryptedPassword);
         user.setEmail(user.getEmail().toLowerCase());
@@ -331,10 +339,9 @@ public class UserService {
 
     @Transactional
     public User registerRecruiterUser(User user) {
-        Set<Authority> authorities = new HashSet<>();
-        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
-        authorityRepository.findById(AuthoritiesConstants.RECRUITER).ifPresent(authorities::add);
-        return this.registerUser(user, authorities);
+        Set<Role> roles = new HashSet<>();
+        roleService.findByName(RoleConstants.RECRUITER).ifPresent(roles::add);
+        return this.registerUser(user, roles);
     }
 
     private void updateUserBasicProperties(UserDTO userDTO, User user) {

@@ -1,6 +1,6 @@
 package io.kimos.talentpipe.service.mapper;
 
-import io.kimos.talentpipe.domain.Authority;
+import io.kimos.talentpipe.domain.Role;
 import io.kimos.talentpipe.domain.User;
 import io.kimos.talentpipe.service.dto.UserDTO;
 import org.springframework.stereotype.Service;
@@ -43,9 +43,9 @@ public class UserMapper {
             user.setImageUrl(userDTO.getImageUrl());
             user.setActivated(userDTO.isActivated());
             user.setLangKey(userDTO.getLangKey());
-            Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
-            if (authorities != null) {
-                user.setAuthorities(authorities);
+            Set<Role> roles = this.rolesFromId(userDTO.getRoles());
+            if (roles != null) {
+                user.setRoles(roles);
             }
             return user;
         }
@@ -67,11 +67,11 @@ public class UserMapper {
         return user;
     }
 
-    public Set<Authority> authoritiesFromStrings(Set<String> strings) {
-        return strings.stream().map(string -> {
-            Authority auth = new Authority();
-            auth.setName(string);
-            return auth;
+    public Set<Role> rolesFromId(Set<Long> ids) {
+        return ids.stream().map(id -> {
+            Role role = new Role();
+            role.setId(id);
+            return role;
         }).collect(Collectors.toSet());
     }
 }

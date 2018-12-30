@@ -1,0 +1,37 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "authorities",
+            "otherEntityName": "authority",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "role"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "unique"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "255"
+        }
+    ],
+    "changelogDate": "20181230034353",
+    "dto": "no",
+    "searchEngine": "elasticsearch",
+    "service": "serviceImpl",
+    "entityTableName": "role",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}

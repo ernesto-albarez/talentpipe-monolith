@@ -1,25 +1,27 @@
 package io.kimos.talentpipe.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.security.core.GrantedAuthority;
-
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
- * A Authority.
+ * A Role.
  */
 @Entity
-@Table(name = "authority")
+@Table(name = "role")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Document(indexName = "authority")
-public class Authority implements GrantedAuthority, Serializable {
+@Document(indexName = "role")
+public class Role implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,6 +37,16 @@ public class Authority implements GrantedAuthority, Serializable {
     @Column(name = "description", length = 255)
     private String description;
 
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+        name = "role_authority",
+        joinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "authority_id", referencedColumnName = "id")})
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @BatchSize(size = 20)
+    private Set<Authority> authorities = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -48,26 +60,39 @@ public class Authority implements GrantedAuthority, Serializable {
         return name;
     }
 
-    public Authority name(String name) {
-        this.name = name;
-        return this;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Role name(String name) {
+        this.name = name;
+        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public Authority description(String description) {
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Role description(String description) {
         this.description = description;
         return this;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public Set<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
+    }
+
+    public Role authorities(Set<Authority> authorities) {
+        this.authorities = authorities;
+        return this;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -79,11 +104,11 @@ public class Authority implements GrantedAuthority, Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Authority authority = (Authority) o;
-        if (authority.getId() == null || getId() == null) {
+        Role role = (Role) o;
+        if (role.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), authority.getId());
+        return Objects.equals(getId(), role.getId());
     }
 
     @Override
@@ -93,15 +118,10 @@ public class Authority implements GrantedAuthority, Serializable {
 
     @Override
     public String toString() {
-        return "Authority{" +
+        return "Role{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             "}";
-    }
-
-    @Override
-    public String getAuthority() {
-        return this.name;
     }
 }

@@ -1,21 +1,23 @@
 package io.kimos.talentpipe.security;
 
+import io.kimos.talentpipe.domain.Authority;
+import io.kimos.talentpipe.domain.Role;
 import io.kimos.talentpipe.domain.User;
 import io.kimos.talentpipe.repository.UserRepository;
+import org.hibernate.Hibernate;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Locale;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 /**
  * Authenticate a user from the database.
@@ -49,15 +51,18 @@ public class DomainUserDetailsService implements UserDetailsService {
 
     }
 
-    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
+    @Transactional
+    org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
         if (!user.getActivated()) {
             throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
         }
-        List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
-            .map(authority -> new SimpleGrantedAuthority(authority.getName()))
-            .collect(Collectors.toList());
+        Set<Authority> authorities = new HashSet<>();
+        for (Role role : user.getRoles()) {
+            Hibernate.initialize(role.getAuthorities());
+            authorities.addAll(role.getAuthorities());
+        }
         return new org.springframework.security.core.userdetails.User(user.getLogin(),
             user.getPassword(),
-            grantedAuthorities);
+            authorities);
     }
 }

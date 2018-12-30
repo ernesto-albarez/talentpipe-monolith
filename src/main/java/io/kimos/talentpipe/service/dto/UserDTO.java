@@ -1,7 +1,7 @@
 package io.kimos.talentpipe.service.dto;
 
 import io.kimos.talentpipe.config.Constants;
-import io.kimos.talentpipe.domain.Authority;
+import io.kimos.talentpipe.domain.Role;
 import io.kimos.talentpipe.domain.User;
 
 import javax.validation.constraints.Email;
@@ -52,7 +52,7 @@ public class UserDTO {
 
     private Instant lastModifiedDate;
 
-    private Set<String> authorities;
+    private Set<Long> roleIds;
 
     public UserDTO() {
         // Empty constructor needed for Jackson.
@@ -72,8 +72,8 @@ public class UserDTO {
         this.acceptTermsOfService = user.getAcceptTermsOfService();
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
-        this.authorities = user.getAuthorities().stream()
-            .map(Authority::getName)
+        this.roleIds = user.getRoles().stream()
+            .map(Role::getId)
             .collect(Collectors.toSet());
     }
 
@@ -173,12 +173,12 @@ public class UserDTO {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public Set<String> getAuthorities() {
-        return authorities;
+    public Set<Long> getRoles() {
+        return roleIds;
     }
 
-    public void setAuthorities(Set<String> authorities) {
-        this.authorities = authorities;
+    public void setRoleIds(Set<Role> roles) {
+        this.roleIds = roles.stream().map(Role::getId).collect(Collectors.toSet());
     }
 
     public Boolean getAcceptTermsOfService() {
@@ -203,7 +203,7 @@ public class UserDTO {
             ", createdDate=" + createdDate +
             ", lastModifiedBy='" + lastModifiedBy + '\'' +
             ", lastModifiedDate=" + lastModifiedDate +
-            ", authorities=" + authorities +
+            ", roles=" + roleIds +
             "}";
     }
 }

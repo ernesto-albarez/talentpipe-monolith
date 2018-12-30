@@ -1,5 +1,5 @@
-name
-ROLE_ADMIN
-ROLE_USER
-ROLE_RECRUITER
-ROLE_COMPANY
+id;name;description
+1;ROLE_ADMIN;Permite las funcionalidades de administrador
+2;ROLE_USER; Permite acceder a los menus
+3;ROLE_RECRUITER; Permite acceder a las funcionalidades de recruiter
+4;ROLE_COMPANY_ADMIN; permite acceder a las funcionalidades de company y las de gestor de company

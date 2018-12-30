@@ -143,4 +143,7 @@ Desktop.ini
 ######################
 .eslintcach
 
-/src/main/resources/*
+/src/main/resources/config/application.yml
+/src/main/resources/config/application-dev.yml
+/src/main/resources/config/application-prod.yml
+/src/main/resources/config/application-tls.yml

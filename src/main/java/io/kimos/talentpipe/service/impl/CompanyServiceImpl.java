@@ -119,7 +119,7 @@ public class CompanyServiceImpl implements CompanyService {
         user.setLastName(company.getContactLastName());
         user.setEmail(company.getEmail());
         user.setPassword(password);
-        user = userService.registerCompanyUser(user);
+        user = userService.registerCompanyUserAdministrator(user);
         company.setMainUser(user);
         return this.save(company);
     }

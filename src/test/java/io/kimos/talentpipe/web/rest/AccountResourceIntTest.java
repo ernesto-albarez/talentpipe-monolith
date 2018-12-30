@@ -134,7 +134,7 @@ public class AccountResourceIntTest {
         user.setEmail("john.doe@jhipster.com");
         user.setImageUrl("http://placehold.it/50x50");
         user.setLangKey("en");
-        user.setAuthorities(authorities);
+        user.setRoles(authorities);
         when(mockUserService.getUserWithAuthorities()).thenReturn(Optional.of(user));
 
         restUserMockMvc.perform(get("/api/account")
@@ -434,7 +434,7 @@ public class AccountResourceIntTest {
         validUser.setActivated(true);
         validUser.setImageUrl("http://placehold.it/50x50");
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        validUser.setRoles(Collections.singleton(AuthoritiesConstants.ADMIN));
 
         restMvc.perform(
             post("/api/register")
@@ -444,7 +444,7 @@ public class AccountResourceIntTest {
 
         Optional<User> userDup = userRepository.findOneByLogin("badguy");
         assertThat(userDup.isPresent()).isTrue();
-        assertThat(userDup.get().getAuthorities()).hasSize(1)
+        assertThat(userDup.get().getRoles()).hasSize(1)
             .containsExactly(authorityRepository.findById(AuthoritiesConstants.USER).get());
     }*/
 
@@ -511,7 +511,7 @@ public class AccountResourceIntTest {
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
         assertThat(updatedUser.getImageUrl()).isEqualTo(userDTO.getImageUrl());
         assertThat(updatedUser.getActivated()).isEqualTo(true);
-        assertThat(updatedUser.getAuthorities()).isEmpty();
+        assertThat(updatedUser.getRoles()).isEmpty();
     }
 
     @Test
