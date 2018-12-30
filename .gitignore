@@ -143,4 +143,4 @@ Desktop.ini
 ######################
 .eslintcach
 
-src/main/resources/config/application*
+/src/main/resources/*
