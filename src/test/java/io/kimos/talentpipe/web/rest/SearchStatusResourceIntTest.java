@@ -2,12 +2,15 @@ package io.kimos.talentpipe.web.rest;
 
 import io.kimos.talentpipe.MonolithApp;
 import io.kimos.talentpipe.domain.SearchStatus;
+import io.kimos.talentpipe.domain.User;
 import io.kimos.talentpipe.repository.SearchStatusRepository;
+import io.kimos.talentpipe.repository.UserRepository;
 import io.kimos.talentpipe.repository.search.SearchStatusSearchRepository;
 import io.kimos.talentpipe.service.SearchStatusService;
 import io.kimos.talentpipe.service.UserService;
 import io.kimos.talentpipe.web.rest.errors.ExceptionTranslator;
 import ma.glasnost.orika.MapperFacade;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -64,6 +68,9 @@ public class SearchStatusResourceIntTest {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private EntityManager em;
+
     /**
      * This repository is mocked in the io.kimos.talentpipe.repository.search test package.
      *
@@ -82,7 +89,7 @@ public class SearchStatusResourceIntTest {
     private ExceptionTranslator exceptionTranslator;
 
     @Autowired
-    private EntityManager em;
+    private UserRepository userRepository;
 
     private MockMvc restSearchStatusMockMvc;
 
@@ -119,8 +126,17 @@ public class SearchStatusResourceIntTest {
 
     @Test
     @Transactional
+    @WithMockUser("test-create-search-status")
     public void createSearchStatus() throws Exception {
         int databaseSizeBeforeCreate = searchStatusRepository.findAll().size();
+
+        User user = new User();
+        user.setLogin("test-create-search-status");
+        user.setEmail("test-create-search-status@example.com");
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(true);
+        user.setAcceptTermsOfService(true);
+        userRepository.saveAndFlush(user);
 
         // Create the SearchStatus
         restSearchStatusMockMvc.perform(post("/api/search-statuses")
@@ -138,28 +154,6 @@ public class SearchStatusResourceIntTest {
 
         // Validate the SearchStatus in Elasticsearch
         verify(mockSearchStatusSearchRepository, times(1)).save(testSearchStatus);
-    }
-
-    @Test
-    @Transactional
-    public void createSearchStatusWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = searchStatusRepository.findAll().size();
-
-        // Create the SearchStatus with an existing ID
-        searchStatus.setId(1L);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restSearchStatusMockMvc.perform(post("/api/search-statuses")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(searchStatus)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the SearchStatus in the database
-        List<SearchStatus> searchStatusList = searchStatusRepository.findAll();
-        assertThat(searchStatusList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the SearchStatus in Elasticsearch
-        verify(mockSearchStatusSearchRepository, times(0)).save(searchStatus);
     }
 
     @Test
