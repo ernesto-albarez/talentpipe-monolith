@@ -113,6 +113,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Transactional
     public Company createCompany(Company company, String password) {
         User user = new User();
+        user.setAcceptTermsOfService(true);
         user.setLogin(company.getEmail());
         user.setFirstName(company.getContactName());
         user.setLastName(company.getContactLastName());
