@@ -29,11 +29,17 @@ before_install:
   - npm -v
 install:
   - npm install
+addons:
+    sonarcloud:
+        organization: sebogado-github
+        token:
+            secure: rbsdEW7kaM5b3Y2EcmgmcKZTwz8o6KlYdxlfYGrbMgB7BiO0JzRgH2OFctzW2Fx4DVNctlTNpOYT//K1YaQYe22qFqcamf25QZypuG7r1sRLbU6Q4wgLjyjt2dnJ0LqXxpfFJ3uR5Br/agvwfuEEHTZySKYwDx+xN2gL525aMHSzwiongLeKX57VVm5Ce82k0/GCbV0bteog4W0uQ2jqx2Z0Qf862E4bv3tZcDnFctOWIA99Q6zG+AAYuln7N/a0mbHsbtB17tS1eByn1u932UWHZQtzb8rEyMDrNNILggwCBdimhZlKbrCsNQ73F88li8ah4SfJnnQvKjRgOeMYUxoj5aeEfkPha21t5EmFBWMXgpMKSjsYlz9ngkOptrNPtIrG17xM6H6SKzDTNnqWTS+HaMgIj+MlYz0YNU5sNk2vK2ZVsRVh8UFBYWFfgGr8WGLShePHrzKsX0EyDCD09IhDXCD6hX9Ogjat2L13P3aX8kHVFo9Ma2jziDM6AQx3xJynZmiOR98mF4fz0CXH5J5eYZzWeecMaHLclRBEkow/4V0hkGyrRvjWbPTWeifWaUFDX3TYHE0vpSmNse4VN8vWlgSXrwgMEWvH857tsL11sGIYdzJaLjSwK4jAJVtNeMUJPgf1/fn3Ztt2QGha0gjK6r+dOmw7Ynq2u5ymS/Q=
 script:
   - chmod +x gradlew
   - ./gradlew clean test
   - npm test -- -u
   - ./gradlew bootWar -Pprod -x test
+  - sonar-scanner
 notifications:
   webhooks:
     on_success: change  # options: [always|never|change] default: always
