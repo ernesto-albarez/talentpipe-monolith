@@ -2,6 +2,7 @@ package io.kimos.talentpipe.web.rest;
 
 import io.kimos.talentpipe.MonolithApp;
 import io.kimos.talentpipe.domain.Authority;
+import io.kimos.talentpipe.domain.Role;
 import io.kimos.talentpipe.domain.User;
 import io.kimos.talentpipe.repository.UserRepository;
 import io.kimos.talentpipe.repository.search.UserSearchRepository;
@@ -565,11 +566,15 @@ public class UserResourceIntTest {
         user.setCreatedDate(Instant.now());
         user.setLastModifiedBy(DEFAULT_LOGIN);
         user.setLastModifiedDate(Instant.now());
+        Set<Role> roles = new HashSet<>();
+        Role role = new Role();
         Set<Authority> authorities = new HashSet<>();
         Authority authority = new Authority();
         authority.setName(AuthoritiesConstants.USER);
         authorities.add(authority);
-        user.setRoles(authorities);
+        role.setAuthorities(authorities);
+        roles.add(role);
+        user.setRoles(roles);
 
         UserDTO userDTO = userMapper.userToUserDTO(user);
 
