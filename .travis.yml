@@ -34,7 +34,7 @@ script:
 - chmod +x gradlew
 - "./gradlew clean test"
 - npm test -- -u
-- "/gradlew sonarqube -Dsonar.projectKey=sebogado_talentpipe-monolith -Dsonar.organization=sebogado-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN""
+## - "/gradlew sonarqube -Dsonar.projectKey=sebogado_talentpipe-monolith -Dsonar.organization=sebogado-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN""
 - "./gradlew bootWar -Pprod -x test"
 notifications:
   webhooks:
