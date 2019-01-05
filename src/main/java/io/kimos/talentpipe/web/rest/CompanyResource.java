@@ -3,11 +3,14 @@ package io.kimos.talentpipe.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.kimos.talentpipe.domain.Company;
+import io.kimos.talentpipe.security.SecurityUtils;
 import io.kimos.talentpipe.service.CompanyQueryService;
 import io.kimos.talentpipe.service.CompanyService;
+import io.kimos.talentpipe.service.UserService;
 import io.kimos.talentpipe.service.dto.CompanyCriteria;
 import io.kimos.talentpipe.web.rest.dto.CreateCompanyRequest;
 import io.kimos.talentpipe.web.rest.errors.BadRequestAlertException;
+import io.kimos.talentpipe.web.rest.errors.UserNotAuthenticatedException;
 import io.kimos.talentpipe.web.rest.util.HeaderUtil;
 import io.kimos.talentpipe.web.rest.util.PaginationUtil;
 import ma.glasnost.orika.MapperFacade;
@@ -18,6 +21,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -125,6 +130,21 @@ public class CompanyResource {
         log.debug("REST request to get Company : {}", id);
         Optional<Company> company = companyService.findOne(id);
         return ResponseUtil.wrapOrNotFound(company);
+    }
+
+    /**
+     * GET  /companies/me : get the company for the user that is authenticated.
+     *
+     * @param id the id of the company to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the company, or with status 404 (Not Found)
+     */
+    @PreAuthorize("hasAnyRole('ROLE_COMPANY_ADMIN')")
+    @GetMapping("/companies/me")
+    @Timed
+    public ResponseEntity<Company> getCurrentUserCompany() {
+        String login = SecurityUtils.getCurrentUserLogin().orElseThrow(UserNotAuthenticatedException::new);
+        Optional<Company> optionalCompany = companyService.findByCurrentUserLogin(login);
+        return ResponseUtil.wrapOrNotFound(optionalCompany);
     }
 
     /**

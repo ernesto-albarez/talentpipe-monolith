@@ -13,6 +13,7 @@ import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -36,12 +37,6 @@ public class SearchStatusResource {
 
     private final MapperFacade orikaMapper;
 
-    public SearchStatusResource(SearchStatusService searchStatusService, MapperFacade orikaMapper, UserService userService) {
-        this.searchStatusService = searchStatusService;
-        this.orikaMapper = orikaMapper;
-        this.userService = userService;
-    }
-
     /**
      * POST  /search-statuses : Create a new searchStatus.
      *
@@ -51,6 +46,7 @@ public class SearchStatusResource {
      */
     @PostMapping("/search-statuses")
     @Timed
+    @Transactional
     public ResponseEntity<SearchStatus> createSearchStatus(@Valid @RequestBody CreateSearchStatusRequest request) throws URISyntaxException {
         log.debug("REST request to save SearchStatus : {}", request);
         SearchStatus searchStatus = orikaMapper.map(request, SearchStatus.class);
@@ -59,6 +55,12 @@ public class SearchStatusResource {
         return ResponseEntity.created(new URI("/api/search-statuses/" + searchStatus.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, searchStatus.getId().toString()))
             .body(searchStatus);
+    }
+
+    public SearchStatusResource(SearchStatusService searchStatusService, MapperFacade orikaMapper, UserService userService) {
+        this.searchStatusService = searchStatusService;
+        this.orikaMapper = orikaMapper;
+        this.userService = userService;
     }
 
     /**

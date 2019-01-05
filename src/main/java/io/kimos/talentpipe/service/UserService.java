@@ -11,10 +11,7 @@ import io.kimos.talentpipe.security.RoleConstants;
 import io.kimos.talentpipe.security.SecurityUtils;
 import io.kimos.talentpipe.service.dto.UserDTO;
 import io.kimos.talentpipe.service.util.RandomUtil;
-import io.kimos.talentpipe.web.rest.errors.EmailAlreadyUsedException;
-import io.kimos.talentpipe.web.rest.errors.InvalidPasswordException;
-import io.kimos.talentpipe.web.rest.errors.LoginAlreadyUsedException;
-import org.hibernate.Hibernate;
+import io.kimos.talentpipe.web.rest.errors.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -58,11 +55,6 @@ public class UserService {
         this.authorityRepository = authorityRepository;
         this.roleService = roleService;
         this.cacheManager = cacheManager;
-    }
-
-    private static User initializeCompany(Optional<User> user1) {
-        Hibernate.initialize(user1.get().getCompany());
-        return user1.get();
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -264,10 +256,9 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities() {
-        Optional<User> user = SecurityUtils.getCurrentUserLogin()
-            .map(userRepository::findOneWithAuthoritiesByLogin)
-            .filter(Optional::isPresent).map(UserService::initializeCompany);
-        return user;
+        String login = SecurityUtils.getCurrentUserLogin().orElseThrow(UserNotAuthenticatedException::new);
+        User user = userRepository.findOneByLogin(login).orElseThrow(UserNotFoundException::new);
+        return Optional.of(user);
     }
 
     /**

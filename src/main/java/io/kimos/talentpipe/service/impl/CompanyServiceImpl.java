@@ -124,6 +124,11 @@ public class CompanyServiceImpl implements CompanyService {
         return this.save(company);
     }
 
+    @Override
+    public Optional<Company> findByCurrentUserLogin(String login) {
+        return companyRepository.findCompanyByMainUser_Login(login);
+    }
+
     private Company prepareToCreate(Company company) {
         company.setCreationDate(Instant.now());
         company.setLastUpdateDate(Instant.now());

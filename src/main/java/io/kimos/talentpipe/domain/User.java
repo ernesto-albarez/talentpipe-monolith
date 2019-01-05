@@ -90,7 +90,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "accept_terms_of_service", nullable = false)
     private Boolean acceptTermsOfService;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = true)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name="company_id")
     private Company company;
 
     @JsonIgnore

@@ -52,4 +52,6 @@ public interface CompanyService {
     Page<Company> search(String query, Pageable pageable);
 
     Company createCompany(Company company, String password);
+
+    Optional<Company> findByCurrentUserLogin(String login);
 }
