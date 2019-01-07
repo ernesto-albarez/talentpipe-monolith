@@ -6,6 +6,10 @@ import io.kimos.talentpipe.repository.CompanyRepository;
 import io.kimos.talentpipe.repository.search.CompanySearchRepository;
 import io.kimos.talentpipe.service.CompanyService;
 import io.kimos.talentpipe.service.UserService;
+import io.kimos.talentpipe.web.rest.errors.CompanyNotFoundException;
+import io.kimos.talentpipe.web.rest.errors.UserNotFoundException;
+import org.hibernate.Hibernate;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -46,6 +50,7 @@ public class CompanyServiceImpl implements CompanyService {
      * @return the persisted entity
      */
     @Override
+    @Transactional
     public Company save(Company company) {
         log.debug("Request to save Company : {}", company);
         Company result = companyRepository.save(company.getId() == null ? prepareToCreate(company) : prepareToUpdate(company));
@@ -54,7 +59,28 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     private Company prepareToUpdate(Company company) {
-        return company;
+        Company persistedCompany = this.findOne(company.getId()).orElseThrow(CompanyNotFoundException::new);
+        persistedCompany.setCity(company.getCity());
+        persistedCompany.setCompanyType(company.getCompanyType());
+        persistedCompany.setSector(company.getSector());
+
+        persistedCompany.setTaxName(company.getTaxName());
+        persistedCompany.setTaxId(company.getTaxId());
+        persistedCompany.setEmail(company.getEmail());
+        persistedCompany.setPhoneNumber(company.getPhoneNumber());
+        persistedCompany.setName(company.getName());
+        persistedCompany.setStreet(company.getStreet());
+        persistedCompany.setNumber(company.getNumber());
+        persistedCompany.setFloor(company.getFloor());
+        persistedCompany.setApartment(company.getApartment());
+        persistedCompany.setPostalCode(company.getPostalCode());
+
+        persistedCompany.setPhonePrefix(company.getPhonePrefix());
+        persistedCompany.setPhoneNumber(company.getPhoneNumber());
+        persistedCompany.setContactLastName(company.getContactLastName());
+        persistedCompany.setContactName(company.getContactName());
+        persistedCompany.setLastUpdateDate(Instant.now());
+        return persistedCompany;
     }
 
     /**
@@ -80,7 +106,8 @@ public class CompanyServiceImpl implements CompanyService {
     @Transactional(readOnly = true)
     public Optional<Company> findOne(Long id) {
         log.debug("Request to get Company : {}", id);
-        return companyRepository.findById(id);
+        Optional<Company> company = companyRepository.findById(id);
+        return initializeCompany(company);
     }
 
     /**
@@ -125,8 +152,22 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    @Transactional
     public Optional<Company> findByCurrentUserLogin(String login) {
-        return companyRepository.findCompanyByMainUser_Login(login);
+        Optional<Company> company = companyRepository.findCompanyByMainUser_Login(login);
+        return initializeCompany(company);
+    }
+
+    @NotNull
+    @Transactional
+    private Optional<Company> initializeCompany(Optional<Company> company) {
+        if(company.isPresent()) {
+            Hibernate.initialize(company.get().getSector());
+            Hibernate.initialize(company.get().getMainUser());
+            Hibernate.initialize(company.get().getCity());
+            Hibernate.initialize(company.get().getCompanyType());
+        }
+        return company;
     }
 
     private Company prepareToCreate(Company company) {

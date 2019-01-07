@@ -17,6 +17,7 @@ public final class ErrorConstants {
     public static final URI EMAIL_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/email-not-found");
     public static final URI USER_NOT_AUTHENTICATED_EXCEPTION = URI.create(PROBLEM_BASE_URL + "/user-not-authenticated");
     public static final URI USER_NOT_FOUND_EXCEPTION = URI.create(PROBLEM_BASE_URL + "/user-not-found-exception");
+    public static final URI COMPANY_NOT_FOUND_EXCEPTION = URI.create(PROBLEM_BASE_URL + "/company-not-found-exception");
 
     private ErrorConstants() {
     }

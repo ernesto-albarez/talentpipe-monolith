@@ -82,21 +82,21 @@ public class Company implements Serializable {
     @Column(name = "last_update_date", nullable = false)
     private Instant lastUpdateDate;
 
-    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @NotNull
     @JoinColumn(unique = true)
     @JsonIgnore
     private User mainUser;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JsonIgnoreProperties("")
     private Sector sector;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JsonIgnoreProperties("")
     private City city;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JsonIgnoreProperties("")
     private CompanyType companyType;
 

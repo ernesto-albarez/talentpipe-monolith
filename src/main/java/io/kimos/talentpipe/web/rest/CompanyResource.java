@@ -6,9 +6,9 @@ import io.kimos.talentpipe.domain.Company;
 import io.kimos.talentpipe.security.SecurityUtils;
 import io.kimos.talentpipe.service.CompanyQueryService;
 import io.kimos.talentpipe.service.CompanyService;
-import io.kimos.talentpipe.service.UserService;
 import io.kimos.talentpipe.service.dto.CompanyCriteria;
 import io.kimos.talentpipe.web.rest.dto.CreateCompanyRequest;
+import io.kimos.talentpipe.web.rest.dto.UpdateCompanyDTO;
 import io.kimos.talentpipe.web.rest.errors.BadRequestAlertException;
 import io.kimos.talentpipe.web.rest.errors.UserNotAuthenticatedException;
 import io.kimos.talentpipe.web.rest.util.HeaderUtil;
@@ -21,7 +21,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -91,12 +90,12 @@ public class CompanyResource {
      */
     @PutMapping("/companies")
     @Timed
-    public ResponseEntity<Company> updateCompany(@Valid @RequestBody Company company) throws URISyntaxException {
+    public ResponseEntity<Company> updateCompany(@Valid @RequestBody UpdateCompanyDTO company) throws URISyntaxException {
         log.debug("REST request to update Company : {}", company);
         if (company.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Company result = companyService.save(company);
+        Company result = companyService.save(orikaMapper.map(company, Company.class));
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, company.getId().toString()))
             .body(result);
