@@ -1073,27 +1073,6 @@ public class CompanyResourceIntTest {
 
     @Test
     @Transactional
-    public void updateNonExistingCompany() throws Exception {
-        int databaseSizeBeforeUpdate = companyRepository.findAll().size();
-
-        // Create the Company
-
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restCompanyMockMvc.perform(put("/api/companies")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(company)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the Company in the database
-        List<Company> companyList = companyRepository.findAll();
-        assertThat(companyList).hasSize(databaseSizeBeforeUpdate);
-
-        // Validate the Company in Elasticsearch
-        verify(mockCompanySearchRepository, times(0)).save(company);
-    }
-
-    @Test
-    @Transactional
     public void deleteCompany() throws Exception {
         // Initialize the database
         companyService.save(company);

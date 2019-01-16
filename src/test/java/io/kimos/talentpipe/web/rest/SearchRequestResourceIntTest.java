@@ -168,28 +168,6 @@ public class SearchRequestResourceIntTest {
 
     @Test
     @Transactional
-    public void createSearchRequestWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = searchRequestRepository.findAll().size();
-
-        // Create the SearchRequest with an existing ID
-        searchRequest.setId(1L);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restSearchRequestMockMvc.perform(post("/api/search-requests")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(searchRequest)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the SearchRequest in the database
-        List<SearchRequest> searchRequestList = searchRequestRepository.findAll();
-        assertThat(searchRequestList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the SearchRequest in Elasticsearch
-        verify(mockSearchRequestSearchRepository, times(0)).save(searchRequest);
-    }
-
-    @Test
-    @Transactional
     public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = searchRequestRepository.findAll().size();
         // set the field null
