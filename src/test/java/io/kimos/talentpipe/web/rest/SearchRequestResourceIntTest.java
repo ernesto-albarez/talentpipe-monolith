@@ -6,7 +6,9 @@ import io.kimos.talentpipe.domain.SearchRequest;
 import io.kimos.talentpipe.repository.SearchRequestRepository;
 import io.kimos.talentpipe.repository.search.SearchRequestSearchRepository;
 import io.kimos.talentpipe.service.SearchRequestService;
+import io.kimos.talentpipe.service.UserService;
 import io.kimos.talentpipe.web.rest.errors.ExceptionTranslator;
+import ma.glasnost.orika.MapperFacade;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -98,6 +100,10 @@ public class SearchRequestResourceIntTest {
 
     private SearchRequest searchRequest;
 
+    private UserService userService;
+
+    private MapperFacade orikaMapper;
+
     /**
      * Create an entity for this test.
      * <p>
@@ -122,7 +128,7 @@ public class SearchRequestResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final SearchRequestResource searchRequestResource = new SearchRequestResource(searchRequestService);
+        final SearchRequestResource searchRequestResource = new SearchRequestResource(searchRequestService, orikaMapper, userService);
         this.restSearchRequestMockMvc = MockMvcBuilders.standaloneSetup(searchRequestResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -274,7 +280,7 @@ public class SearchRequestResourceIntTest {
 
     @SuppressWarnings({"unchecked"})
     public void getAllSearchRequestsWithEagerRelationshipsIsEnabled() throws Exception {
-        SearchRequestResource searchRequestResource = new SearchRequestResource(searchRequestServiceMock);
+        SearchRequestResource searchRequestResource = new SearchRequestResource(searchRequestServiceMock, orikaMapper, userService);
         when(searchRequestServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restSearchRequestMockMvc = MockMvcBuilders.standaloneSetup(searchRequestResource)
@@ -291,7 +297,7 @@ public class SearchRequestResourceIntTest {
 
     @SuppressWarnings({"unchecked"})
     public void getAllSearchRequestsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        SearchRequestResource searchRequestResource = new SearchRequestResource(searchRequestServiceMock);
+        SearchRequestResource searchRequestResource = new SearchRequestResource(searchRequestServiceMock, orikaMapper, userService);
         when(searchRequestServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
         MockMvc restSearchRequestMockMvc = MockMvcBuilders.standaloneSetup(searchRequestResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
