@@ -30,6 +30,9 @@ before_install:
 - npm -v
 install:
 - npm install
+- docker build -t kimosproject/monolith .
+- docker login --username=soyseeb --email=seebogado@gmail.com --password=Palmeras61212
+- docker push kimosproject/monolith
 script:
 - chmod +x gradlew
 - "./gradlew clean test"
