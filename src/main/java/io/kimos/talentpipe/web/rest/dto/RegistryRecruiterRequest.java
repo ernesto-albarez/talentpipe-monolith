@@ -29,7 +29,8 @@ public class RegistryRecruiterRequest {
     @NotEmpty
     private String password;
     @AssertTrue
-    private Boolean aceptTermsOfService;
+    @NotNull
+    private Boolean acceptTermsOfService;
     private Boolean wantNewsLetter;
 
     public String getTaxId() {
@@ -88,12 +89,12 @@ public class RegistryRecruiterRequest {
         this.password = password;
     }
 
-    public Boolean getAceptTermsOfService() {
-        return aceptTermsOfService;
+    public Boolean getAcceptTermsOfService() {
+        return acceptTermsOfService;
     }
 
-    public void setAceptTermsOfService(Boolean aceptTermsOfService) {
-        this.aceptTermsOfService = aceptTermsOfService;
+    public void setAcceptTermsOfService(Boolean acceptTermsOfService) {
+        this.acceptTermsOfService = acceptTermsOfService;
     }
 
     public Boolean getWantNewsLetter() {
@@ -114,7 +115,7 @@ public class RegistryRecruiterRequest {
             ", phonePrefix='" + phonePrefix + '\'' +
             ", phoneNumber='" + phoneNumber + '\'' +
             ", password='" + password + '\'' +
-            ", aceptTermsOfService=" + aceptTermsOfService +
+            ", acceptTermsOfService=" + acceptTermsOfService +
             ", wantNewsLetter=" + wantNewsLetter +
             '}';
     }

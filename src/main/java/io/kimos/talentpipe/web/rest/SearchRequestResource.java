@@ -2,8 +2,7 @@ package io.kimos.talentpipe.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
-import io.kimos.talentpipe.domain.SearchRequest;
-import io.kimos.talentpipe.domain.User;
+import io.kimos.talentpipe.domain.*;
 import io.kimos.talentpipe.service.SearchRequestService;
 import io.kimos.talentpipe.service.UserService;
 import io.kimos.talentpipe.web.rest.dto.CreateSearchRequestDTO;
@@ -12,6 +11,7 @@ import io.kimos.talentpipe.web.rest.errors.UserNotAuthenticatedException;
 import io.kimos.talentpipe.web.rest.util.HeaderUtil;
 import io.kimos.talentpipe.web.rest.util.PaginationUtil;
 import ma.glasnost.orika.MapperFacade;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -20,13 +20,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing SearchRequest.
@@ -108,21 +111,20 @@ public class SearchRequestResource {
     /**
      * GET  /search-requests : get all the searchRequests.
      *
-     * @param pageable  the pagination information
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many)
+     * @param pageable  the pagination informatio
      * @return the ResponseEntity with status 200 (OK) and the list of searchRequests in body
      */
     @GetMapping("/search-requests")
     @Timed
-    public ResponseEntity<List<SearchRequest>> getAllSearchRequests(Pageable pageable, @RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public ResponseEntity<List<SearchRequest>> getAllSearchRequests(Pageable pageable) {
         log.debug("REST request to get a page of SearchRequests");
-        Page<SearchRequest> page;
-        if (eagerload) {
-            page = searchRequestService.findAllWithEagerRelationships(pageable);
-        } else {
-            page = searchRequestService.findAll(pageable);
-        }
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, String.format("/api/search-requests?eagerload=%b", eagerload));
+        User user = userService.getUserWithAuthorities().orElseThrow(UserNotAuthenticatedException::new);
+        Page<SearchRequest> page = user.getRoles().stream().map(Role::getAuthorities)
+            .flatMap(Collection::stream).map(Authority::getAuthority)
+            .collect(Collectors.toSet())
+            .contains(BaseAuthorities.ROLE_ADMIN.getAuthority())
+            ? searchRequestService.findAll(pageable) : searchRequestService.findAllForCompany(pageable, user);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/search-requests");
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 

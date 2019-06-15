@@ -94,7 +94,7 @@ public class AuthorityResource {
     @GetMapping("/authorities")
     @Timed
     public ResponseEntity<List<Authority>> getAllAuthorities(Pageable pageable) {
-        log.debug("REST request to get a page of Authorities");
+        log.debug("REST request to get a page of BaseAuthorities");
         Page<Authority> page = authorityService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/authorities");
         return ResponseEntity.ok().headers(headers).body(page.getContent());
@@ -139,7 +139,7 @@ public class AuthorityResource {
     @GetMapping("/_search/authorities")
     @Timed
     public ResponseEntity<List<Authority>> searchAuthorities(@RequestParam String query, Pageable pageable) {
-        log.debug("REST request to search for a page of Authorities for query {}", query);
+        log.debug("REST request to search for a page of BaseAuthorities for query {}", query);
         Page<Authority> page = authorityService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/authorities");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);

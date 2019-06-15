@@ -12,6 +12,7 @@ import io.kimos.talentpipe.security.SecurityUtils;
 import io.kimos.talentpipe.service.dto.UserDTO;
 import io.kimos.talentpipe.service.util.RandomUtil;
 import io.kimos.talentpipe.web.rest.errors.*;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -258,6 +259,9 @@ public class UserService {
     public Optional<User> getUserWithAuthorities() {
         String login = SecurityUtils.getCurrentUserLogin().orElseThrow(UserNotAuthenticatedException::new);
         User user = userRepository.findOneByLogin(login).orElseThrow(UserNotFoundException::new);
+        Hibernate.initialize(user.getRoles());
+        user.getRoles().forEach(role -> Hibernate.initialize(role.getAuthorities()));
+        Hibernate.initialize(user.getCompany());
         return Optional.of(user);
     }
 

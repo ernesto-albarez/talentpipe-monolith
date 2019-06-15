@@ -73,17 +73,8 @@ public class Authority implements GrantedAuthority, Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Authority authority = (Authority) o;
-        if (authority.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), authority.getId());
+        GrantedAuthority grantedAuthority = (GrantedAuthority)o;
+        return this.name.equals(grantedAuthority.getAuthority());
     }
 
     @Override

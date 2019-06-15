@@ -57,7 +57,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     @Override
     @Transactional(readOnly = true)
     public Page<Authority> findAll(Pageable pageable) {
-        log.debug("Request to get all Authorities");
+        log.debug("Request to get all BaseAuthorities");
         return authorityRepository.findAll(pageable);
     }
 
@@ -97,6 +97,6 @@ public class AuthorityServiceImpl implements AuthorityService {
     @Override
     @Transactional(readOnly = true)
     public Page<Authority> search(String query, Pageable pageable) {
-        log.debug("Request to search for a page of Authorities for query {}", query);
+        log.debug("Request to search for a page of BaseAuthorities for query {}", query);
         return authoritySearchRepository.search(queryStringQuery(query), pageable);    }
 }

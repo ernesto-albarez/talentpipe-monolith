@@ -51,5 +51,5 @@ public interface RecruiterService {
      */
     Page<Recruiter> search(String query, Pageable pageable);
 
-    Recruiter registryRecruiter(Recruiter map, String password);
+    Recruiter registryRecruiter(Recruiter map, String password, Boolean aceptTermsOfService);
 }

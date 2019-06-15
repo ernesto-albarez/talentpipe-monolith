@@ -14,10 +14,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Authenticate a user from the database.
@@ -56,10 +54,7 @@ public class DomainUserDetailsService implements UserDetailsService {
         if (!user.getActivated()) {
             throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
         }
-        Set<Authority> authorities = new HashSet<>();
-        for (Role role : user.getRoles()) {
-            authorities.addAll(role.getAuthorities());
-        }
+        Set<Authority> authorities = user.getRoles().stream().map(Role::getAuthorities).flatMap(Collection::stream).collect(Collectors.toSet());
         return new org.springframework.security.core.userdetails.User(user.getLogin(),
             user.getPassword(),
             authorities);

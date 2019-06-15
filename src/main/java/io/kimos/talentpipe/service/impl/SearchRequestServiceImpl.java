@@ -1,6 +1,7 @@
 package io.kimos.talentpipe.service.impl;
 
 import io.kimos.talentpipe.domain.SearchRequest;
+import io.kimos.talentpipe.domain.User;
 import io.kimos.talentpipe.repository.SearchRequestRepository;
 import io.kimos.talentpipe.repository.search.SearchRequestSearchRepository;
 import io.kimos.talentpipe.service.SearchRequestService;
@@ -106,5 +107,10 @@ public class SearchRequestServiceImpl implements SearchRequestService {
     public Page<SearchRequest> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of SearchRequests for query {}", query);
         return searchRequestSearchRepository.search(queryStringQuery(query), pageable);
+    }
+
+    @Override
+    public Page<SearchRequest> findAllForCompany(Pageable pageable, User user) {
+        return searchRequestRepository.findAllByCompany_Id(user.getCompany().getId(), pageable);
     }
 }

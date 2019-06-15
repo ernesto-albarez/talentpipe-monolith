@@ -28,4 +28,6 @@ public interface SearchRequestRepository extends JpaRepository<SearchRequest, Lo
     @Query("select search_request from SearchRequest search_request left join fetch search_request.requiredTechnicalSkills left join fetch search_request.nonRequiredTechnicalSkills left join fetch search_request.requiredSoftSkills left join fetch search_request.nonRequiredSoftSkills left join fetch search_request.benefits where search_request.id =:id")
     Optional<SearchRequest> findOneWithEagerRelationships(@Param("id") Long id);
 
+    Page<SearchRequest> findAllByCompany_Id(Long companyId, Pageable pageable);
+
 }

@@ -105,13 +105,14 @@ public class RecruiterServiceImpl implements RecruiterService {
     }
 
     @Override
-    public Recruiter registryRecruiter(Recruiter recruiter, String password) {
+    public Recruiter registryRecruiter(Recruiter recruiter, String password, Boolean acceptTermsOfService) {
         log.debug("Request to registry Recruiter : {}", recruiter);
         User user = new User();
         user.setFirstName(recruiter.getName());
         user.setLastName(recruiter.getLastName());
         user.setLogin(recruiter.getEmail());
         user.setEmail(recruiter.getEmail());
+        user.setAcceptTermsOfService(acceptTermsOfService);
         user.setPassword(password);
         recruiter.setUser(userService.registerRecruiterUser(user));
         return this.save(recruiter);

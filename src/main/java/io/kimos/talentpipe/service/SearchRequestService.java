@@ -1,6 +1,7 @@
 package io.kimos.talentpipe.service;
 
 import io.kimos.talentpipe.domain.SearchRequest;
+import io.kimos.talentpipe.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -57,4 +58,6 @@ public interface SearchRequestService {
      * @return the list of entities
      */
     Page<SearchRequest> search(String query, Pageable pageable);
+
+    Page<SearchRequest> findAllForCompany(Pageable pageable, User user);
 }
